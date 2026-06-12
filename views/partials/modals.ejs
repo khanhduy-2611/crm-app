@@ -1,0 +1,394 @@
+<!-- MODAL XÓA LỊCH SỬ -->
+<div class="modal fade" id="modalXoaLichSu" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa lịch sử</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc muốn xóa bản ghi này?</p>
+                <p class="text-danger fw-bold" id="tenLichSuCanXoa"></p>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalLS">Hủy bỏ</button>
+                <a id="linkXacNhanXoaLS" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XÓA DOANH NGHIỆP -->
+<div class="modal fade" id="modalXoa" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa Doanh nghiệp</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc chắn muốn xóa không?</p>
+                <p class="text-danger fw-bold" id="tenCanXoa"></p>
+                <small class="text-muted">* Xóa doanh nghiệp sẽ xóa toàn bộ nhân sự VIP trực thuộc!</small>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalKH">Hủy bỏ</button>
+                <a id="linkXacNhanXoa" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XÓA VIP -->
+<div class="modal fade" id="modalXoaVip" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa VIP</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc chắn muốn xóa nhân sự VIP này?</p>
+                <p class="text-danger fw-bold" id="tenVipCanXoa"></p>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalVip">Hủy bỏ</button>
+                <a id="linkXacNhanXoaVip" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL IMPORT EXCEL ===== -->
+<div class="modal fade" id="modalImport" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header" style="background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;">
+                <h5 class="modal-title fw-bold">
+                    <i class="fa-solid fa-file-import me-2"></i>Import Khách Hàng Từ Excel
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+
+                <!-- BƯỚC 1: CHỌN FILE -->
+                <div id="importStep1">
+                    <div class="mb-3 p-3" style="background:var(--surface);border-radius:var(--radius);border:2px dashed var(--border);" id="dropZone">
+                        <div class="text-center py-3">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size:2.5rem;color:var(--primary);margin-bottom:12px;display:block;"></i>
+                            <div class="fw-bold mb-1" style="color:var(--text-dark);">Kéo thả file Excel vào đây</div>
+                            <div class="text-muted small mb-3">hoặc</div>
+                            <label class="btn btn-dark fw-bold px-4" style="cursor:pointer;">
+                                <i class="fa-solid fa-folder-open me-2"></i>Chọn file
+                                <input type="file" id="importFile" accept=".xlsx,.xls" style="display:none;" onchange="previewImport(this)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Hướng dẫn cột -->
+                    <div class="p-3" style="background:rgba(212,175,55,0.08);border-radius:var(--radius);border:1px solid rgba(212,175,55,0.25);">
+                        <div style="font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent-dark);margin-bottom:8px;">
+                            <i class="fa-solid fa-circle-info me-1"></i>Cấu trúc file Excel yêu cầu
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0" style="font-size:0.75rem;">
+                                <thead>
+                                    <tr style="background:rgba(140,29,64,0.07);">
+                                        <th>Mã KH</th><th>Tên KH</th><th>Ngày thành lập</th>
+                                        <th>Tên lãnh đạo</th><th>Ngày sinh lãnh đạo</th><th>SĐT lãnh đạo</th>
+                                        <th>Tên kế toán</th><th>Ngày sinh kế toán</th><th>SĐT kế toán</th>
+                                        <th>Cán bộ quản lý</th><th>Ngày sinh CBQL</th><th>SĐT CBQL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-muted">
+                                        <td>KH001</td><td>Cty ABC</td><td>01/01/2000</td>
+                                        <td>Nguyễn A</td><td>01/01/1980</td><td>0901...</td>
+                                        <td>Trần B</td><td>01/01/1985</td><td>0902...</td>
+                                        <td>Lê C</td><td>01/01/1990</td><td>0903...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2: KẾT QUẢ IMPORT -->
+                <div id="importStep2" style="display:none;">
+                    <div class="d-flex gap-3 mb-3 flex-wrap">
+                        <div class="flex-fill p-3 text-center" style="background:rgba(26,138,86,0.08);border-radius:var(--radius);border:1px solid rgba(26,138,86,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:#1a8a56;" id="importCountMoi">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:#1a8a56;">Thêm mới</div>
+                        </div>
+                        <div class="flex-fill p-3 text-center" style="background:rgba(37,99,235,0.08);border-radius:var(--radius);border:1px solid rgba(37,99,235,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:#2563EB;" id="importCountCapNhat">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:#2563EB;">Cập nhật</div>
+                        </div>
+                        <div class="flex-fill p-3 text-center" style="background:rgba(140,29,64,0.08);border-radius:var(--radius);border:1px solid rgba(140,29,64,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:var(--primary);" id="importCountLoi">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:var(--primary);">Lỗi</div>
+                        </div>
+                    </div>
+
+                    <!-- Chi tiết từng dòng -->
+                    <div style="max-height:260px;overflow-y:auto;">
+                        <table class="table table-sm align-middle mb-0" id="importDetailTable">
+                            <thead style="position:sticky;top:0;">
+                                <tr style="background:var(--surface);">
+                                    <th style="font-size:0.7rem;">Dòng</th>
+                                    <th style="font-size:0.7rem;">Mã KH</th>
+                                    <th style="font-size:0.7rem;">Tên KH</th>
+                                    <th style="font-size:0.7rem;">Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody id="importDetailBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- LOADING -->
+                <div id="importLoading" style="display:none;text-align:center;padding:40px;">
+                    <div class="spinner-border" style="color:var(--primary);width:3rem;height:3rem;" role="status"></div>
+                    <div class="mt-3 fw-bold" style="color:var(--text-mid);">Đang xử lý file...</div>
+                </div>
+
+            </div>
+            <div class="modal-footer" style="background:var(--surface);border-top:1px solid var(--border);">
+                <span id="importFileName" class="text-muted small me-auto fst-italic"></span>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-dark fw-bold px-4" id="btnImport" onclick="thucHienImport()" style="display:none;">
+                    <i class="fa-solid fa-upload me-2"></i>Import ngay
+                </button>
+                <button type="button" class="btn btn-outline-success fw-bold px-4" id="btnImportDone" onclick="location.reload()" style="display:none;">
+                    <i class="fa-solid fa-rotate me-2"></i>Tải lại trang
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL THÊM KHÁCH HÀNG ========== -->
+<div id="addCustomerModalBackdrop" class="modal-backdrop-custom" onclick="dongFormAddCustomerIfBackdrop(event)">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="modal-header-custom">
+            <h5>
+                <i class="fa-solid fa-user-plus" style="color: var(--primary);"></i>
+                Thêm Khách Hàng Mới
+            </h5>
+            <button type="button" class="modal-close-btn" onclick="dongFormAddCustomer()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body-custom">
+            <form action="/khach-hang/add-all" method="POST" id="formAddAll">
+                <!-- PHẦN 1: THÔNG TIN DOANH NGHIỆP -->
+                <div class="section-box mb-3">
+                    <div class="section-box-title">
+                        <i class="fa-solid fa-building-columns"></i>
+                        Thông Tin Doanh Nghiệp / Đơn Vị
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-12">
+                            <label class="form-label">Tên Khách Hàng / Cơ Quan <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="ten_khach_hang" required
+                                   placeholder="Ví dụ: Công ty TNHH XYZ hoặc Trường TH Chu Văn An">
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Ngày Thành Lập <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="ngay_thanh_lap" required>
+                        <div class="form-text">Định dạng kỷ niệm ngày thành lập doanh nghiệp</div>
+                    </div>
+                </div>
+
+                <!-- PHẦN 2: THÔNG TIN VIP (động) -->
+                <div id="vipContainer">
+                    <div class="section-box mb-3 vip-block" id="vip-block-0">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="vip-block-header">
+                                <span class="badge bg-primary me-1">1</span> Thông Tin Khách VIP Thứ Nhất
+                            </span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <label class="form-label">Họ Và Tên VIP <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="ho_ten" required placeholder="Ví dụ: Nguyễn Văn A">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Chức Vụ <span class="text-danger">*</span></label>
+                                <select class="form-select" name="chuc_vu_id" required>
+                                    <option value="">-- Chọn chức vụ --</option>
+                                    <% listChucVu.forEach(cv => { %>
+                                        <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Ngày Sinh Nhật <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="ngay_sinh" required oninput="kiemTraNgaySinh(this)">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Số Điện Thoại <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="so_dien_thoai" required
+                                       placeholder="Ví dụ: 0912345678" maxlength="10" oninput="kiemTraSoDienThoai(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút thêm VIP -->
+                <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-3 fw-bold" onclick="themVipMoi()">
+                    <i class="fa-solid fa-plus me-1"></i> Thêm thông tin VIP thứ hai
+                </button>
+
+                <!-- Footer -->
+                <div class="modal-footer-custom">
+                    <button type="reset" class="btn btn-outline-secondary fw-bold" onclick="resetForm()">
+                        <i class="fa-solid fa-xmark me-1"></i>Hủy bỏ
+                    </button>
+                    <button type="submit" class="btn btn-dark fw-bold">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Lưu khách hàng
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL VIP DETAIL ========== -->
+<div id="vipDetailModalBackdrop" class="vip-detail-modal-backdrop" onclick="closeVipDetailIfBackdrop(event)">
+    <div class="vip-detail-modal-content" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="vip-detail-header">
+            <h4 id="vipDetailName">---</h4>
+            <button type="button" class="modal-close-btn" onclick="closeVipDetail()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="vip-detail-body">
+            <form id="vipDetailForm">
+                <input type="hidden" id="vipDetailId" name="id">
+                <input type="hidden" id="vipDetailKhachHangId" name="khach_hang_id">
+
+                <div class="vip-profile-card">
+                    <div class="vip-profile-avatar" id="vipDetailAvatar">VIP</div>
+                    <div>
+                        <div class="vip-profile-name" id="vipDetailProfileName">---</div>
+                        <div class="vip-profile-company" id="vipDetailProfileCompany">---</div>
+                    </div>
+                </div>
+
+                <!-- THÔNG TIN VIP -->
+                <div class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-user"></i> Thông Tin VIP
+                    </div>
+                    <div class="vip-info-grid">
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Họ Tên</span>
+                            <span class="vip-info-value view-mode" id="vipDetailHoTen">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditHoTen" name="ho_ten">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Chức Vụ</span>
+                            <span class="vip-info-value view-mode" id="vipDetailChucVu">---</span>
+                            <select class="vip-edit-input edit-mode" id="vipEditChucVu" name="chuc_vu_id">
+                                <option value="">-- Chọn chức vụ --</option>
+                                <% listChucVu.forEach(cv => { %>
+                                    <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Ngày Sinh</span>
+                            <span class="vip-info-value view-mode" id="vipDetailNgaySinh">---</span>
+                            <input type="date" class="vip-edit-input edit-mode" id="vipEditNgaySinh" name="ngay_sinh">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Số Điện Thoại</span>
+                            <span class="vip-info-value view-mode" id="vipDetailSdt">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditSdt" name="so_dien_thoai" placeholder="0912345678">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Email</span>
+                            <span class="vip-info-value view-mode" id="vipDetailEmail">---</span>
+                            <input type="email" class="vip-edit-input edit-mode" id="vipEditEmail" name="email" placeholder="example@company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THÔNG TIN DOANH NGHIỆP -->
+                <div class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-building"></i> Thông Tin Doanh Nghiệp
+                    </div>
+                    <div class="vip-info-grid full">
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Tên Doanh Nghiệp</span>
+                            <span class="vip-info-value view-mode" id="vipDetailTenKh">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditTenKh" name="ten_khach_hang" placeholder="Tên công ty">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Ngày Thành Lập</span>
+                            <span class="vip-info-value view-mode" id="vipDetailNgayThanhLap">---</span>
+                            <input type="date" class="vip-edit-input edit-mode" id="vipEditNgayThanhLap" name="ngay_thanh_lap">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GHI CHÚ CHĂM SÓC -->
+                <div class="vip-info-section">
+                    <div class="vip-notes-heading">
+                        <div class="vip-info-section-title">
+                            <i class="fa-solid fa-note-sticky"></i> Ghi Chú Chăm Sóc
+                            <span class="vip-notes-count" id="vipDetailNotesCount">0</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="openAddNoteForm()">
+                            <i class="fa-solid fa-plus me-1"></i>Thêm ghi chú
+                        </button>
+                    </div>
+                    <ul class="vip-notes-list" id="vipDetailNotesList">
+                        <li style="text-align: center; color: var(--text-light); padding: 10px;">Đang tải...</li>
+                    </ul>
+                </div>
+
+                <!-- FORM THÊM GHI CHÚ (ẩn theo mặc định) -->
+                <div id="vipAddNoteForm" style="display: none;" class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-pen"></i> Ghi Chú Mới
+                    </div>
+                    <div class="vip-info-item mb-3">
+                        <label class="vip-info-label">Nội Dung</label>
+                        <textarea id="vipNewNoteContent" class="vip-edit-input" placeholder="Ghi chú chăm sóc..." rows="3" style="resize: vertical;"></textarea>
+                    </div>
+                    <div class="vip-info-item mb-3">
+                        <label class="vip-info-label">Ngày Liên Hệ</label>
+                        <input type="date" id="vipNewNoteDate" class="vip-edit-input">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="cancelAddNote()">Hủy</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="saveNote()">Lưu Ghi Chú</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="vip-detail-footer">
+            <div class="view-actions">
+                <button type="button" class="btn btn-outline-secondary" onclick="closeVipDetail()">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="toggleVipEditMode()">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh Sửa
+                </button>
+            </div>
+            <div class="edit-actions">
+                <button type="button" class="btn btn-outline-secondary" onclick="cancelVipEdit()">Hủy</button>
+                <button type="button" class="btn btn-success" onclick="saveVipEdit()">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Lưu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1692 @@
+/* ============================================================
+   AGRIBANK CRM — DESIGN SYSTEM
+   Primary  : #8C1D40  (Đỏ đô)
+   Accent   : #D4AF37  (Vàng kim)
+   Surface  : #F4F6F9  (Xám nhạt)
+   Card BG  : #FFFFFF
+============================================================ */
+:root {
+    --primary:      #8C1D40;
+    --primary-dark: #6d1632;
+    --primary-light:#b5244f;
+    --accent:       #D4AF37;
+    --accent-dark:  #b8962e;
+    --accent-light: #e8c84a;
+    --surface:      #F4F6F9;
+    --surface-2:    #EEF1F6;
+    --white:        #FFFFFF;
+    --text-dark:    #1A1F2E;
+    --text-mid:     #4A5568;
+    --text-light:   #8A96A8;
+    --border:       #E2E8F0;
+    --shadow-sm:    0 2px 8px rgba(0,0,0,0.06);
+    --shadow-md:    0 4px 20px rgba(0,0,0,0.08);
+    --shadow-lg:    0 8px 40px rgba(0,0,0,0.12);
+    --shadow-primary: 0 4px 20px rgba(140,29,64,0.18);
+    --radius:       10px;
+    --radius-sm:    7px;
+    --radius-lg:    16px;
+    --transition:   all 0.25s ease;
+}
+
+/* ---- DARK MODE VARIABLES ---- */
+body.dark-mode {
+    --surface:   #1E2235;
+    --surface-2: #1A1F30;
+    --white:     #252B3D;
+    --text-dark: #EDF2F7;
+    --text-mid:  #A0AEC0;
+    --text-light:#718096;
+    --border:    #3A4258;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+    --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.45);
+}
+/* Toàn bộ nền tối — không còn ô trắng */
+body.dark-mode .card,
+body.dark-mode .stat-card,
+body.dark-mode .section-box,
+body.dark-mode .vip-block,
+body.dark-mode .modal-content,
+body.dark-mode .modal-body,
+body.dark-mode .modal-footer,
+body.dark-mode .table-light,
+body.dark-mode .table-warning-row,
+body.dark-mode .bg-white,
+body.dark-mode .bg-light { background: var(--white) !important; }
+
+body.dark-mode .accordion-content { background: var(--surface-2) !important; }
+
+/* Form controls tối */
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background: var(--surface-2) !important;
+    color: var(--text-dark) !important;
+    border-color: var(--border) !important;
+}
+body.dark-mode .form-control::placeholder { color: var(--text-light) !important; }
+
+/* ---- NEON TEXT khi dark mode ---- */
+/* Tên VIP — xanh lá neon */
+body.dark-mode .text-success,
+body.dark-mode .fw-bold.text-success {
+    color: #4ADE80 !important;
+    text-shadow: 0 0 8px rgba(74,222,128,0.4) !important;
+}
+/* Tên doanh nghiệp — xanh dương neon */
+body.dark-mode .dn-name {
+    color: #60A5FA !important;
+    text-shadow: 0 0 8px rgba(96,165,250,0.35) !important;
+}
+/* Số điện thoại — hồng neon */
+body.dark-mode .text-primary {
+    color: #F472B6 !important;
+    text-shadow: 0 0 8px rgba(244,114,182,0.35) !important;
+}
+/* Section title — vàng neon */
+body.dark-mode .section-title {
+    color: var(--accent-light) !important;
+    text-shadow: 0 0 6px rgba(212,175,55,0.3) !important;
+}
+body.dark-mode .section-title i { color: var(--accent) !important; }
+/* Label thống kê */
+body.dark-mode .stat-value { color: #EDF2F7 !important; }
+body.dark-mode .stat-label { color: var(--text-light) !important; }
+body.dark-mode .stat-card.primary .stat-icon { background: rgba(140,29,64,0.25) !important; }
+body.dark-mode .stat-card.accent  .stat-icon { background: rgba(212,175,55,0.2) !important; }
+/* Table header */
+body.dark-mode .table th { background: var(--surface-2) !important; color: var(--text-mid) !important; }
+body.dark-mode thead.table-primary th { background: rgba(140,29,64,0.2) !important; color: #F9A8D4 !important; }
+body.dark-mode thead.table-success th { background: rgba(74,222,128,0.1) !important; color: #4ADE80 !important; }
+body.dark-mode thead.table-warning th { background: rgba(212,175,55,0.12) !important; color: var(--accent-light) !important; }
+body.dark-mode .table td { border-bottom-color: var(--border) !important; }
+/* Badge */
+body.dark-mode .badge.bg-light { background: var(--surface-2) !important; color: var(--text-mid) !important; border-color: var(--border) !important; }
+/* Form label */
+body.dark-mode .form-label { color: var(--text-mid) !important; }
+body.dark-mode .form-text   { color: var(--text-light) !important; }
+/* Section box title */
+body.dark-mode .section-box-title,
+body.dark-mode .vip-block-header { color: var(--accent-light) !important; }
+/* Tiêu đề section — neon trong dark mode */
+body.dark-mode .section-title {
+    text-shadow: none !important;
+}
+/* DANH SÁCH DOANH NGHIỆP → hồng neon */
+body.dark-mode h5.section-title:not([style*="color:#1a8a56"]) {
+    color: #F472B6 !important;
+    text-shadow: 0 0 10px rgba(244,114,182,0.45) !important;
+}
+/* DANH SÁCH NHÂN SỰ VIP → xanh lá neon */
+body.dark-mode h5.section-title[style*="color:#1a8a56"] {
+    color: #4ADE80 !important;
+    text-shadow: 0 0 10px rgba(74,222,128,0.45) !important;
+}
+body.dark-mode .section-title i { color: var(--accent-dark) !important; }
+
+/* Accordion content area */
+body.dark-mode [id^="acc-"] td { background: var(--surface-2) !important; }
+/* Care progress label */
+body.dark-mode .care-progress-wrap { background: var(--border) !important; }
+/* Collapse section */
+body.dark-mode #formThemLichSu { background: var(--white) !important; }
+
+/* ---- FIX TABLE ROWS DARK MODE ---- */
+/* Tất cả dòng trong bảng đều tối */
+body.dark-mode .table tbody tr td,
+body.dark-mode .table tbody tr th {
+    background-color: var(--white) !important;
+    color: var(--text-dark) !important;
+}
+/* Dòng edit (sửa inline) */
+body.dark-mode .table-light td,
+body.dark-mode .table-warning td,
+body.dark-mode .table-warning-row td {
+    background-color: var(--surface-2) !important;
+    color: var(--text-dark) !important;
+}
+/* Chữ các cột thông thường */
+body.dark-mode .table td,
+body.dark-mode .table th {
+    color: var(--text-dark) !important;
+}
+/* ID và text-muted → sáng lên */
+body.dark-mode .table .text-muted,
+body.dark-mode .table small.text-muted {
+    color: var(--text-light) !important;
+}
+/* Ngày tháng, nội dung thông thường — loại trừ ô có tên DN */
+body.dark-mode .table td:not(:has(.dn-name)):not(.text-primary):not(.text-success):not(.text-muted) {
+    color: #CBD5E0 !important;
+}
+/* Ô chứa tên doanh nghiệp — không áp dụng màu trắng */
+body.dark-mode .table td:has(.dn-name) {
+    color: #60A5FA !important;
+}
+/* Tên doanh nghiệp — xanh dương neon, ưu tiên cao nhất */
+body.dark-mode .table td .dn-name,
+body.dark-mode .table tbody tr td .dn-name,
+body.dark-mode .table tbody tr:hover td .dn-name,
+body.dark-mode .dn-name {
+    color: #60A5FA !important;
+    text-shadow: 0 0 8px rgba(96,165,250,0.45) !important;
+}
+/* Skeleton rows trong dark mode */
+body.dark-mode .skeleton-row {
+    border-bottom-color: var(--border) !important;
+}
+
+/* Smooth transition có chọn lọc — không dùng * để tránh ghi đè animation */
+body,
+.card, .stat-card, .section-card, .section-box, .vip-block,
+.crm-item, .modal-content, .modal-body, .modal-footer,
+.form-control, .form-select, .btn,
+.table td, .table th,
+.navbar, .dark-toggle, .badge {
+    transition: background-color 0.5s ease, border-color 0.4s ease, color 0.3s ease;
+}
+/* Ngoại lệ: các element có animation riêng — không transition */
+.care-progress-bar, .skeleton-block,
+.toast-item, .birthday-badge,
+tr.vip-item-row, tr.dn-item-row,
+.btn-accordion { transition: none; }
+
+/* ---- ĐỒNG HỒ & DARK TOGGLE trên NAVBAR ---- */
+.navbar-clock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+.clock-display {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.clock-display .clock-time {
+    font-size: 0.88rem;
+    color: var(--accent-light);
+    font-variant-numeric: tabular-nums;
+}
+.clock-display .clock-date {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.55);
+}
+.notification-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+.notification-bell {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    font-size: 0.95rem;
+}
+.notification-bell:hover,
+.notification-bell.active {
+    background: rgba(212,175,55,0.2);
+    border-color: var(--accent);
+    color: var(--accent-light);
+}
+.notification-bell.has-today {
+    animation: bellRing 2.5s ease-in-out infinite;
+}
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dc3545;
+    color: #fff;
+    border: 2px solid var(--primary);
+    font-size: 0.58rem;
+    font-weight: 800;
+}
+.notification-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(390px, calc(100vw - 24px));
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow: 0 18px 55px rgba(15,23,42,0.24);
+    color: var(--text-dark);
+    display: none;
+    z-index: 1100;
+}
+.notification-panel.show {
+    display: block;
+    animation: notificationIn 0.2s ease both;
+}
+.notification-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 14px 16px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+.notification-group-title {
+    padding: 12px 16px 6px;
+    color: var(--text-light);
+    font-size: 0.66rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+.notification-item {
+    display: flex;
+    gap: 10px;
+    margin: 0 10px 8px;
+    padding: 11px 12px;
+    border-radius: 10px;
+    background: var(--surface);
+}
+.notification-item.today {
+    background: linear-gradient(135deg, #fff7dc, #fff1c1);
+    border: 1px solid rgba(212,175,55,0.35);
+}
+.notification-item-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: rgba(140,29,64,0.1);
+    color: var(--primary);
+}
+.notification-item-title { font-size: 0.8rem; font-weight: 800; color: var(--text-dark); }
+.notification-item-sub { font-size: 0.7rem; color: var(--text-light); margin-top: 2px; }
+.notification-empty { padding: 28px 16px; text-align: center; color: var(--text-light); font-size: 0.78rem; }
+
+.celebration-ticker {
+    position: relative;
+    z-index: 100;
+    overflow: hidden;
+    background: linear-gradient(90deg, var(--primary-dark), var(--primary), #b5244f);
+    color: #fff;
+    border-bottom: 2px solid var(--accent);
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
+.celebration-ticker-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    white-space: nowrap;
+    min-width: max-content;
+    padding-left: 100%;
+    font-size: 0.78rem;
+    font-weight: 700;
+    animation: tickerMove 24s linear infinite;
+}
+.celebration-ticker-track i { color: var(--accent-light); }
+.celebration-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 12000;
+}
+.celebration-particle {
+    position: absolute;
+    top: -30px;
+    font-size: 1.25rem;
+    animation: particleFall var(--duration) ease-in forwards;
+}
+@keyframes bellRing {
+    0%, 88%, 100% { transform: rotate(0); }
+    91% { transform: rotate(15deg); }
+    94% { transform: rotate(-13deg); }
+    97% { transform: rotate(9deg); }
+}
+@keyframes notificationIn {
+    from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes tickerMove {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+}
+@keyframes particleFall {
+    0% { transform: translate3d(0,-20px,0) rotate(0); opacity: 0; }
+    12% { opacity: 1; }
+    100% { transform: translate3d(var(--drift),105vh,0) rotate(720deg); opacity: 0; }
+}
+.dark-toggle {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 12px;
+    color: rgba(255,255,255,0.8);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s, border-color 0.2s !important;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    white-space: nowrap;
+}
+.dark-toggle:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: var(--accent);
+    color: var(--accent-light);
+}
+body.dark-mode .dark-toggle {
+    background: rgba(212,175,55,0.15);
+    border-color: rgba(212,175,55,0.4);
+    color: var(--accent-light);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+    background: var(--surface);
+    color: var(--text-dark);
+    font-size: 0.92rem;
+}
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-2); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; opacity: 0.6; }
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+.navbar {
+    background: var(--primary) !important;
+    box-shadow: var(--shadow-primary);
+    border-bottom: 3px solid var(--accent);
+    padding: 0.6rem 1rem;
+}
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.navbar-brand::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    border-radius: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238C1D40'%3E%3Cpath d='M2 10.5L12 3l10 7.5V21H15v-6H9v6H2V10.5z'/%3E%3C/svg%3E");
+    background-size: 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.navbar .nav-link {
+    color: rgba(255,255,255,0.75) !important;
+    font-weight: 500;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.15);
+}
+.navbar .nav-link.active {
+    background: rgba(212,175,55,0.25);
+    color: var(--accent-light) !important;
+}
+
+/* ============================================================
+   STAT CARDS
+============================================================ */
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+.stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+}
+.stat-card.primary::before { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+.stat-card.accent::before  { background: linear-gradient(90deg, var(--accent-dark), var(--accent-light)); }
+
+.stat-card .stat-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 6px;
+}
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1;
+}
+.stat-card .stat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+}
+.stat-card.primary .stat-icon { background: rgba(140,29,64,0.1); color: var(--primary); }
+.stat-card.accent  .stat-icon { background: rgba(212,175,55,0.15); color: var(--accent-dark); }
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+.btn {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    border-width: 1.5px;
+}
+.btn-primary-custom {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: var(--shadow-primary);
+}
+.btn-primary-custom:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+.btn-accent {
+    background: var(--accent);
+    color: var(--text-dark);
+    border-color: var(--accent);
+    font-weight: 700;
+}
+.btn-accent:hover {
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
+.btn-outline-primary {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+.btn-outline-primary:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+}
+.btn-outline-success {
+    border-color: #1a8a56 !important;
+    color: #1a8a56 !important;
+}
+.btn-outline-success:hover {
+    background: #1a8a56 !important;
+    color: #fff !important;
+}
+.btn-warning {
+    background: var(--accent) !important;
+    border-color: var(--accent) !important;
+    color: var(--text-dark) !important;
+    font-weight: 700 !important;
+}
+.btn-warning:hover {
+    background: var(--accent-dark) !important;
+    border-color: var(--accent-dark) !important;
+}
+.btn-dark {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
+}
+.btn-dark:hover {
+    background: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+.btn-outline-warning {
+    border-color: var(--accent) !important;
+    color: var(--accent-dark) !important;
+}
+.btn-outline-warning:hover {
+    background: var(--accent) !important;
+    color: var(--text-dark) !important;
+}
+.btn-outline-danger {
+    border-color: #dc3545 !important;
+    color: #dc3545 !important;
+}
+.btn-outline-danger:hover {
+    background: #dc3545 !important;
+    color: #fff !important;
+}
+.btn-outline-secondary {
+    border-color: var(--border) !important;
+    color: var(--text-mid) !important;
+}
+.btn-outline-secondary:hover {
+    background: var(--surface-2) !important;
+    color: var(--text-dark) !important;
+}
+.btn-success {
+    background: #1a8a56 !important;
+    border-color: #1a8a56 !important;
+}
+.btn-secondary {
+    background: var(--surface-2) !important;
+    border-color: var(--border) !important;
+    color: var(--text-mid) !important;
+}
+
+/* ============================================================
+   FORM CONTROLS
+============================================================ */
+.form-control, .form-select {
+    border-color: var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 0.875rem;
+    color: var(--text-dark);
+    background: var(--white);
+    transition: var(--transition);
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(140,29,64,0.15);
+    background: var(--white);
+}
+.form-control::placeholder { color: var(--text-light); }
+.form-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 4px;
+}
+.form-text { color: var(--text-light); font-size: 0.75rem; }
+
+/* ============================================================
+   CARDS
+============================================================ */
+.card {
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: var(--transition);
+}
+.card:hover { box-shadow: var(--shadow-md) !important; }
+
+/* Section headings inside cards */
+.section-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.section-title i { color: var(--accent-dark); }
+
+/* ============================================================
+   PARTICLE CARD
+/* ============================================================
+   VIP BLOCK (form thêm mới)
+============================================================ */
+.vip-block {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 16px;
+    background: var(--surface) !important;
+    transition: var(--transition);
+}
+.vip-block:hover { border-color: rgba(140,29,64,0.3) !important; }
+.vip-block-header {
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+    color: var(--primary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+.vip-block-header .badge { background: var(--primary) !important; }
+
+/* Enterprise section box */
+.section-box {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 1rem 1.1rem;
+    background: var(--white) !important;
+    position: relative;
+}
+.section-box-title {
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 6px;
+}
+
+/* ============================================================
+   TABLES
+============================================================ */
+.table {
+    font-size: 0.875rem;
+}
+.table th {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    background: var(--surface) !important;
+    border-bottom: 2px solid var(--border) !important;
+    padding: 10px 12px;
+    white-space: nowrap;
+}
+thead.sticky-top th { position: sticky; top: 0; z-index: 2; }
+
+/* Custom thead colors */
+.table-primary thead th, thead.table-primary th {
+    background: rgba(140,29,64,0.08) !important;
+    color: var(--primary) !important;
+    border-bottom: 2px solid rgba(140,29,64,0.2) !important;
+}
+.table-success thead th, thead.table-success th {
+    background: rgba(26,138,86,0.07) !important;
+    color: #1a8a56 !important;
+    border-bottom: 2px solid rgba(26,138,86,0.2) !important;
+}
+.table-warning thead th, thead.table-warning th {
+    background: rgba(212,175,55,0.1) !important;
+    color: var(--accent-dark) !important;
+    border-bottom: 2px solid rgba(212,175,55,0.25) !important;
+}
+
+.table td { padding: 10px 12px; border-bottom: 1px solid var(--surface-2); vertical-align: middle; }
+.table-hover tbody tr:not(.vip-item-row):not(.dn-item-row):hover { background: rgba(140,29,64,0.03) !important; }
+.table-light { background: var(--surface) !important; }
+.table-warning { background: rgba(212,175,55,0.08) !important; }
+
+/* Badges */
+.badge {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+    border-radius: 5px;
+    padding: 4px 8px;
+}
+.badge.bg-secondary { background: var(--surface-2) !important; color: var(--text-mid) !important; border: 1px solid var(--border); }
+.badge.bg-primary   { background: var(--primary) !important; }
+.badge.bg-success   { background: #1a8a56 !important; }
+.badge.bg-warning   { background: var(--accent) !important; color: var(--text-dark) !important; }
+.badge.bg-light     { background: var(--surface-2) !important; color: var(--text-mid) !important; border: 1px solid var(--border); }
+
+/* ---- BADGE CHỨC VỤ theo cấp bậc ---- */
+/* Cấp 1: Lãnh đạo cao nhất — Đỏ đô (Primary) */
+.badge-cap1 {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(140,29,64,0.25);
+}
+/* Cấp 2: Quản lý trung cấp — Xanh dương đậm */
+.badge-cap2 {
+    background: linear-gradient(135deg, #1e40af, #2563EB) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+}
+/* Cấp 3: Nhân viên / chức vụ khác — Xanh lá ngọc */
+.badge-cap3 {
+    background: linear-gradient(135deg, #0f766e, #0d9488) !important;
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(13,148,136,0.2);
+}
+
+/* text colors */
+.text-primary { color: var(--primary) !important; }
+.text-success { color: #1a8a56 !important; }
+.text-warning { color: var(--accent-dark) !important; }
+.text-muted   { color: var(--text-light) !important; }
+
+/* ============================================================
+   COLLAPSE / FORM THÊM LỊCH SỬ
+============================================================ */
+.bg-light { background: var(--surface) !important; }
+.bg-white { background: var(--white) !important; }
+
+/* ============================================================
+   MODALS
+============================================================ */
+.modal-content {
+    border-radius: var(--radius-lg) !important;
+    border: none !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+.modal-header {
+    border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+}
+.modal-header.bg-danger { background: #c0392b !important; }
+.modal-footer {
+    background: var(--surface) !important;
+    border-top: 1px solid var(--border) !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+}
+
+/* ============================================================
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+.toast-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+    border-radius: var(--radius);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 280px;
+    max-width: 380px;
+    box-shadow: var(--shadow-lg);
+    pointer-events: all;
+    animation: toastIn 0.4s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+    position: relative;
+    overflow: hidden;
+}
+.toast-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    animation: toastProgress linear forwards;
+}
+.toast-item.toast-success {
+    background: linear-gradient(135deg, #1a6641, #1a8a56);
+    color: #fff;
+}
+.toast-item.toast-error {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff;
+}
+.toast-item.toast-warning {
+    background: linear-gradient(135deg, #b45309, #d97706);
+    color: #fff;
+}
+.toast-item .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-item .toast-msg { flex: 1; line-height: 1.4; }
+.toast-item .toast-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+.toast-item .toast-close:hover { color: #fff; }
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(60px) scale(0.92); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 0; }
+    to   { opacity: 0; transform: translateX(60px); max-height: 0; margin-bottom: -10px; }
+}
+@keyframes toastProgress {
+    from { width: 100%; }
+    to   { width: 0%; }
+}
+.toast-item.removing {
+    animation: toastOut 0.35s ease forwards;
+}
+
+
+
+/* ---- SECURITY SCAN LINE ---- */
+tr.vip-item-row:hover {
+    z-index: 2;
+}
+/* Viền trái vàng-đỏ khi hover */
+tr.vip-item-row td:first-child {
+    position: relative;
+    transition: var(--transition);
+}
+tr.vip-item-row:hover td:first-child::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 8%; bottom: 8%;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--primary));
+    border-radius: 0 3px 3px 0;
+}
+/* Tên VIP đổi màu khi hover — light mode */
+tr.vip-item-row:hover .text-success {
+    color: var(--primary) !important;
+}
+
+/* ---- DARK MODE: simpler hover ---- */
+body.dark-mode tr.vip-item-row:hover td {
+    background: var(--surface-2) !important;
+    border-bottom-color: rgba(74,222,128,0.2) !important;
+    border-top-color: rgba(74,222,128,0.1) !important;
+}
+body.dark-mode tr.vip-item-row:hover .text-success {
+    color: #4ADE80 !important;
+}
+body.dark-mode tr.vip-item-row:hover td:first-child::after {
+    background: linear-gradient(180deg, #4ADE80, #22c55e) !important;
+}
+body.dark-mode tr.dn-item-row:hover .dn-name {
+    color: #60A5FA !important;
+}
+body.dark-mode tr.dn-item-row:hover td {
+    background: var(--surface-2) !important;
+    border-bottom-color: rgba(96,165,250,0.2) !important;
+    border-top-color: rgba(96,165,250,0.1) !important;
+}
+body.dark-mode tr.dn-item-row:hover td:first-child::after {
+    background: linear-gradient(180deg, #60A5FA, #3B82F6) !important;
+}
+
+/* ---- THANH TIẾN TRÌNH CHĂM SÓC ---- */
+.care-progress-wrap {
+    width: 100%;
+    height: 4px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+.care-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.22, 0.68, 0, 1.1);
+}
+.care-progress-bar.fresh  { background: linear-gradient(90deg, #1a8a56, #34d399); }
+.care-progress-bar.medium { background: linear-gradient(90deg, #d97706, #fbbf24); }
+.care-progress-bar.stale  { background: linear-gradient(90deg, var(--primary), #f87171); }
+.care-progress-bar.never  { background: var(--surface-2); width: 100% !important; }
+.care-progress-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+    opacity: 0.75;
+}
+.care-progress-label.fresh  { color: #1a8a56; }
+.care-progress-label.medium { color: #d97706; }
+.care-progress-label.stale  { color: var(--primary); }
+.care-progress-label.never  { color: var(--text-light); }
+
+/* ---- BIRTHDAY HIGHLIGHT ---- */
+.birthday-badge {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 20px;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+.birthday-badge.today {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(140,29,64,0.35);
+}
+.birthday-badge.soon-3 {
+    background: linear-gradient(135deg, #d97706, #f59e0b);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(217,119,6,0.3);
+}
+.birthday-badge.soon-7 {
+    background: linear-gradient(135deg, #0369a1, #0ea5e9);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(3,105,161,0.25);
+}
+/* Highlight cả dòng nếu hôm nay sinh nhật */
+tr.vip-item-row.birthday-today {
+    background: linear-gradient(90deg, rgba(140,29,64,0.04), rgba(212,175,55,0.06)) !important;
+    border-left: 3px solid var(--accent) !important;
+}
+tr.vip-item-row.birthday-today td:first-child {
+    border-left: 3px solid var(--accent);
+}
+
+/* ---- GLASSMORPHISM: DOANH NGHIỆP ---- */
+tr.dn-item-row {
+    transition: all 0.28s cubic-bezier(0.22, 0.68, 0, 1.1);
+    position: relative;
+}
+tr.dn-item-row:hover td {
+    background: linear-gradient(
+        90deg,
+        rgba(37,99,235,0.06) 0%,
+        rgba(255,255,255,0.95) 8%,
+        rgba(240,246,255,0.98) 50%,
+        rgba(37,99,235,0.05) 100%
+    ) !important;
+    border-bottom-color: rgba(37,99,235,0.2) !important;
+    border-top-color: rgba(37,99,235,0.1) !important;
+}
+tr.dn-item-row:hover {
+    z-index: 2;
+}
+/* Viền trái xanh dương khi hover */
+tr.dn-item-row td:first-child {
+    position: relative;
+}
+tr.dn-item-row:hover td:first-child::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 8%; bottom: 8%;
+    width: 3px;
+    background: linear-gradient(180deg, #2563EB, #1e40af);
+    border-radius: 0 3px 3px 0;
+}
+/* Tên doanh nghiệp đổi màu khi hover */
+tr.dn-item-row:hover .dn-name {
+    color: #1e40af !important;
+}
+
+/* ---- ACCORDION ---- */
+.btn-accordion {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    color: var(--text-light);
+    padding: 0;
+    flex-shrink: 0;
+}
+.btn-accordion:hover { background: rgba(140,29,64,0.08); border-color: var(--primary); color: var(--primary); }
+.btn-accordion.open { background: rgba(26,138,86,0.1); border-color: #1a8a56; color: #1a8a56; }
+.btn-accordion .fa-chevron-right { font-size: 0.65rem; }
+.acc-count {
+    position: absolute;
+    top: -6px; right: -6px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 800;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+tr.vip-item-row td { cursor: default; }
+tr.vip-item-row td[onclick] { cursor: pointer; }
+tr.vip-item-row td[onclick]:hover { color: #1a6641 !important; text-decoration: underline; }
+
+/* ============================================================
+   SEARCH BAR
+============================================================ */
+.search-input {
+    border-radius: 20px !important;
+    padding-left: 2.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A96A8' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 12px center;
+    font-size: 0.82rem !important;
+}
+/* ---- BỘ LỌC CHỨC VỤ ---- */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 0 2px;
+}
+.filter-btn {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(140,29,64,0.05); }
+.filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(140,29,64,0.3); }
+.filter-btn.active.cap1 { background: linear-gradient(135deg,var(--primary),var(--primary-light)); }
+.filter-btn.active.cap2 { background: linear-gradient(135deg,#1e40af,#2563EB); border-color:#2563EB; }
+.filter-btn.active.cap3 { background: linear-gradient(135deg,#0f766e,#0d9488); border-color:#0d9488; }
+body.dark-mode .filter-btn { background: var(--surface-2); border-color: var(--border); color: var(--text-mid); }
+body.dark-mode .filter-btn:hover { border-color: #4ADE80; color: #4ADE80; }
+
+.pagination-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+}
+.pagination-info { color: var(--text-light); font-size: 0.78rem; }
+.pagination-controls { display: flex; align-items: center; gap: 5px; }
+.pagination-link {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--white);
+    color: var(--text-mid);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+.pagination-link:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(140,29,64,0.05);
+}
+.pagination-link.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+.pagination-link.disabled { pointer-events: none; opacity: 0.45; }
+.pagination-limit { width: auto; min-width: 100px; font-size: 0.78rem; }
+/* Fade khi lọc */
+
+/* ---- COMMAND PALETTE ---- */
+#cmdOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,12,20,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 99998;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 12vh;
+}
+#cmdOverlay.open { display: flex; }
+
+#cmdBox {
+    width: 100%;
+    max-width: 580px;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+    overflow: hidden;
+}
+
+#cmdInput {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background: var(--white);
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border);
+}
+#cmdInput::placeholder { color: var(--text-light); }
+
+#cmdResults {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 6px 0;
+}
+.cmd-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+}
+.cmd-item:hover, .cmd-item.selected {
+    background: rgba(140,29,64,0.06);
+    border-left-color: var(--primary);
+}
+body.dark-mode .cmd-item:hover,
+body.dark-mode .cmd-item.selected {
+    background: rgba(74,222,128,0.07);
+    border-left-color: #4ADE80;
+}
+.cmd-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+.cmd-icon.vip  { background: rgba(26,138,86,0.12);  color: #1a8a56; }
+.cmd-icon.dn   { background: rgba(37,99,235,0.12);  color: #2563EB; }
+.cmd-icon.nav  { background: rgba(140,29,64,0.1);   color: var(--primary); }
+.cmd-icon.ls   { background: rgba(212,175,55,0.15); color: var(--accent-dark); }
+
+.cmd-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    flex: 1;
+}
+.cmd-name mark {
+    background: rgba(212,175,55,0.35);
+    color: var(--accent-dark);
+    border-radius: 3px;
+    padding: 0 2px;
+}
+.cmd-sub {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+.cmd-tag {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 700;
+    background: var(--surface-2);
+    color: var(--text-light);
+}
+.cmd-group-label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 8px 20px 4px;
+}
+#cmdEmpty {
+    text-align: center;
+    padding: 28px;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+#cmdFooter {
+    padding: 8px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    font-size: 0.7rem;
+    color: var(--text-light);
+}
+.cmd-hint kbd {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.68rem;
+    font-family: monospace;
+    color: var(--text-mid);
+}
+
+/* ============================================================
+   MODAL ADD CUSTOMER - Popup giữa màn hình
+============================================================ */
+.modal-backdrop-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.58);
+    backdrop-filter: blur(3px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-backdrop-custom.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content-custom {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1.2);
+    position: relative;
+    z-index: 10000;
+}
+.modal-backdrop-custom.show .modal-content-custom {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modal-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 10;
+}
+.modal-header-custom h5 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+.modal-close-btn:hover {
+    background: var(--surface);
+    color: var(--text-dark);
+}
+
+.modal-body-custom {
+    padding: 1.5rem;
+}
+.modal-footer-custom {
+    display: flex;
+    gap: 10px;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+.modal-footer-custom .btn {
+    flex: 1;
+}
+
+/* Dark mode support */
+body.dark-mode .modal-content-custom {
+    background: var(--white);
+    color: var(--text-dark);
+}
+body.dark-mode .modal-header-custom {
+    background: var(--white);
+    border-bottom-color: var(--border);
+}
+body.dark-mode .modal-footer-custom {
+    background: var(--surface);
+    border-top-color: var(--border);
+}
+
+/* ============================================================
+   DISABLE STICKY HEADER KHI MODAL MỞ
+============================================================ */
+body.modal-open thead.sticky-top th {
+    position: static !important;
+    z-index: auto !important;
+}
+body.modal-open {
+    overflow: hidden;
+}
+
+/* ============================================================
+   MODAL VIP DETAIL
+============================================================ */
+.vip-detail-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.vip-detail-modal-backdrop.show {
+    display: flex;
+    opacity: 1;
+}
+
+.vip-detail-modal-content {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    max-width: 560px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1.2);
+    position: relative;
+    z-index: 10000;
+}
+.vip-detail-modal-backdrop.show .vip-detail-modal-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.vip-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.45rem 1.75rem 1rem;
+    border-bottom: 0;
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    z-index: 10;
+}
+.vip-detail-header h4 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.vip-detail-body {
+    padding: 0 1.75rem 1.25rem;
+}
+
+.vip-profile-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #eef7ff, #dff1ff);
+}
+body.dark-mode .vip-profile-card {
+    background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(14,165,233,0.12));
+}
+.vip-profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: #d7e7ff;
+    color: #2452b8;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+.vip-profile-name {
+    color: var(--text-dark);
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+.vip-profile-company {
+    color: var(--text-mid);
+    font-size: 0.78rem;
+}
+
+.vip-info-section {
+    margin-bottom: 1.25rem;
+}
+.vip-info-section-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.vip-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.vip-info-grid.full {
+    grid-template-columns: 1fr 1fr;
+}
+
+.vip-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 62px;
+    padding: 11px 12px;
+    border-radius: 9px;
+    background: var(--surface);
+}
+.vip-info-label {
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+}
+.vip-info-value {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.vip-info-value.edit-mode,
+.vip-edit-input.edit-mode {
+    display: none;
+}
+.vip-detail-modal-content.editing .vip-info-value.view-mode {
+    display: none;
+}
+.vip-detail-modal-content.editing .vip-info-value.edit-mode,
+.vip-detail-modal-content.editing .vip-edit-input.edit-mode {
+    display: block;
+}
+
+.vip-edit-input {
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-family: inherit;
+    width: 100%;
+}
+
+.vip-notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.vip-note-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+    background: var(--surface);
+}
+.vip-note-content {
+    flex: 1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.vip-note-date {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+.vip-note-actions {
+    display: flex;
+    gap: 6px;
+    margin-left: 10px;
+}
+.vip-note-delete-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.vip-detail-footer {
+    display: flex;
+    gap: 10px;
+    padding: 1rem 1.75rem 1.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
+.vip-notes-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.vip-notes-heading .vip-info-section-title {
+    margin-bottom: 0;
+}
+.vip-notes-count {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+.vip-detail-footer.edit-mode .view-actions {
+    display: none;
+}
+.vip-detail-footer.edit-mode .edit-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.vip-detail-footer .edit-actions {
+    display: none;
+}
+.vip-detail-footer .view-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+.vip-detail-footer .btn {
+    flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .vip-detail-modal-content {
+        width: 100%;
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+    .vip-info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .modal-content-custom {
+        width: 100%;
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+    .modal-header-custom {
+        padding: 1rem;
+    }
+    .modal-body-custom {
+        padding: 1rem;
+    }
+    .modal-footer-custom {
+        padding: 1rem;
+        flex-direction: column;
+    }
+}
+

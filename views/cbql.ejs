@@ -75,18 +75,9 @@
         <a class="navbar-brand" href="/"><i class="fa-solid fa-building-columns me-2" style="color:var(--accent);"></i>HỆ THỐNG CRM NỘI BỘ</a>
         <div class="navbar-nav ms-lg-3">
             <a class="nav-link" href="/"><i class="fa-solid fa-house me-1"></i>Màn hình chính</a>
-            <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i><%= user.role === 'can_bo' ? 'Khách hàng của tôi' : 'Khách hàng & VIP' %></a>
-            <% if (user.role !== 'can_bo') { %>
-                <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Chức vụ</a>
-            <% } %>
+            <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i>Khách hàng & VIP</a>
+            <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Chức vụ</a>
             <a class="nav-link active" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
-            <% if (user.role === 'admin') { %>
-                <a class="nav-link" href="/users"><i class="fa-solid fa-users-gear me-1"></i>Tài khoản</a>
-            <% } %>
-        </div>
-        <div class="ms-auto d-flex align-items-center gap-3 text-white" style="font-size:.7rem;">
-            <div class="text-end"><strong><%= user.full_name || user.username %></strong><br><span style="opacity:.75;"><%= user.role %></span></div>
-            <form action="/logout" method="POST"><button class="btn btn-sm btn-outline-light" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form>
         </div>
     </div>
 </nav>
@@ -101,7 +92,6 @@
 
     <form class="card-panel filter-panel mb-3" action="/cbql" method="GET" id="filterForm">
         <div class="row g-3 align-items-end">
-            <% if (user.role !== 'can_bo') { %>
             <div class="col-lg-4 col-md-6">
                 <label class="form-label">Cán bộ quản lý</label>
                 <select class="form-select" name="canBo" id="canBoFilter">
@@ -113,7 +103,6 @@
                     <% }) %>
                 </select>
             </div>
-            <% } %>
             <div class="col-lg-3 col-md-6">
                 <label class="form-label">Tháng thống kê</label>
                 <input type="month" class="form-control" name="month" value="<%= month %>">

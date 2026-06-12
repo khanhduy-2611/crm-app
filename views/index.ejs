@@ -3,634 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM - Màn hình chính</title>
+    <title>Dashboard CRM Agribank</title>
     <link href="/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* ============================================================
-           AGRIBANK CRM — DESIGN SYSTEM (shared with khach-hang.ejs)
-        ============================================================ */
-        :root {
-            --primary:       #8C1D40;
-            --primary-dark:  #6d1632;
-            --primary-light: #b5244f;
-            --accent:        #D4AF37;
-            --accent-dark:   #b8962e;
-            --accent-light:  #e8c84a;
-            --surface:       #F4F6F9;
-            --surface-2:     #EEF1F6;
-            --white:         #FFFFFF;
-            --text-dark:     #1A1F2E;
-            --text-mid:      #4A5568;
-            --text-light:    #8A96A8;
-            --border:        #E2E8F0;
-            --shadow-sm:     0 2px 8px rgba(0,0,0,0.06);
-            --shadow-md:     0 4px 20px rgba(0,0,0,0.08);
-            --shadow-lg:     0 8px 40px rgba(0,0,0,0.12);
-            --shadow-primary:0 4px 20px rgba(140,29,64,0.18);
-            --radius:        10px;
-            --radius-sm:     7px;
-            --radius-lg:     16px;
-            --transition:    all 0.25s ease;
-        }
-
-        * { box-sizing: border-box; }
-
-        body.dark-mode {
-            --surface:   #1E2235;
-            --surface-2: #1A1F30;
-            --white:     #252B3D;
-            --text-dark: #EDF2F7;
-            --text-mid:  #A0AEC0;
-            --text-light:#718096;
-            --border:    #3A4258;
-        }
-        body.dark-mode .section-card,
-        body.dark-mode .hero-banner { background: var(--white) !important; border-color: var(--border) !important; }
-        body.dark-mode .crm-item { background: var(--surface-2) !important; border-color: var(--border) !important; }
-        body.dark-mode .crm-item.today { background: rgba(212,175,55,0.1) !important; }
-        body.dark-mode .item-name { color: #60A5FA !important; text-shadow: 0 0 8px rgba(96,165,250,0.3) !important; }
-        body.dark-mode .vip-name { color: #4ADE80 !important; text-shadow: 0 0 8px rgba(74,222,128,0.35) !important; }
-        body.dark-mode .vip-phone { color: #F472B6 !important; text-shadow: 0 0 6px rgba(244,114,182,0.3) !important; }
-        body.dark-mode .hero-title { color: var(--accent-light) !important; text-shadow: 0 0 12px rgba(212,175,55,0.25) !important; }
-        body.dark-mode .section-card-header.red   { background: linear-gradient(135deg, var(--primary-dark), var(--primary)) !important; }
-        body.dark-mode .section-card-header.green { background: linear-gradient(135deg, #1a5c38, #1a8a56) !important; }
-        body.dark-mode .form-control,
-        body.dark-mode .form-select { background: var(--surface-2) !important; color: var(--text-dark) !important; border-color: var(--border) !important; }
-        *, *::before, *::after { transition: background-color 0.5s ease, border-color 0.4s ease, color 0.3s ease; }
-
-        .navbar-clock { display:flex; align-items:center; gap:10px; margin-left:auto; }
-        .clock-display { font-family:'Be Vietnam Pro',sans-serif; font-size:0.8rem; font-weight:700; color:rgba(255,255,255,0.85); letter-spacing:1px; display:flex; align-items:center; gap:6px; }
-        .clock-display .clock-time { font-size:0.88rem; color:var(--accent-light); font-variant-numeric:tabular-nums; }
-        .clock-display .clock-date { font-size:0.72rem; color:rgba(255,255,255,0.55); }
-
-        body {
-            font-family: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
-            background: var(--surface);
-            color: var(--text-dark);
-            font-size: 0.92rem;
-        }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--surface-2); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
-
-        /* ---- NAVBAR ---- */
-        .navbar {
-            background: var(--primary) !important;
-            box-shadow: var(--shadow-primary);
-            border-bottom: 3px solid var(--accent);
-            padding: 0.6rem 1rem;
-        }
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1rem;
-            letter-spacing: 0.5px;
-            color: #fff !important;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .navbar-brand::before {
-            content: '';
-            display: inline-block;
-            width: 28px; height: 28px;
-            background: var(--accent);
-            border-radius: 6px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238C1D40'%3E%3Cpath d='M2 10.5L12 3l10 7.5V21H15v-6H9v6H2V10.5z'/%3E%3C/svg%3E");
-            background-size: 16px;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        .navbar .nav-link {
-            color: rgba(255,255,255,0.75) !important;
-            font-weight: 500;
-            font-size: 0.85rem;
-            padding: 0.4rem 0.9rem;
-            border-radius: var(--radius-sm);
-            transition: var(--transition);
-        }
-        .navbar .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.15); }
-        .navbar .nav-link.active {
-            color: var(--accent-light) !important;
-            background: rgba(212,175,55,0.25);
-        }
-
-        /* ---- HERO BANNER ---- */
-        .hero-banner {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 2rem 2.5rem;
-            margin-bottom: 1.75rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--accent));
-        }
-        .hero-banner::after {
-            content: '';
-            position: absolute;
-            right: -30px; top: -30px;
-            width: 160px; height: 160px;
-            border-radius: 50%;
-            background: rgba(140,29,64,0.04);
-        }
-        .hero-title {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-        .hero-sub { color: var(--text-light); font-size: 0.88rem; }
-        .hero-sub strong { color: var(--primary); font-weight: 700; }
-
-        /* ---- SECTION CARDS ---- */
-        .section-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-        .section-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-
-        .section-card-header {
-            padding: 1rem 1.25rem;
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-        }
-        .section-card-header.red {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #fff;
-        }
-        .section-card-header.green {
-            background: linear-gradient(135deg, #1a6641, #1a8a56);
-            color: #fff;
-        }
-        .section-card-header i { font-size: 1rem; opacity: 0.9; }
-
-        .section-card-body { padding: 0.75rem; }
-
-        /* ---- LIST ITEMS ---- */
-        .crm-item {
-            border-radius: var(--radius);
-            padding: 0.9rem 1rem;
-            margin-bottom: 0.5rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            transition: var(--transition);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .crm-item:last-child { margin-bottom: 0; }
-        .crm-item:hover { border-color: rgba(140,29,64,0.25); background: rgba(140,29,64,0.03); }
-
-        /* Today highlight */
-        .crm-item.today {
-            background: linear-gradient(135deg, #fff8ed, #fff3d4) !important;
-            border-left: 4px solid var(--accent) !important;
-            border-color: rgba(212,175,55,0.4);
-            animation: pulseGlow 2.5s ease-in-out infinite;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.15); }
-            50%       { box-shadow: 0 0 10px 4px rgba(212,175,55,0.25); }
-        }
-
-        .item-name {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            margin-bottom: 2px;
-        }
-        .item-meta {
-            font-size: 0.78rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .item-meta i { font-size: 0.7rem; }
-
-        /* VIP item extra row */
-        .vip-item { flex-direction: column; align-items: flex-start; }
-        .vip-item .vip-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 4px;
-        }
-        .vip-item .vip-name {
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: #1a6641;
-        }
-        .vip-item.today .vip-name { color: var(--accent-dark); }
-        .vip-item .vip-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            font-size: 0.78rem;
-            color: var(--text-light);
-            margin-top: 2px;
-        }
-        .vip-item .vip-phone {
-            color: var(--primary);
-            font-weight: 700;
-            font-size: 0.82rem;
-        }
-        .vip-item .vip-unit {
-            font-size: 0.78rem;
-            color: var(--text-mid);
-        }
-        .vip-item .vip-unit strong { color: var(--text-dark); font-weight: 600; }
-
-        /* ---- BADGES ---- */
-        .badge-primary  { background: var(--primary); color: #fff; }
-        .badge-success  { background: #1a8a56; color: #fff; }
-        .badge-today-kh {
-            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
-            color: #fff;
-            font-size: 0.72rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .badge-today-vip {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #fff;
-            font-size: 0.72rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        .badge-chucvu {
-            font-size: 0.7rem;
-            padding: 3px 9px;
-            border-radius: 5px;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-        /* Cấp 1: Lãnh đạo cao nhất — Đỏ đô */
-        .badge-cap1 {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(140,29,64,0.25);
-        }
-        /* Cấp 2: Quản lý trung cấp — Xanh dương */
-        .badge-cap2 {
-            background: linear-gradient(135deg, #1e40af, #2563EB);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
-        }
-        /* Cấp 3: Chức vụ khác — Xanh ngọc */
-        .badge-cap3 {
-            background: linear-gradient(135deg, #0f766e, #0d9488);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(13,148,136,0.2);
-        }
-        .badge-congrats {
-            background: rgba(140,29,64,0.08);
-            color: var(--primary);
-            border: 1px solid rgba(140,29,64,0.18);
-            font-size: 0.72rem;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        /* ---- EMPTY STATE ---- */
-        .empty-state {
-            text-align: center;
-            padding: 2.5rem 1rem;
-            color: var(--text-light);
-        }
-        .empty-state i { font-size: 2rem; margin-bottom: 10px; opacity: 0.4; display: block; }
-
-        .dashboard-pagination {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 12px 4px 4px;
-            border-top: 1px solid var(--border);
-            margin-top: 10px;
-        }
-        .dashboard-pagination-info { color: var(--text-light); font-size: 0.7rem; }
-        .dashboard-pagination-controls { display: flex; align-items: center; gap: 4px; }
-        .dashboard-page-link {
-            min-width: 28px;
-            height: 28px;
-            padding: 0 7px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--white);
-            color: var(--text-mid);
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-decoration: none;
-        }
-        .dashboard-page-link:hover { border-color: var(--primary); color: var(--primary); }
-        .dashboard-page-link.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-        .dashboard-page-link.disabled { pointer-events: none; opacity: 0.4; }
-        .dashboard-limit { width: auto; min-width: 92px; font-size: 0.72rem; }
-
-        /* ---- ANIMATIONS ---- */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .anim { animation: fadeUp 0.45s ease both; }
-        .anim-1 { animation-delay: 0.05s; }
-        .anim-2 { animation-delay: 0.14s; }
-        .anim-3 { animation-delay: 0.22s; }
-    </style>
+    <link href="/css/dashboard.css" rel="stylesheet">
 </head>
 <body>
+<% const birthdaysToday = birthdays.filter(item => item.days_left === 0); %>
+<% const birthdaysUpcoming = birthdays.filter(item => item.days_left > 0); %>
+<% const dashboardUrl = (nextKhPage, nextVipPage, nextLimit = limit) => `/?khPage=${nextKhPage}&vipPage=${nextVipPage}&limit=${nextLimit}`; %>
 
-<nav class="navbar navbar-expand-lg mb-4">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/">HỆ THỐNG CRM NỘI BỘ</a>
-        <div class="navbar-nav">
-            <a class="nav-link active" href="/"><i class="fa-solid fa-house-chimney me-1"></i>Màn hình chính</a>
-            <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i><%= user.role === 'can_bo' ? 'Khách hàng của tôi' : 'Quản lý Khách Hàng & VIP' %></a>
-            <% if (user.role !== 'can_bo') { %>
-                <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Quản lý Chức Vụ</a>
-            <% } %>
-            <a class="nav-link" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
-            <% if (user.role === 'admin') { %>
-                <a class="nav-link" href="/users"><i class="fa-solid fa-users-gear me-1"></i>Tài khoản</a>
-            <% } %>
-        </div>
-        <div class="navbar-clock">
-            <div class="text-white text-end" style="font-size:.68rem;line-height:1.25;">
-                <strong><%= user.full_name || user.username %></strong><br>
-                <span style="opacity:.75;"><%= user.role %></span>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid px-lg-4">
+        <a class="navbar-brand" href="/">CRM AGRIBANK</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="dashboardNav">
+            <div class="navbar-nav me-auto">
+                <a class="nav-link active" href="/"><i class="fa-solid fa-chart-pie me-1"></i>Dashboard</a>
+                <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i>Khách hàng</a>
+                <a class="nav-link" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>CBQL</a>
+                <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Chức vụ</a>
             </div>
-            <div class="clock-display">
-                <i class="fa-regular fa-clock"></i>
-                <div>
-                    <div class="clock-time" id="clockTime">--:--:--</div>
-                    <div class="clock-date" id="clockDate">--/--/----</div>
+            <div class="dashboard-user">
+                <div class="dashboard-clock" id="dashboardClock">--:--</div>
+                <div class="notification-wrap" id="notificationWrap">
+                    <button type="button"
+                            class="notification-bell <%= birthdaysToday.length > 0 ? 'has-today' : '' %>"
+                            id="notificationBell"
+                            onclick="toggleDashboardNotifications(event)"
+                            aria-label="Mở thông báo sinh nhật">
+                        <i class="fa-solid fa-bell"></i>
+                        <% if (birthdays.length > 0) { %>
+                            <span class="notification-count"><%= birthdays.length > 99 ? '99+' : birthdays.length %></span>
+                        <% } %>
+                    </button>
+                    <div class="notification-panel" id="notificationPanel">
+                        <div class="notification-header">
+                            <i class="fa-solid fa-cake-candles me-2"></i>Thông báo sinh nhật
+                        </div>
+                        <% if (birthdays.length === 0) { %>
+                            <div class="notification-empty">
+                                <i class="fa-regular fa-calendar-check"></i>
+                                Không có sinh nhật trong 7 ngày tới.
+                            </div>
+                        <% } %>
+                        <% if (birthdaysToday.length > 0) { %>
+                            <div class="notification-group-title">Hôm nay</div>
+                            <% birthdaysToday.forEach(item => { %>
+                                <div class="notification-item today">
+                                    <div class="notification-item-icon"><i class="fa-solid fa-cake-candles"></i></div>
+                                    <div>
+                                        <strong><%= item.ho_ten %></strong>
+                                        <span><%= item.ten_khach_hang || 'Chưa có doanh nghiệp' %></span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                        <% if (birthdaysUpcoming.length > 0) { %>
+                            <div class="notification-group-title">Trong 7 ngày tới</div>
+                            <% birthdaysUpcoming.forEach(item => { %>
+                                <div class="notification-item">
+                                    <div class="notification-item-icon"><i class="fa-solid fa-gift"></i></div>
+                                    <div>
+                                        <strong><%= item.ho_ten %></strong>
+                                        <span>Còn <%= item.days_left %> ngày · <%= item.ten_khach_hang || 'Chưa có doanh nghiệp' %></span>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
                 </div>
             </div>
-            <form action="/logout" method="POST">
-                <button class="btn btn-sm btn-outline-light" type="submit" title="Đăng xuất"><i class="fa-solid fa-right-from-bracket"></i></button>
-            </form>
         </div>
     </div>
 </nav>
 
-<div class="container pb-5">
-    <%
-        const makeDashboardUrl = (targetKhPage, targetVipPage, targetLimit = limit) =>
-            `/?khPage=${targetKhPage}&vipPage=${targetVipPage}&limit=${targetLimit}`;
-        const khStart = totalKhachHang === 0 ? 0 : (khPage - 1) * limit + 1;
-        const khEnd = Math.min(khPage * limit, totalKhachHang);
-        const vipStart = totalVip === 0 ? 0 : (vipPage - 1) * limit + 1;
-        const vipEnd = Math.min(vipPage * limit, totalVip);
-    %>
-
-    <!-- HERO -->
-    <div class="hero-banner anim anim-1">
-        <div class="hero-title">
-            <i class="fa-solid fa-chart-line me-2" style="color:var(--accent);font-size:1.3rem;"></i>
-            Màn Hình Theo Dõi Chăm Sóc Khách Hàng
+<% if (birthdaysToday.length > 0) { %>
+    <div class="celebration-ticker" role="status">
+        <div class="celebration-ticker-track">
+            <% birthdaysToday.forEach(item => { %>
+                <span>
+                    <i class="fa-solid fa-star me-2"></i>
+                    Chúc mừng sinh nhật <strong><%= item.ho_ten %></strong>
+                    <% if (item.ten_khach_hang) { %> · <%= item.ten_khach_hang %><% } %>
+                </span>
+            <% }) %>
         </div>
-        <p class="hero-sub mb-0">
-            Hệ thống tự động lọc sự kiện trong <strong>Tháng <%= thang %></strong>
-        </p>
+    </div>
+    <div class="celebration-effects" id="celebrationEffects" aria-hidden="true"></div>
+<% } %>
+
+<main class="container-fluid px-lg-4 py-4">
+    <section class="dashboard-heading">
+        <div>
+            <span class="eyebrow">Theo dõi sự kiện định kỳ</span>
+            <h1>Sự kiện trong tháng <%= thang %></h1>
+            <p>Danh sách tự động chuyển theo tháng hệ thống. Cập nhật đến ngày <span id="dashboardDate"></span>.</p>
+        </div>
+        <a class="btn btn-agribank" href="/khach-hang">
+            <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Mở danh sách VIP
+        </a>
+    </section>
+
+    <div class="monthly-grid">
+        <section class="dashboard-panel">
+            <header class="panel-header">
+                <div>
+                    <span class="eyebrow">Doanh nghiệp</span>
+                    <h2>Ngày thành lập trong tháng <%= thang %></h2>
+                </div>
+                <span class="panel-count"><%= totalKhachHang %> doanh nghiệp</span>
+            </header>
+            <div class="monthly-list">
+                <% if (danhSachKhachHang.length === 0) { %>
+                    <div class="empty-state">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        Không có doanh nghiệp kỷ niệm ngày thành lập trong tháng này.
+                    </div>
+                <% } %>
+                <% danhSachKhachHang.forEach(item => { %>
+                    <article class="monthly-item <%= item.la_hom_nay ? 'today' : '' %>">
+                        <div class="event-date">
+                            <strong><%= new Date(item.ngay_thanh_lap).getDate() %></strong>
+                            <span>Tháng <%= thang %></span>
+                        </div>
+                        <div class="event-info">
+                            <strong><%= item.ten_khach_hang %></strong>
+                            <span>Ngày thành lập: <%= new Date(item.ngay_thanh_lap).toLocaleDateString('vi-VN') %></span>
+                            <% if (item.la_hom_nay) { %><small>Hôm nay</small><% } %>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+            <% if (tongTrangKhachHang > 1) { %>
+                <nav class="panel-pagination" aria-label="Phân trang doanh nghiệp">
+                    <a class="page-button <%= khPage <= 1 ? 'disabled' : '' %>"
+                       href="<%= khPage <= 1 ? '#' : dashboardUrl(khPage - 1, vipPage) %>">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <span>Trang <strong><%= khPage %></strong>/<%= tongTrangKhachHang %></span>
+                    <a class="page-button <%= khPage >= tongTrangKhachHang ? 'disabled' : '' %>"
+                       href="<%= khPage >= tongTrangKhachHang ? '#' : dashboardUrl(khPage + 1, vipPage) %>">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </nav>
+            <% } %>
+        </section>
+
+        <section class="dashboard-panel">
+            <header class="panel-header">
+                <div>
+                    <span class="eyebrow">Khách hàng VIP</span>
+                    <h2>Sinh nhật trong tháng <%= thang %></h2>
+                </div>
+                <span class="panel-count"><%= totalVip %> VIP</span>
+            </header>
+            <div class="monthly-list">
+                <% if (danhSachVip.length === 0) { %>
+                    <div class="empty-state">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        Không có khách hàng VIP sinh nhật trong tháng này.
+                    </div>
+                <% } %>
+                <% danhSachVip.forEach(item => { %>
+                    <article class="monthly-item <%= item.la_hom_nay ? 'today' : '' %>">
+                        <div class="event-date vip">
+                            <strong><%= new Date(item.ngay_sinh).getDate() %></strong>
+                            <span>Tháng <%= thang %></span>
+                        </div>
+                        <div class="event-info">
+                            <strong><%= item.ho_ten %></strong>
+                            <span><%= item.ten_chuc_vu || 'Chưa cập nhật chức vụ' %> · <%= item.ten_khach_hang || 'Chưa có doanh nghiệp' %></span>
+                            <span>Sinh nhật: <%= new Date(item.ngay_sinh).toLocaleDateString('vi-VN') %><% if (item.so_dien_thoai) { %> · <%= item.so_dien_thoai %><% } %></span>
+                            <% if (item.la_hom_nay) { %><small>Chúc mừng sinh nhật hôm nay</small><% } %>
+                        </div>
+                    </article>
+                <% }) %>
+            </div>
+            <% if (tongTrangVip > 1) { %>
+                <nav class="panel-pagination" aria-label="Phân trang VIP">
+                    <a class="page-button <%= vipPage <= 1 ? 'disabled' : '' %>"
+                       href="<%= vipPage <= 1 ? '#' : dashboardUrl(khPage, vipPage - 1) %>">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <span>Trang <strong><%= vipPage %></strong>/<%= tongTrangVip %></span>
+                    <a class="page-button <%= vipPage >= tongTrangVip ? 'disabled' : '' %>"
+                       href="<%= vipPage >= tongTrangVip ? '#' : dashboardUrl(khPage, vipPage + 1) %>">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </nav>
+            <% } %>
+        </section>
     </div>
 
-    <div class="row g-4">
-
-        <!-- DOANH NGHIỆP KỶ NIỆM -->
-        <div class="col-md-6 anim anim-2">
-            <div class="section-card h-100">
-                <div class="section-card-header red">
-                    <i class="fa-solid fa-building-columns"></i>
-                    Doanh Nghiệp Thành Lập Trong Tháng
-                </div>
-                <div class="section-card-body">
-                    <% if (danhSachKhachHang.length === 0) { %>
-                        <div class="empty-state">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                            Không có doanh nghiệp nào trong tháng này.
-                        </div>
-                    <% } else { %>
-                        <% danhSachKhachHang.forEach(kh => { %>
-                            <div class="crm-item <%= kh.la_hom_nay ? 'today' : '' %>">
-                                <div>
-                                    <div class="item-name">
-                                        <% if (kh.la_hom_nay) { %><i class="fa-solid fa-party-horn me-1" style="color:var(--accent);"></i><% } %>
-                                        <%= kh.ten_khach_hang %>
-                                    </div>
-                                    <div class="item-meta">
-                                        <i class="fa-regular fa-calendar"></i>
-                                        Ngày kỷ niệm: <%= new Date(kh.ngay_thanh_lap).toLocaleDateString('vi-VN') %>
-                                    </div>
-                                </div>
-                                <% if (kh.la_hom_nay) { %>
-                                    <span class="badge-today-kh"><i class="fa-solid fa-gift me-1"></i>Hôm nay!</span>
-                                <% } else { %>
-                                    <span class="badge-congrats"><i class="fa-solid fa-champagne-glasses me-1"></i>Chúc mừng</span>
-                                <% } %>
-                            </div>
-                        <% }) %>
-                    <% } %>
-                    <div class="dashboard-pagination">
-                        <div class="dashboard-pagination-info">
-                            <%= khStart %>–<%= khEnd %> / <%= totalKhachHang %>
-                        </div>
-                        <div class="dashboard-pagination-controls">
-                            <a class="dashboard-page-link <%= khPage <= 1 ? 'disabled' : '' %>"
-                               href="<%= khPage <= 1 ? '#' : makeDashboardUrl(khPage - 1, vipPage) %>">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </a>
-                            <% for (let p = Math.max(1, khPage - 1); p <= Math.min(totalKhPages, khPage + 1); p++) { %>
-                                <a class="dashboard-page-link <%= p === khPage ? 'active' : '' %>"
-                                   href="<%= makeDashboardUrl(p, vipPage) %>"><%= p %></a>
-                            <% } %>
-                            <a class="dashboard-page-link <%= khPage >= totalKhPages ? 'disabled' : '' %>"
-                               href="<%= khPage >= totalKhPages ? '#' : makeDashboardUrl(khPage + 1, vipPage) %>">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SINH NHẬT VIP -->
-        <div class="col-md-6 anim anim-3">
-            <div class="section-card h-100">
-                <div class="section-card-header green">
-                    <i class="fa-solid fa-crown"></i>
-                    Sinh Nhật Lãnh Đạo VIP Trong Tháng
-                </div>
-                <div class="section-card-body">
-                    <% if (danhSachVip.length === 0) { %>
-                        <div class="empty-state">
-                            <i class="fa-regular fa-face-smile"></i>
-                            Không có VIP nào sinh nhật trong tháng này.
-                        </div>
-                    <% } else { %>
-                        <% danhSachVip.forEach(vip => { %>
-                            <div class="crm-item vip-item <%= vip.la_hom_nay ? 'today' : '' %>">
-                                <div class="vip-top">
-                                    <span class="vip-name">
-                                        <% if (vip.la_hom_nay) { %><i class="fa-solid fa-cake-candles me-1" style="color:var(--accent-dark);"></i><% } %>
-                                        <%= vip.ho_ten %>
-                                    </span>
-                                    <% if (vip.la_hom_nay) { %>
-                                        <span class="badge-today-vip"><i class="fa-solid fa-gift me-1"></i>Sinh nhật hôm nay!</span>
-                                    <% } else { %>
-                                        <span class="badge-chucvu"><%= vip.chuc_vu || 'VIP' %></span>
-                                    <% } %>
-                                </div>
-                                <div class="vip-unit">Đơn vị: <strong><%= vip.ten_khach_hang %></strong></div>
-                                <div class="vip-bottom">
-                                    <span><i class="fa-regular fa-calendar me-1"></i><%= new Date(vip.ngay_sinh).toLocaleDateString('vi-VN') %></span>
-                                    <span class="vip-phone"><i class="fa-solid fa-phone me-1"></i><%= vip.so_dien_thoai %></span>
-                                </div>
-                            </div>
-                        <% }) %>
-                    <% } %>
-                    <div class="dashboard-pagination">
-                        <div class="dashboard-pagination-info">
-                            <%= vipStart %>–<%= vipEnd %> / <%= totalVip %>
-                        </div>
-                        <div class="dashboard-pagination-controls">
-                            <a class="dashboard-page-link <%= vipPage <= 1 ? 'disabled' : '' %>"
-                               href="<%= vipPage <= 1 ? '#' : makeDashboardUrl(khPage, vipPage - 1) %>">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </a>
-                            <% for (let p = Math.max(1, vipPage - 1); p <= Math.min(totalVipPages, vipPage + 1); p++) { %>
-                                <a class="dashboard-page-link <%= p === vipPage ? 'active' : '' %>"
-                                   href="<%= makeDashboardUrl(khPage, p) %>"><%= p %></a>
-                            <% } %>
-                            <a class="dashboard-page-link <%= vipPage >= totalVipPages ? 'disabled' : '' %>"
-                               href="<%= vipPage >= totalVipPages ? '#' : makeDashboardUrl(khPage, vipPage + 1) %>">
-                                <i class="fa-solid fa-chevron-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="d-flex justify-content-end align-items-center gap-2 mt-3">
-        <span style="font-size:0.75rem;color:var(--text-light);">Số dòng mỗi danh sách:</span>
-        <select class="form-select form-select-sm dashboard-limit" id="dashboardLimit">
-            <option value="20" <%= limit === 20 ? 'selected' : '' %>>20 dòng</option>
-            <option value="50" <%= limit === 50 ? 'selected' : '' %>>50 dòng</option>
+    <div class="dashboard-options">
+        <label for="dashboardLimit">Số dòng mỗi danh sách</label>
+        <select id="dashboardLimit" class="form-select form-select-sm">
+            <option value="20" <%= limit === 20 ? 'selected' : '' %>>20</option>
+            <option value="50" <%= limit === 50 ? 'selected' : '' %>>50</option>
         </select>
     </div>
-</div>
+</main>
 
-<!-- Giữ nguyên data variables cho server (không dùng render nữa nhưng vẫn pass từ server) -->
-<script>
-    const dataThangSinh = <%- JSON.stringify(dataThangSinh) %>;
-    const dataChucVu    = <%- JSON.stringify(dataChucVu) %>;
-
-    // ---- BADGE CHỨC VỤ THEO CẤP BẬC ----
-    const CAP1 = ['giám đốc','phó giám đốc','tổng giám đốc','phó tổng giám đốc',
-                  'chủ tịch','phó chủ tịch','chủ tịch hội đồng quản trị','phó chủ tịch hội đồng quản trị',
-                  'hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo',
-                  'bí thư','phó bí thư','chủ tịch ubnd','phó chủ tịch ubnd',
-                  'giám đốc sở','phó giám đốc sở','viện trưởng','phó viện trưởng'];
-    const CAP2 = ['trưởng phòng','phó trưởng phòng','trưởng ban','phó ban','trưởng bộ phận',
-                  'trưởng nhóm','team lead','quản lý','manager','supervisor',
-                  'trưởng khoa','phó trưởng khoa','tổ trưởng','tổ phó',
-                  'trưởng chi nhánh','phó chi nhánh','giám sát'];
-
-    function getCapBadgeClass(ten) {
-        if (!ten) return 'badge-cap3';
-        const lower = ten.toLowerCase().trim();
-        if (CAP1.some(k => lower.includes(k))) return 'badge-cap1';
-        if (CAP2.some(k => lower.includes(k))) return 'badge-cap2';
-        return 'badge-cap3';
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.badge-chucvu').forEach(function (badge) {
-            const text = badge.textContent.trim();
-            if (!text || text === 'VIP') return;
-            badge.classList.add(getCapBadgeClass(text));
-        });
-
-        // ---- FAVICON & TITLE ĐỘNG ----
-        const todayBadges = document.querySelectorAll('.badge-today-vip, .badge-today-kh');
-        const count = todayBadges.length;
-        if (count > 0) {
-            document.title = `🎂 ${count} sự kiện hôm nay | CRM Agribank`;
-        } else {
-            document.title = 'Màn hình chính | CRM Agribank';
-        }
-        // Favicon
-        const canvas = document.createElement('canvas');
-        canvas.width = 32; canvas.height = 32;
-        const ctx = canvas.getContext('2d');
-        ctx.beginPath(); ctx.arc(16,16,15,0,2*Math.PI);
-        ctx.fillStyle = '#8C1D40'; ctx.fill();
-        if (count > 0) {
-            ctx.fillStyle = '#D4AF37'; ctx.font = 'bold 18px sans-serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText(count > 9 ? '9+' : count.toString(), 16, 17);
-        } else {
-            ctx.fillStyle = '#fff'; ctx.font = 'bold 18px sans-serif';
-            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-            ctx.fillText('A', 16, 17);
-        }
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) { link = document.createElement('link'); link.rel='icon'; document.head.appendChild(link); }
-        link.href = canvas.toDataURL();
-    });
-
-    // ======== ĐỒNG HỒ ========
-    function updateClock() {
-        const now = new Date();
-        const h = now.getHours();
-        const pad = n => String(n).padStart(2,'0');
-        const timeEl = document.getElementById('clockTime');
-        const dateEl = document.getElementById('clockDate');
-        if (timeEl) timeEl.textContent = `${pad(h)}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        if (dateEl) dateEl.textContent = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`;
-    }
-    document.getElementById('dashboardLimit').addEventListener('change', function() {
-        window.location.href = `/?khPage=1&vipPage=1&limit=${this.value}`;
-    });
-    document.body.classList.remove('dark-mode');
-    updateClock();
-    setInterval(updateClock, 1000);
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="/js/dashboard.js"></script>
 </body>
 </html>

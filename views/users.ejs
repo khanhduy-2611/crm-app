@@ -38,15 +38,6 @@
             <a class="nav-link" href="/chuc-vu">Chức vụ</a>
             <a class="nav-link active" href="/users">Quản lý tài khoản</a>
         </div>
-        <div class="ms-auto d-flex align-items-center gap-3">
-            <div class="user-box text-end">
-                <strong><%= user.full_name || user.username %></strong><br>
-                <span>Quản trị viên</span>
-            </div>
-            <form action="/logout" method="POST">
-                <button class="btn btn-sm btn-outline-light" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
-            </form>
-        </div>
     </div>
 </nav>
 
@@ -130,11 +121,9 @@
                                             <input class="form-control form-control-sm" type="password" name="password" minlength="8" placeholder="Mật khẩu mới" required>
                                             <button class="btn btn-sm btn-outline-warning" type="submit" title="Đặt lại mật khẩu"><i class="fa-solid fa-key"></i></button>
                                         </form>
-                                        <% if (account.id !== user.id) { %>
-                                            <form action="/users/<%= account.id %>/delete" method="POST" onsubmit="return confirm('Xóa tài khoản này?')">
-                                                <button class="btn btn-sm btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
-                                            </form>
-                                        <% } %>
+                                        <form action="/users/<%= account.id %>/delete" method="POST" onsubmit="return confirm('Xóa tài khoản này?')">
+                                            <button class="btn btn-sm btn-outline-danger" type="submit"><i class="fa-solid fa-trash"></i></button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

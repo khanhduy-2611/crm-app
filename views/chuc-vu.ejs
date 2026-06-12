@@ -370,15 +370,8 @@
             <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i>Quản lý Khách Hàng & VIP</a>
             <a class="nav-link active" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Quản lý Chức Vụ</a>
             <a class="nav-link" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
-            <% if (user.role === 'admin') { %>
-                <a class="nav-link" href="/users"><i class="fa-solid fa-users-gear me-1"></i>Tài khoản</a>
-            <% } %>
         </div>
         <div class="navbar-clock">
-            <div class="text-white text-end" style="font-size:.68rem;line-height:1.25;">
-                <strong><%= user.full_name || user.username %></strong><br>
-                <span style="opacity:.75;"><%= user.role %></span>
-            </div>
             <div class="clock-display">
                 <i class="fa-regular fa-clock"></i>
                 <div>
@@ -386,9 +379,6 @@
                     <div class="clock-date" id="clockDate">--/--/----</div>
                 </div>
             </div>
-            <form action="/logout" method="POST">
-                <button class="btn btn-sm btn-outline-light" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button>
-            </form>
             <button class="dark-toggle" id="darkToggle" onclick="toggleDarkManual()" title="Chuyển chế độ sáng/tối">
                 <span id="darkToggleIcon">🌙</span>
                 <span id="darkToggleText">Tối</span>
@@ -424,7 +414,6 @@
     <div class="row g-4">
 
         <!-- FORM THÊM MỚI -->
-        <% if (user.role === 'admin') { %>
         <div class="col-md-4 anim anim-2">
             <div class="card p-3">
                 <h5 class="section-title mb-3">
@@ -480,10 +469,9 @@
                 </div>
             </div>
         </div>
-        <% } %>
 
         <!-- BẢNG DANH SÁCH -->
-        <div class="<%= user.role === 'admin' ? 'col-md-8' : 'col-md-12' %> anim anim-3">
+        <div class="col-md-8 anim anim-3">
             <div class="card p-3">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                     <h5 class="section-title mb-0">
@@ -522,7 +510,6 @@
                                         <span class="badge-cap cv-badge"><%= cv.ten_chuc_vu %></span>
                                     </td>
                                     <td class="text-center">
-                                        <% if (user.role === 'admin') { %>
                                         <button class="btn btn-sm btn-outline-warning me-1 btn-sua-cv" data-id="<%= cv.id %>">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </button>
@@ -531,9 +518,6 @@
                                                 data-ten="<%= cv.ten_chuc_vu %>">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
-                                        <% } else { %>
-                                            <span class="text-muted">Chỉ xem</span>
-                                        <% } %>
                                     </td>
                                 </tr>
                                 <!-- Dòng sửa -->
