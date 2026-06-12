@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhật ký cán bộ quản lý | CRM Agribank</title>
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary:#8C1D40; --primary-dark:#68132e; --primary-light:#b5244f;
+            --accent:#D4AF37; --surface:#F4F6F9; --white:#fff;
+            --text:#1A1F2E; --muted:#7B8798; --border:#E2E8F0;
+            --green:#17824f; --orange:#d97706; --red:#dc3545;
+            --shadow:0 4px 18px rgba(15,23,42,.07); --radius:14px;
+        }
+        * { box-sizing:border-box; }
+        body { margin:0; background:var(--surface); color:var(--text); font-family:'Be Vietnam Pro',sans-serif; font-size:.9rem; }
+        .navbar { background:var(--primary)!important; border-bottom:3px solid var(--accent); box-shadow:0 4px 20px rgba(140,29,64,.18); }
+        .navbar-brand { color:#fff!important; font-size:.95rem; font-weight:800; }
+        .nav-link { color:rgba(255,255,255,.75)!important; font-size:.8rem; font-weight:600; border-radius:7px; }
+        .nav-link:hover,.nav-link.active { color:#fff!important; background:rgba(255,255,255,.14); }
+        .nav-link.active { color:#f5d86c!important; }
+        .page-title { font-size:1.45rem; font-weight:800; color:var(--primary); margin:0; }
+        .page-subtitle { color:var(--muted); font-size:.8rem; margin-top:4px; }
+        .card-panel { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+        .filter-panel { padding:16px; }
+        .form-label { color:var(--muted); font-size:.68rem; font-weight:800; letter-spacing:.7px; text-transform:uppercase; }
+        .form-control,.form-select { border-color:var(--border); border-radius:8px; font-size:.82rem; }
+        .form-control:focus,.form-select:focus { border-color:var(--primary); box-shadow:0 0 0 .2rem rgba(140,29,64,.12); }
+        .officer-card { display:flex; align-items:center; gap:12px; padding:14px 16px; margin-bottom:16px; }
+        .officer-avatar { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(140,29,64,.1); color:var(--primary); font-weight:800; }
+        .officer-name { font-size:1rem; font-weight:800; }
+        .officer-meta { color:var(--muted); font-size:.75rem; margin-top:2px; }
+        .stat-card { position:relative; overflow:hidden; min-height:112px; padding:17px; }
+        .stat-card::before { content:''; position:absolute; inset:0 auto 0 0; width:4px; background:var(--primary); }
+        .stat-card.accent::before { background:var(--accent); }
+        .stat-card.green::before { background:var(--green); }
+        .stat-card.orange::before { background:var(--orange); }
+        .stat-card.red::before { background:var(--red); }
+        .stat-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(140,29,64,.08); color:var(--primary); }
+        .stat-label { color:var(--muted); font-size:.66rem; font-weight:800; letter-spacing:.7px; text-transform:uppercase; }
+        .stat-value { font-size:1.65rem; font-weight:800; line-height:1; margin-top:9px; }
+        .section-header { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:16px 18px; border-bottom:1px solid var(--border); }
+        .section-title { margin:0; color:var(--primary); font-size:.82rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase; }
+        .table th { background:#f8fafc!important; color:var(--muted); font-size:.68rem; text-transform:uppercase; letter-spacing:.6px; padding:11px 14px; border-bottom:1px solid var(--border); }
+        .table td { padding:12px 14px; border-bottom:1px solid #edf1f5; vertical-align:middle; }
+        .vip-name { font-weight:800; color:var(--green); }
+        .company-name { color:#445064; font-size:.78rem; }
+        .status-badge { display:inline-flex; align-items:center; padding:4px 9px; border-radius:20px; font-size:.68rem; font-weight:800; }
+        .status-binh-thuong { color:var(--green); background:rgba(23,130,79,.1); }
+        .status-can-cham-soc { color:var(--orange); background:rgba(217,119,6,.1); }
+        .status-qua-han { color:var(--red); background:rgba(220,53,69,.1); }
+        .birthday-list { padding:12px; max-height:470px; overflow-y:auto; }
+        .birthday-item { display:flex; gap:10px; padding:11px; margin-bottom:8px; border-radius:10px; background:#f8fafc; border:1px solid var(--border); }
+        .birthday-icon { width:34px; height:34px; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--primary); background:rgba(212,175,55,.18); }
+        .birthday-name { font-size:.78rem; font-weight:800; }
+        .birthday-meta { color:var(--muted); font-size:.68rem; margin-top:2px; }
+        .empty-state { padding:32px 16px; text-align:center; color:var(--muted); font-size:.78rem; }
+        .pagination-wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:14px 16px; }
+        .pagination-info { color:var(--muted); font-size:.72rem; }
+        .page-links { display:flex; gap:4px; }
+        .page-link-custom { min-width:31px; height:31px; padding:0 8px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:7px; color:#566274; text-decoration:none; font-size:.72rem; font-weight:700; }
+        .page-link-custom:hover { color:var(--primary); border-color:var(--primary); }
+        .page-link-custom.active { color:#fff; border-color:var(--primary); background:var(--primary); }
+        .page-link-custom.disabled { opacity:.4; pointer-events:none; }
+        @media(max-width:991px) { .navbar-nav { flex-direction:row; flex-wrap:wrap; } }
+        @media(max-width:767px) { .page-title{font-size:1.2rem}.table-responsive{font-size:.8rem}.section-header{align-items:flex-start;flex-direction:column} }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg py-2">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="/"><i class="fa-solid fa-building-columns me-2" style="color:var(--accent);"></i>HỆ THỐNG CRM NỘI BỘ</a>
+        <div class="navbar-nav ms-lg-3">
+            <a class="nav-link" href="/"><i class="fa-solid fa-house me-1"></i>Màn hình chính</a>
+            <a class="nav-link" href="/khach-hang"><i class="fa-solid fa-users me-1"></i><%= user.role === 'can_bo' ? 'Khách hàng của tôi' : 'Khách hàng & VIP' %></a>
+            <% if (user.role !== 'can_bo') { %>
+                <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Chức vụ</a>
+            <% } %>
+            <a class="nav-link active" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
+            <% if (user.role === 'admin') { %>
+                <a class="nav-link" href="/users"><i class="fa-solid fa-users-gear me-1"></i>Tài khoản</a>
+            <% } %>
+        </div>
+        <div class="ms-auto d-flex align-items-center gap-3 text-white" style="font-size:.7rem;">
+            <div class="text-end"><strong><%= user.full_name || user.username %></strong><br><span style="opacity:.75;"><%= user.role %></span></div>
+            <form action="/logout" method="POST"><button class="btn btn-sm btn-outline-light" type="submit"><i class="fa-solid fa-right-from-bracket"></i></button></form>
+        </div>
+    </div>
+</nav>
+
+<main class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="page-title"><i class="fa-solid fa-clipboard-list me-2" style="color:var(--accent);"></i>Nhật Ký Cán Bộ Quản Lý</h1>
+            <div class="page-subtitle">Theo dõi danh mục khách hàng, tiến độ chăm sóc và công việc cần xử lý.</div>
+        </div>
+    </div>
+
+    <form class="card-panel filter-panel mb-3" action="/cbql" method="GET" id="filterForm">
+        <div class="row g-3 align-items-end">
+            <% if (user.role !== 'can_bo') { %>
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label">Cán bộ quản lý</label>
+                <select class="form-select" name="canBo" id="canBoFilter">
+                    <option value="">Tất cả cán bộ / Chưa phân công</option>
+                    <% listCanBo.forEach(canBo => { %>
+                        <option value="<%= canBo.id %>" <%= canBoId === canBo.id ? 'selected' : '' %>>
+                            <%= canBo.ho_ten %><%= canBo.phong_ban ? ' - ' + canBo.phong_ban : '' %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+            <% } %>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Tháng thống kê</label>
+                <input type="month" class="form-control" name="month" value="<%= month %>">
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label">Trạng thái công việc</label>
+                <select class="form-select" name="status">
+                    <option value="all" <%= status === 'all' ? 'selected' : '' %>>Tất cả trạng thái</option>
+                    <option value="binh-thuong" <%= status === 'binh-thuong' ? 'selected' : '' %>>Bình thường</option>
+                    <option value="can-cham-soc" <%= status === 'can-cham-soc' ? 'selected' : '' %>>Cần chăm sóc</option>
+                    <option value="qua-han" <%= status === 'qua-han' ? 'selected' : '' %>>Quá hạn</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-6 d-flex gap-2">
+                <button class="btn flex-fill text-white fw-bold" style="background:var(--primary);"><i class="fa-solid fa-filter me-1"></i>Lọc</button>
+                <a href="/cbql" class="btn btn-outline-secondary" title="Đặt lại"><i class="fa-solid fa-rotate-left"></i></a>
+            </div>
+        </div>
+    </form>
+
+    <% if (selectedCanBo) { %>
+        <div class="card-panel officer-card">
+            <div class="officer-avatar"><%= selectedCanBo.ho_ten.split(/\s+/).slice(-2).map(part => part[0]).join('').toUpperCase() %></div>
+            <div>
+                <div class="officer-name"><%= selectedCanBo.ho_ten %></div>
+                <div class="officer-meta">
+                    <%= selectedCanBo.phong_ban || 'Chưa cập nhật phòng ban' %>
+                    <% if (selectedCanBo.so_dien_thoai) { %> · <%= selectedCanBo.so_dien_thoai %><% } %>
+                    <% if (selectedCanBo.email) { %> · <%= selectedCanBo.email %><% } %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <div class="row g-3 mb-4">
+        <% const stats = [
+            ['Doanh nghiệp phụ trách', summary.totalDoanhNghiep, 'fa-building', ''],
+            ['VIP phụ trách', summary.totalVip, 'fa-user-tie', 'accent'],
+            ['Lượt chăm sóc trong tháng', summary.chamSocTrongThang, 'fa-handshake-angle', 'green'],
+            ['Cần chăm sóc hôm nay', summary.canChamSocHomNay, 'fa-calendar-day', 'orange'],
+            ['Quá hạn chăm sóc', summary.quaHan, 'fa-triangle-exclamation', 'red'],
+            ['Sinh nhật trong 7 ngày', summary.sinhNhatSapToi, 'fa-cake-candles', 'accent']
+        ]; %>
+        <% stats.forEach(item => { %>
+            <div class="col-xl-2 col-lg-4 col-md-6">
+                <div class="card-panel stat-card <%= item[3] %>">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-label"><%= item[0] %></div>
+                            <div class="stat-value"><%= item[1] %></div>
+                        </div>
+                        <div class="stat-icon"><i class="fa-solid <%= item[2] %>"></i></div>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-9">
+            <section class="card-panel">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-list-check me-2"></i>Danh sách công việc</h2>
+                    <select class="form-select form-select-sm" id="pageLimit" style="width:auto;">
+                        <option value="20" <%= limit === 20 ? 'selected' : '' %>>20 dòng</option>
+                        <option value="50" <%= limit === 50 ? 'selected' : '' %>>50 dòng</option>
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>VIP</th>
+                                <th>Doanh nghiệp</th>
+                                <th>Cán bộ</th>
+                                <th>Chăm sóc gần nhất</th>
+                                <th>Số ngày</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (workItems.length === 0) { %>
+                                <tr><td colspan="6" class="empty-state">Không có công việc phù hợp với bộ lọc.</td></tr>
+                            <% } %>
+                            <% workItems.forEach(item => {
+                                const statusLabel = item.trang_thai === 'binh-thuong' ? 'Bình thường'
+                                    : item.trang_thai === 'qua-han' ? 'Quá hạn' : 'Cần chăm sóc';
+                            %>
+                                <tr>
+                                    <td><a class="vip-name text-decoration-none" href="/khach-hang"><%= item.ho_ten %></a></td>
+                                    <td class="company-name"><%= item.ten_khach_hang || '---' %></td>
+                                    <td class="company-name"><%= item.can_bo_quan_ly || 'Chưa phân công' %></td>
+                                    <td><%= item.ngay_cham_soc_gan_nhat ? new Date(item.ngay_cham_soc_gan_nhat).toLocaleDateString('vi-VN') : 'Chưa chăm sóc' %></td>
+                                    <td><%= item.so_ngay_chua_cham_soc == null ? '---' : item.so_ngay_chua_cham_soc + ' ngày' %></td>
+                                    <td><span class="status-badge status-<%= item.trang_thai %>"><%= statusLabel %></span></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <%
+                    const makeUrl = (targetPage, targetLimit = limit) => {
+                        const params = [`page=${targetPage}`, `limit=${targetLimit}`, `month=${encodeURIComponent(month)}`];
+                        if (canBoId) params.push(`canBo=${canBoId}`);
+                        if (status !== 'all') params.push(`status=${encodeURIComponent(status)}`);
+                        return `/cbql?${params.join('&')}`;
+                    };
+                    const from = totalRows === 0 ? 0 : (page - 1) * limit + 1;
+                    const to = Math.min(page * limit, totalRows);
+                    const startPage = Math.max(1, Math.min(page - 2, totalPages - 4));
+                    const endPage = Math.min(totalPages, startPage + 4);
+                %>
+                <div class="pagination-wrap">
+                    <div class="pagination-info">Hiển thị <strong><%= from %>–<%= to %></strong> trên <strong><%= totalRows %></strong> công việc</div>
+                    <div class="page-links">
+                        <a class="page-link-custom <%= page <= 1 ? 'disabled' : '' %>" href="<%= page <= 1 ? '#' : makeUrl(page - 1) %>"><i class="fa-solid fa-chevron-left"></i></a>
+                        <% for (let p = startPage; p <= endPage; p++) { %>
+                            <a class="page-link-custom <%= p === page ? 'active' : '' %>" href="<%= makeUrl(p) %>"><%= p %></a>
+                        <% } %>
+                        <a class="page-link-custom <%= page >= totalPages ? 'disabled' : '' %>" href="<%= page >= totalPages ? '#' : makeUrl(page + 1) %>"><i class="fa-solid fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-xl-3">
+            <section class="card-panel">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fa-solid fa-cake-candles me-2"></i>Sinh nhật 7 ngày tới</h2>
+                </div>
+                <div class="birthday-list">
+                    <% if (birthdays.length === 0) { %>
+                        <div class="empty-state"><i class="fa-regular fa-calendar-xmark d-block mb-2" style="font-size:1.5rem;"></i>Không có sinh nhật sắp tới.</div>
+                    <% } %>
+                    <% birthdays.forEach(item => {
+                        const birthday = new Date(item.sinh_nhat_sap_toi);
+                        const today = new Date(); today.setHours(0,0,0,0);
+                        const daysLeft = Math.round((birthday - today) / 86400000);
+                    %>
+                        <div class="birthday-item">
+                            <div class="birthday-icon"><i class="fa-solid fa-gift"></i></div>
+                            <div>
+                                <div class="birthday-name"><%= item.ho_ten %></div>
+                                <div class="birthday-meta"><%= item.ten_khach_hang || '---' %></div>
+                                <div class="birthday-meta"><strong><%= daysLeft === 0 ? 'Hôm nay' : 'Còn ' + daysLeft + ' ngày' %></strong> · <%= birthday.toLocaleDateString('vi-VN') %></div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('canBoFilter').addEventListener('change', function() {
+        const form = document.getElementById('filterForm');
+        form.action = this.value ? '/cbql/' + this.value : '/cbql';
+        this.removeAttribute('name');
+        form.submit();
+    });
+
+    document.getElementById('pageLimit').addEventListener('change', function() {
+        const url = new URL(window.location.href);
+        url.pathname = '/cbql';
+        url.searchParams.set('limit', this.value);
+        url.searchParams.set('page', '1');
+        if (<%- JSON.stringify(canBoId) %>) url.searchParams.set('canBo', <%- JSON.stringify(canBoId) %>);
+        window.location.href = url.toString();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập | CRM Agribank</title>
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary:#8C1D40; --primary-dark:#68132e; --accent:#D4AF37; --surface:#F4F6F9; --border:#E2E8F0; }
+        * { box-sizing:border-box; }
+        body { min-height:100vh; margin:0; display:grid; place-items:center; padding:24px; background:linear-gradient(135deg,#f7f8fb,#edf1f6); font-family:'Be Vietnam Pro',sans-serif; }
+        .login-card { width:min(420px,100%); overflow:hidden; border:1px solid var(--border); border-radius:18px; background:#fff; box-shadow:0 24px 70px rgba(15,23,42,.14); }
+        .login-header { padding:28px; color:#fff; background:linear-gradient(135deg,var(--primary-dark),var(--primary)); border-bottom:4px solid var(--accent); text-align:center; }
+        .brand-icon { width:54px; height:54px; margin:0 auto 14px; border-radius:14px; display:grid; place-items:center; color:var(--primary); background:var(--accent); font-size:1.35rem; }
+        .login-header h1 { margin:0; font-size:1.15rem; font-weight:800; }
+        .login-header p { margin:6px 0 0; color:rgba(255,255,255,.7); font-size:.75rem; }
+        .login-body { padding:28px; }
+        .form-label { color:#64748b; font-size:.7rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase; }
+        .form-control { min-height:44px; border-color:var(--border); border-radius:9px; }
+        .form-control:focus { border-color:var(--primary); box-shadow:0 0 0 .2rem rgba(140,29,64,.12); }
+        .btn-login { min-height:44px; border:0; border-radius:9px; color:#fff; background:var(--primary); font-weight:800; }
+        .btn-login:hover { color:#fff; background:var(--primary-dark); }
+        .alert { font-size:.78rem; border-radius:9px; }
+    </style>
+</head>
+<body>
+    <main class="login-card">
+        <header class="login-header">
+            <div class="brand-icon"><i class="fa-solid fa-building-columns"></i></div>
+            <h1>HỆ THỐNG CRM NỘI BỘ</h1>
+            <p>Đăng nhập để tiếp tục quản lý khách hàng Agribank</p>
+        </header>
+        <div class="login-body">
+            <% if (error) { %>
+                <div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation me-2"></i><%= error %></div>
+            <% } %>
+            <form action="/login" method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" name="username" value="<%= username || '' %>" required autofocus autocomplete="username">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" name="password" required autocomplete="current-password">
+                </div>
+                <button class="btn btn-login w-100" type="submit"><i class="fa-solid fa-right-to-bracket me-2"></i>Đăng nhập</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

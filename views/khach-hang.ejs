@@ -1,0 +1,3894 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Khách hàng & VIP</title>
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* ============================================================
+           AGRIBANK CRM — DESIGN SYSTEM
+           Primary  : #8C1D40  (Đỏ đô)
+           Accent   : #D4AF37  (Vàng kim)
+           Surface  : #F4F6F9  (Xám nhạt)
+           Card BG  : #FFFFFF
+        ============================================================ */
+        :root {
+            --primary:      #8C1D40;
+            --primary-dark: #6d1632;
+            --primary-light:#b5244f;
+            --accent:       #D4AF37;
+            --accent-dark:  #b8962e;
+            --accent-light: #e8c84a;
+            --surface:      #F4F6F9;
+            --surface-2:    #EEF1F6;
+            --white:        #FFFFFF;
+            --text-dark:    #1A1F2E;
+            --text-mid:     #4A5568;
+            --text-light:   #8A96A8;
+            --border:       #E2E8F0;
+            --shadow-sm:    0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md:    0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg:    0 8px 40px rgba(0,0,0,0.12);
+            --shadow-primary: 0 4px 20px rgba(140,29,64,0.18);
+            --radius:       10px;
+            --radius-sm:    7px;
+            --radius-lg:    16px;
+            --transition:   all 0.25s ease;
+        }
+
+        /* ---- DARK MODE VARIABLES ---- */
+        body.dark-mode {
+            --surface:   #1E2235;
+            --surface-2: #1A1F30;
+            --white:     #252B3D;
+            --text-dark: #EDF2F7;
+            --text-mid:  #A0AEC0;
+            --text-light:#718096;
+            --border:    #3A4258;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.45);
+        }
+        /* Toàn bộ nền tối — không còn ô trắng */
+        body.dark-mode .card,
+        body.dark-mode .stat-card,
+        body.dark-mode .section-box,
+        body.dark-mode .vip-block,
+        body.dark-mode .modal-content,
+        body.dark-mode .modal-body,
+        body.dark-mode .modal-footer,
+        body.dark-mode .table-light,
+        body.dark-mode .table-warning-row,
+        body.dark-mode .bg-white,
+        body.dark-mode .bg-light { background: var(--white) !important; }
+
+        body.dark-mode .accordion-content { background: var(--surface-2) !important; }
+
+        /* Form controls tối */
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: var(--surface-2) !important;
+            color: var(--text-dark) !important;
+            border-color: var(--border) !important;
+        }
+        body.dark-mode .form-control::placeholder { color: var(--text-light) !important; }
+
+        /* ---- NEON TEXT khi dark mode ---- */
+        /* Tên VIP — xanh lá neon */
+        body.dark-mode .text-success,
+        body.dark-mode .fw-bold.text-success {
+            color: #4ADE80 !important;
+            text-shadow: 0 0 8px rgba(74,222,128,0.4) !important;
+        }
+        /* Tên doanh nghiệp — xanh dương neon */
+        body.dark-mode .dn-name {
+            color: #60A5FA !important;
+            text-shadow: 0 0 8px rgba(96,165,250,0.35) !important;
+        }
+        /* Số điện thoại — hồng neon */
+        body.dark-mode .text-primary {
+            color: #F472B6 !important;
+            text-shadow: 0 0 8px rgba(244,114,182,0.35) !important;
+        }
+        /* Section title — vàng neon */
+        body.dark-mode .section-title {
+            color: var(--accent-light) !important;
+            text-shadow: 0 0 6px rgba(212,175,55,0.3) !important;
+        }
+        body.dark-mode .section-title i { color: var(--accent) !important; }
+        /* Label thống kê */
+        body.dark-mode .stat-value { color: #EDF2F7 !important; }
+        body.dark-mode .stat-label { color: var(--text-light) !important; }
+        body.dark-mode .stat-card.primary .stat-icon { background: rgba(140,29,64,0.25) !important; }
+        body.dark-mode .stat-card.accent  .stat-icon { background: rgba(212,175,55,0.2) !important; }
+        /* Table header */
+        body.dark-mode .table th { background: var(--surface-2) !important; color: var(--text-mid) !important; }
+        body.dark-mode thead.table-primary th { background: rgba(140,29,64,0.2) !important; color: #F9A8D4 !important; }
+        body.dark-mode thead.table-success th { background: rgba(74,222,128,0.1) !important; color: #4ADE80 !important; }
+        body.dark-mode thead.table-warning th { background: rgba(212,175,55,0.12) !important; color: var(--accent-light) !important; }
+        body.dark-mode .table td { border-bottom-color: var(--border) !important; }
+        /* Badge */
+        body.dark-mode .badge.bg-light { background: var(--surface-2) !important; color: var(--text-mid) !important; border-color: var(--border) !important; }
+        /* Form label */
+        body.dark-mode .form-label { color: var(--text-mid) !important; }
+        body.dark-mode .form-text   { color: var(--text-light) !important; }
+        /* Section box title */
+        body.dark-mode .section-box-title,
+        body.dark-mode .vip-block-header { color: var(--accent-light) !important; }
+        /* Tiêu đề section — neon trong dark mode */
+        body.dark-mode .section-title {
+            text-shadow: none !important;
+        }
+        /* DANH SÁCH DOANH NGHIỆP → hồng neon */
+        body.dark-mode h5.section-title:not([style*="color:#1a8a56"]) {
+            color: #F472B6 !important;
+            text-shadow: 0 0 10px rgba(244,114,182,0.45) !important;
+        }
+        /* DANH SÁCH NHÂN SỰ VIP → xanh lá neon */
+        body.dark-mode h5.section-title[style*="color:#1a8a56"] {
+            color: #4ADE80 !important;
+            text-shadow: 0 0 10px rgba(74,222,128,0.45) !important;
+        }
+        body.dark-mode .section-title i { color: var(--accent-dark) !important; }
+
+        /* Accordion content area */
+        body.dark-mode [id^="acc-"] td { background: var(--surface-2) !important; }
+        /* Care progress label */
+        body.dark-mode .care-progress-wrap { background: var(--border) !important; }
+        /* Collapse section */
+        body.dark-mode #formThemLichSu { background: var(--white) !important; }
+
+        /* ---- FIX TABLE ROWS DARK MODE ---- */
+        /* Tất cả dòng trong bảng đều tối */
+        body.dark-mode .table tbody tr td,
+        body.dark-mode .table tbody tr th {
+            background-color: var(--white) !important;
+            color: var(--text-dark) !important;
+        }
+        /* Dòng edit (sửa inline) */
+        body.dark-mode .table-light td,
+        body.dark-mode .table-warning td,
+        body.dark-mode .table-warning-row td {
+            background-color: var(--surface-2) !important;
+            color: var(--text-dark) !important;
+        }
+        /* Chữ các cột thông thường */
+        body.dark-mode .table td,
+        body.dark-mode .table th {
+            color: var(--text-dark) !important;
+        }
+        /* ID và text-muted → sáng lên */
+        body.dark-mode .table .text-muted,
+        body.dark-mode .table small.text-muted {
+            color: var(--text-light) !important;
+        }
+        /* Ngày tháng, nội dung thông thường — loại trừ ô có tên DN */
+        body.dark-mode .table td:not(:has(.dn-name)):not(.text-primary):not(.text-success):not(.text-muted) {
+            color: #CBD5E0 !important;
+        }
+        /* Ô chứa tên doanh nghiệp — không áp dụng màu trắng */
+        body.dark-mode .table td:has(.dn-name) {
+            color: #60A5FA !important;
+        }
+        /* Tên doanh nghiệp — xanh dương neon, ưu tiên cao nhất */
+        body.dark-mode .table td .dn-name,
+        body.dark-mode .table tbody tr td .dn-name,
+        body.dark-mode .table tbody tr:hover td .dn-name,
+        body.dark-mode .dn-name {
+            color: #60A5FA !important;
+            text-shadow: 0 0 8px rgba(96,165,250,0.45) !important;
+        }
+        /* Skeleton rows trong dark mode */
+        body.dark-mode .skeleton-row {
+            border-bottom-color: var(--border) !important;
+        }
+
+        /* Smooth transition có chọn lọc — không dùng * để tránh ghi đè animation */
+        body,
+        .card, .stat-card, .section-card, .section-box, .vip-block,
+        .crm-item, .modal-content, .modal-body, .modal-footer,
+        .form-control, .form-select, .btn,
+        .table td, .table th,
+        .navbar, .dark-toggle, .badge {
+            transition: background-color 0.5s ease, border-color 0.4s ease, color 0.3s ease;
+        }
+        /* Ngoại lệ: các element có animation riêng — không transition */
+        .care-progress-bar, .skeleton-block,
+        .toast-item, .birthday-badge,
+        tr.vip-item-row, tr.dn-item-row,
+        .btn-accordion { transition: none; }
+
+        /* ---- ĐỒNG HỒ & DARK TOGGLE trên NAVBAR ---- */
+        .navbar-clock {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .clock-display {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .clock-display .clock-time {
+            font-size: 0.88rem;
+            color: var(--accent-light);
+            font-variant-numeric: tabular-nums;
+        }
+        .clock-display .clock-date {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.55);
+        }
+        .notification-wrap {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .notification-bell {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.22);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        .notification-bell:hover,
+        .notification-bell.active {
+            background: rgba(212,175,55,0.2);
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+        .notification-bell.has-today {
+            animation: bellRing 2.5s ease-in-out infinite;
+        }
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dc3545;
+            color: #fff;
+            border: 2px solid var(--primary);
+            font-size: 0.58rem;
+            font-weight: 800;
+        }
+        .notification-panel {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: min(390px, calc(100vw - 24px));
+            max-height: 480px;
+            overflow-y: auto;
+            padding: 0;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--white);
+            box-shadow: 0 18px 55px rgba(15,23,42,0.24);
+            color: var(--text-dark);
+            display: none;
+            z-index: 1100;
+        }
+        .notification-panel.show {
+            display: block;
+            animation: notificationIn 0.2s ease both;
+        }
+        .notification-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 14px 16px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+        .notification-group-title {
+            padding: 12px 16px 6px;
+            color: var(--text-light);
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+        .notification-item {
+            display: flex;
+            gap: 10px;
+            margin: 0 10px 8px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: var(--surface);
+        }
+        .notification-item.today {
+            background: linear-gradient(135deg, #fff7dc, #fff1c1);
+            border: 1px solid rgba(212,175,55,0.35);
+        }
+        .notification-item-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(140,29,64,0.1);
+            color: var(--primary);
+        }
+        .notification-item-title { font-size: 0.8rem; font-weight: 800; color: var(--text-dark); }
+        .notification-item-sub { font-size: 0.7rem; color: var(--text-light); margin-top: 2px; }
+        .notification-empty { padding: 28px 16px; text-align: center; color: var(--text-light); font-size: 0.78rem; }
+
+        .celebration-ticker {
+            position: relative;
+            z-index: 100;
+            overflow: hidden;
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary), #b5244f);
+            color: #fff;
+            border-bottom: 2px solid var(--accent);
+            height: 38px;
+            display: flex;
+            align-items: center;
+        }
+        .celebration-ticker-track {
+            display: inline-flex;
+            align-items: center;
+            gap: 28px;
+            white-space: nowrap;
+            min-width: max-content;
+            padding-left: 100%;
+            font-size: 0.78rem;
+            font-weight: 700;
+            animation: tickerMove 24s linear infinite;
+        }
+        .celebration-ticker-track i { color: var(--accent-light); }
+        .celebration-effects {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 12000;
+        }
+        .celebration-particle {
+            position: absolute;
+            top: -30px;
+            font-size: 1.25rem;
+            animation: particleFall var(--duration) ease-in forwards;
+        }
+        @keyframes bellRing {
+            0%, 88%, 100% { transform: rotate(0); }
+            91% { transform: rotate(15deg); }
+            94% { transform: rotate(-13deg); }
+            97% { transform: rotate(9deg); }
+        }
+        @keyframes notificationIn {
+            from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes tickerMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        @keyframes particleFall {
+            0% { transform: translate3d(0,-20px,0) rotate(0); opacity: 0; }
+            12% { opacity: 1; }
+            100% { transform: translate3d(var(--drift),105vh,0) rotate(720deg); opacity: 0; }
+        }
+        .dark-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 4px 12px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.2s, border-color 0.2s !important;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            white-space: nowrap;
+        }
+        .dark-toggle:hover {
+            background: rgba(255,255,255,0.18);
+            border-color: var(--accent);
+            color: var(--accent-light);
+        }
+        body.dark-mode .dark-toggle {
+            background: rgba(212,175,55,0.15);
+            border-color: rgba(212,175,55,0.4);
+            color: var(--accent-light);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+            background: var(--surface);
+            color: var(--text-dark);
+            font-size: 0.92rem;
+        }
+
+        /* ---- SCROLLBAR ---- */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--surface-2); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; opacity: 0.6; }
+
+        /* ============================================================
+           NAVBAR
+        ============================================================ */
+        .navbar {
+            background: var(--primary) !important;
+            box-shadow: var(--shadow-primary);
+            border-bottom: 3px solid var(--accent);
+            padding: 0.6rem 1rem;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar-brand::before {
+            content: '';
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 6px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238C1D40'%3E%3Cpath d='M2 10.5L12 3l10 7.5V21H15v-6H9v6H2V10.5z'/%3E%3C/svg%3E");
+            background-size: 16px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .navbar .nav-link {
+            color: rgba(255,255,255,0.75) !important;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        .navbar .nav-link:hover,
+        .navbar .nav-link.active {
+            color: #fff !important;
+            background: rgba(255,255,255,0.15);
+        }
+        .navbar .nav-link.active {
+            background: rgba(212,175,55,0.25);
+            color: var(--accent-light) !important;
+        }
+
+        /* ============================================================
+           STAT CARDS
+        ============================================================ */
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+        }
+        .stat-card.primary::before { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+        .stat-card.accent::before  { background: linear-gradient(90deg, var(--accent-dark), var(--accent-light)); }
+
+        .stat-card .stat-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1;
+        }
+        .stat-card .stat-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        .stat-card.primary .stat-icon { background: rgba(140,29,64,0.1); color: var(--primary); }
+        .stat-card.accent  .stat-icon { background: rgba(212,175,55,0.15); color: var(--accent-dark); }
+
+        /* ============================================================
+           BUTTONS
+        ============================================================ */
+        .btn {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            border-width: 1.5px;
+        }
+        .btn-primary-custom {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: var(--shadow-primary);
+        }
+        .btn-primary-custom:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: var(--text-dark);
+            border-color: var(--accent);
+            font-weight: 700;
+        }
+        .btn-accent:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+        }
+        .btn-outline-primary {
+            border-color: var(--primary) !important;
+            color: var(--primary) !important;
+        }
+        .btn-outline-primary:hover {
+            background: var(--primary) !important;
+            color: #fff !important;
+        }
+        .btn-outline-success {
+            border-color: #1a8a56 !important;
+            color: #1a8a56 !important;
+        }
+        .btn-outline-success:hover {
+            background: #1a8a56 !important;
+            color: #fff !important;
+        }
+        .btn-warning {
+            background: var(--accent) !important;
+            border-color: var(--accent) !important;
+            color: var(--text-dark) !important;
+            font-weight: 700 !important;
+        }
+        .btn-warning:hover {
+            background: var(--accent-dark) !important;
+            border-color: var(--accent-dark) !important;
+        }
+        .btn-dark {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            color: #fff !important;
+        }
+        .btn-dark:hover {
+            background: var(--primary-dark) !important;
+            border-color: var(--primary-dark) !important;
+        }
+        .btn-outline-warning {
+            border-color: var(--accent) !important;
+            color: var(--accent-dark) !important;
+        }
+        .btn-outline-warning:hover {
+            background: var(--accent) !important;
+            color: var(--text-dark) !important;
+        }
+        .btn-outline-danger {
+            border-color: #dc3545 !important;
+            color: #dc3545 !important;
+        }
+        .btn-outline-danger:hover {
+            background: #dc3545 !important;
+            color: #fff !important;
+        }
+        .btn-outline-secondary {
+            border-color: var(--border) !important;
+            color: var(--text-mid) !important;
+        }
+        .btn-outline-secondary:hover {
+            background: var(--surface-2) !important;
+            color: var(--text-dark) !important;
+        }
+        .btn-success {
+            background: #1a8a56 !important;
+            border-color: #1a8a56 !important;
+        }
+        .btn-secondary {
+            background: var(--surface-2) !important;
+            border-color: var(--border) !important;
+            color: var(--text-mid) !important;
+        }
+
+        /* ============================================================
+           FORM CONTROLS
+        ============================================================ */
+        .form-control, .form-select {
+            border-color: var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+            background: var(--white);
+            transition: var(--transition);
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(140,29,64,0.15);
+            background: var(--white);
+        }
+        .form-control::placeholder { color: var(--text-light); }
+        .form-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--text-mid);
+            margin-bottom: 4px;
+        }
+        .form-text { color: var(--text-light); font-size: 0.75rem; }
+
+        /* ============================================================
+           CARDS
+        ============================================================ */
+        .card {
+            border-radius: var(--radius-lg) !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: var(--shadow-sm) !important;
+            transition: var(--transition);
+        }
+        .card:hover { box-shadow: var(--shadow-md) !important; }
+
+        /* Section headings inside cards */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i { color: var(--accent-dark); }
+
+        /* ============================================================
+           PARTICLE CARD
+        /* ============================================================
+           VIP BLOCK (form thêm mới)
+        ============================================================ */
+        .vip-block {
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            padding: 16px;
+            background: var(--surface) !important;
+            transition: var(--transition);
+        }
+        .vip-block:hover { border-color: rgba(140,29,64,0.3) !important; }
+        .vip-block-header {
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.8px;
+            color: var(--primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .vip-block-header .badge { background: var(--primary) !important; }
+
+        /* Enterprise section box */
+        .section-box {
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius) !important;
+            padding: 1rem 1.1rem;
+            background: var(--white) !important;
+            position: relative;
+        }
+        .section-box-title {
+            font-size: 0.73rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 14px;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* ============================================================
+           TABLES
+        ============================================================ */
+        .table {
+            font-size: 0.875rem;
+        }
+        .table th {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: var(--text-mid);
+            background: var(--surface) !important;
+            border-bottom: 2px solid var(--border) !important;
+            padding: 10px 12px;
+            white-space: nowrap;
+        }
+        thead.sticky-top th { position: sticky; top: 0; z-index: 2; }
+
+        /* Custom thead colors */
+        .table-primary thead th, thead.table-primary th {
+            background: rgba(140,29,64,0.08) !important;
+            color: var(--primary) !important;
+            border-bottom: 2px solid rgba(140,29,64,0.2) !important;
+        }
+        .table-success thead th, thead.table-success th {
+            background: rgba(26,138,86,0.07) !important;
+            color: #1a8a56 !important;
+            border-bottom: 2px solid rgba(26,138,86,0.2) !important;
+        }
+        .table-warning thead th, thead.table-warning th {
+            background: rgba(212,175,55,0.1) !important;
+            color: var(--accent-dark) !important;
+            border-bottom: 2px solid rgba(212,175,55,0.25) !important;
+        }
+
+        .table td { padding: 10px 12px; border-bottom: 1px solid var(--surface-2); vertical-align: middle; }
+        .table-hover tbody tr:not(.vip-item-row):not(.dn-item-row):hover { background: rgba(140,29,64,0.03) !important; }
+        .table-light { background: var(--surface) !important; }
+        .table-warning { background: rgba(212,175,55,0.08) !important; }
+
+        /* Badges */
+        .badge {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.3px;
+            border-radius: 5px;
+            padding: 4px 8px;
+        }
+        .badge.bg-secondary { background: var(--surface-2) !important; color: var(--text-mid) !important; border: 1px solid var(--border); }
+        .badge.bg-primary   { background: var(--primary) !important; }
+        .badge.bg-success   { background: #1a8a56 !important; }
+        .badge.bg-warning   { background: var(--accent) !important; color: var(--text-dark) !important; }
+        .badge.bg-light     { background: var(--surface-2) !important; color: var(--text-mid) !important; border: 1px solid var(--border); }
+
+        /* ---- BADGE CHỨC VỤ theo cấp bậc ---- */
+        /* Cấp 1: Lãnh đạo cao nhất — Đỏ đô (Primary) */
+        .badge-cap1 {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(140,29,64,0.25);
+        }
+        /* Cấp 2: Quản lý trung cấp — Xanh dương đậm */
+        .badge-cap2 {
+            background: linear-gradient(135deg, #1e40af, #2563EB) !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        }
+        /* Cấp 3: Nhân viên / chức vụ khác — Xanh lá ngọc */
+        .badge-cap3 {
+            background: linear-gradient(135deg, #0f766e, #0d9488) !important;
+            color: #fff !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(13,148,136,0.2);
+        }
+
+        /* text colors */
+        .text-primary { color: var(--primary) !important; }
+        .text-success { color: #1a8a56 !important; }
+        .text-warning { color: var(--accent-dark) !important; }
+        .text-muted   { color: var(--text-light) !important; }
+
+        /* ============================================================
+           COLLAPSE / FORM THÊM LỊCH SỬ
+        ============================================================ */
+        .bg-light { background: var(--surface) !important; }
+        .bg-white { background: var(--white) !important; }
+
+        /* ============================================================
+           MODALS
+        ============================================================ */
+        .modal-content {
+            border-radius: var(--radius-lg) !important;
+            border: none !important;
+            box-shadow: var(--shadow-lg) !important;
+        }
+        .modal-header {
+            border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+        }
+        .modal-header.bg-danger { background: #c0392b !important; }
+        .modal-footer {
+            background: var(--surface) !important;
+            border-top: 1px solid var(--border) !important;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+        }
+
+        /* ============================================================
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 18px;
+            border-radius: var(--radius);
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 280px;
+            max-width: 380px;
+            box-shadow: var(--shadow-lg);
+            pointer-events: all;
+            animation: toastIn 0.4s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+            position: relative;
+            overflow: hidden;
+        }
+        .toast-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.4);
+            animation: toastProgress linear forwards;
+        }
+        .toast-item.toast-success {
+            background: linear-gradient(135deg, #1a6641, #1a8a56);
+            color: #fff;
+        }
+        .toast-item.toast-error {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #fff;
+        }
+        .toast-item.toast-warning {
+            background: linear-gradient(135deg, #b45309, #d97706);
+            color: #fff;
+        }
+        .toast-item .toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+        .toast-item .toast-msg { flex: 1; line-height: 1.4; }
+        .toast-item .toast-close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0;
+            flex-shrink: 0;
+            transition: color 0.2s;
+        }
+        .toast-item .toast-close:hover { color: #fff; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(60px) scale(0.92); }
+            to   { opacity: 1; transform: translateX(0) scale(1); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 0; }
+            to   { opacity: 0; transform: translateX(60px); max-height: 0; margin-bottom: -10px; }
+        }
+        @keyframes toastProgress {
+            from { width: 100%; }
+            to   { width: 0%; }
+        }
+        .toast-item.removing {
+            animation: toastOut 0.35s ease forwards;
+        }
+
+
+
+        /* ---- SECURITY SCAN LINE ---- */
+        tr.vip-item-row:hover {
+            z-index: 2;
+        }
+        /* Viền trái vàng-đỏ khi hover */
+        tr.vip-item-row td:first-child {
+            position: relative;
+            transition: var(--transition);
+        }
+        tr.vip-item-row:hover td:first-child::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 8%; bottom: 8%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent), var(--primary));
+            border-radius: 0 3px 3px 0;
+        }
+        /* Tên VIP đổi màu khi hover — light mode */
+        tr.vip-item-row:hover .text-success {
+            color: var(--primary) !important;
+        }
+
+        /* ---- DARK MODE: simpler hover ---- */
+        body.dark-mode tr.vip-item-row:hover td {
+            background: var(--surface-2) !important;
+            border-bottom-color: rgba(74,222,128,0.2) !important;
+            border-top-color: rgba(74,222,128,0.1) !important;
+        }
+        body.dark-mode tr.vip-item-row:hover .text-success {
+            color: #4ADE80 !important;
+        }
+        body.dark-mode tr.vip-item-row:hover td:first-child::after {
+            background: linear-gradient(180deg, #4ADE80, #22c55e) !important;
+        }
+        body.dark-mode tr.dn-item-row:hover .dn-name {
+            color: #60A5FA !important;
+        }
+        body.dark-mode tr.dn-item-row:hover td {
+            background: var(--surface-2) !important;
+            border-bottom-color: rgba(96,165,250,0.2) !important;
+            border-top-color: rgba(96,165,250,0.1) !important;
+        }
+        body.dark-mode tr.dn-item-row:hover td:first-child::after {
+            background: linear-gradient(180deg, #60A5FA, #3B82F6) !important;
+        }
+
+        /* ---- THANH TIẾN TRÌNH CHĂM SÓC ---- */
+        .care-progress-wrap {
+            width: 100%;
+            height: 4px;
+            background: var(--surface-2);
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .care-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.22, 0.68, 0, 1.1);
+        }
+        .care-progress-bar.fresh  { background: linear-gradient(90deg, #1a8a56, #34d399); }
+        .care-progress-bar.medium { background: linear-gradient(90deg, #d97706, #fbbf24); }
+        .care-progress-bar.stale  { background: linear-gradient(90deg, var(--primary), #f87171); }
+        .care-progress-bar.never  { background: var(--surface-2); width: 100% !important; }
+        .care-progress-label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+            opacity: 0.75;
+        }
+        .care-progress-label.fresh  { color: #1a8a56; }
+        .care-progress-label.medium { color: #d97706; }
+        .care-progress-label.stale  { color: var(--primary); }
+        .care-progress-label.never  { color: var(--text-light); }
+
+        /* ---- BIRTHDAY HIGHLIGHT ---- */
+        .birthday-badge {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-left: 6px;
+            white-space: nowrap;
+        }
+        .birthday-badge.today {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(140,29,64,0.35);
+        }
+        .birthday-badge.soon-3 {
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(217,119,6,0.3);
+        }
+        .birthday-badge.soon-7 {
+            background: linear-gradient(135deg, #0369a1, #0ea5e9);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(3,105,161,0.25);
+        }
+        /* Highlight cả dòng nếu hôm nay sinh nhật */
+        tr.vip-item-row.birthday-today {
+            background: linear-gradient(90deg, rgba(140,29,64,0.04), rgba(212,175,55,0.06)) !important;
+            border-left: 3px solid var(--accent) !important;
+        }
+        tr.vip-item-row.birthday-today td:first-child {
+            border-left: 3px solid var(--accent);
+        }
+
+        /* ---- GLASSMORPHISM: DOANH NGHIỆP ---- */
+        tr.dn-item-row {
+            transition: all 0.28s cubic-bezier(0.22, 0.68, 0, 1.1);
+            position: relative;
+        }
+        tr.dn-item-row:hover td {
+            background: linear-gradient(
+                90deg,
+                rgba(37,99,235,0.06) 0%,
+                rgba(255,255,255,0.95) 8%,
+                rgba(240,246,255,0.98) 50%,
+                rgba(37,99,235,0.05) 100%
+            ) !important;
+            border-bottom-color: rgba(37,99,235,0.2) !important;
+            border-top-color: rgba(37,99,235,0.1) !important;
+        }
+        tr.dn-item-row:hover {
+            z-index: 2;
+        }
+        /* Viền trái xanh dương khi hover */
+        tr.dn-item-row td:first-child {
+            position: relative;
+        }
+        tr.dn-item-row:hover td:first-child::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 8%; bottom: 8%;
+            width: 3px;
+            background: linear-gradient(180deg, #2563EB, #1e40af);
+            border-radius: 0 3px 3px 0;
+        }
+        /* Tên doanh nghiệp đổi màu khi hover */
+        tr.dn-item-row:hover .dn-name {
+            color: #1e40af !important;
+        }
+
+        /* ---- ACCORDION ---- */
+        .btn-accordion {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            color: var(--text-light);
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .btn-accordion:hover { background: rgba(140,29,64,0.08); border-color: var(--primary); color: var(--primary); }
+        .btn-accordion.open { background: rgba(26,138,86,0.1); border-color: #1a8a56; color: #1a8a56; }
+        .btn-accordion .fa-chevron-right { font-size: 0.65rem; }
+        .acc-count {
+            position: absolute;
+            top: -6px; right: -6px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 0.55rem;
+            font-weight: 800;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        tr.vip-item-row td { cursor: default; }
+        tr.vip-item-row td[onclick] { cursor: pointer; }
+        tr.vip-item-row td[onclick]:hover { color: #1a6641 !important; text-decoration: underline; }
+
+        /* ============================================================
+           SEARCH BAR
+        ============================================================ */
+        .search-input {
+            border-radius: 20px !important;
+            padding-left: 2.25rem;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A96A8' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 12px center;
+            font-size: 0.82rem !important;
+        }
+        /* ---- BỘ LỌC CHỨC VỤ ---- */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 0 2px;
+        }
+        .filter-btn {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            white-space: nowrap;
+        }
+        .filter-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(140,29,64,0.05); }
+        .filter-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 2px 8px rgba(140,29,64,0.3); }
+        .filter-btn.active.cap1 { background: linear-gradient(135deg,var(--primary),var(--primary-light)); }
+        .filter-btn.active.cap2 { background: linear-gradient(135deg,#1e40af,#2563EB); border-color:#2563EB; }
+        .filter-btn.active.cap3 { background: linear-gradient(135deg,#0f766e,#0d9488); border-color:#0d9488; }
+        body.dark-mode .filter-btn { background: var(--surface-2); border-color: var(--border); color: var(--text-mid); }
+        body.dark-mode .filter-btn:hover { border-color: #4ADE80; color: #4ADE80; }
+
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .pagination-info { color: var(--text-light); font-size: 0.78rem; }
+        .pagination-controls { display: flex; align-items: center; gap: 5px; }
+        .pagination-link {
+            min-width: 32px;
+            height: 32px;
+            padding: 0 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            background: var(--white);
+            color: var(--text-mid);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .pagination-link:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(140,29,64,0.05);
+        }
+        .pagination-link.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+        .pagination-link.disabled { pointer-events: none; opacity: 0.45; }
+        .pagination-limit { width: auto; min-width: 100px; font-size: 0.78rem; }
+        /* Fade khi lọc */
+
+        /* ---- COMMAND PALETTE ---- */
+        #cmdOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,12,20,0.75);
+            backdrop-filter: blur(6px);
+            z-index: 99998;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 12vh;
+        }
+        #cmdOverlay.open { display: flex; }
+
+        #cmdBox {
+            width: 100%;
+            max-width: 580px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+
+        #cmdInput {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1rem;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-weight: 500;
+            border: none;
+            outline: none;
+            background: var(--white);
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border);
+        }
+        #cmdInput::placeholder { color: var(--text-light); }
+
+        #cmdResults {
+            max-height: 360px;
+            overflow-y: auto;
+            padding: 6px 0;
+        }
+        .cmd-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .cmd-item:hover, .cmd-item.selected {
+            background: rgba(140,29,64,0.06);
+            border-left-color: var(--primary);
+        }
+        body.dark-mode .cmd-item:hover,
+        body.dark-mode .cmd-item.selected {
+            background: rgba(74,222,128,0.07);
+            border-left-color: #4ADE80;
+        }
+        .cmd-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+        .cmd-icon.vip  { background: rgba(26,138,86,0.12);  color: #1a8a56; }
+        .cmd-icon.dn   { background: rgba(37,99,235,0.12);  color: #2563EB; }
+        .cmd-icon.nav  { background: rgba(140,29,64,0.1);   color: var(--primary); }
+        .cmd-icon.ls   { background: rgba(212,175,55,0.15); color: var(--accent-dark); }
+
+        .cmd-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            flex: 1;
+        }
+        .cmd-name mark {
+            background: rgba(212,175,55,0.35);
+            color: var(--accent-dark);
+            border-radius: 3px;
+            padding: 0 2px;
+        }
+        .cmd-sub {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        .cmd-tag {
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 10px;
+            font-weight: 700;
+            background: var(--surface-2);
+            color: var(--text-light);
+        }
+        .cmd-group-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            padding: 8px 20px 4px;
+        }
+        #cmdEmpty {
+            text-align: center;
+            padding: 28px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        #cmdFooter {
+            padding: 8px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 16px;
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+        .cmd-hint kbd {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1px 6px;
+            font-size: 0.68rem;
+            font-family: monospace;
+            color: var(--text-mid);
+        }
+
+        /* ============================================================
+           MODAL ADD CUSTOMER - Popup giữa màn hình
+        ============================================================ */
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.58);
+            backdrop-filter: blur(3px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-backdrop-custom.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content-custom {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            max-width: 600px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1.2);
+            position: relative;
+            z-index: 10000;
+        }
+        .modal-backdrop-custom.show .modal-content-custom {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .modal-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
+        }
+        .modal-header-custom h5 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        .modal-close-btn:hover {
+            background: var(--surface);
+            color: var(--text-dark);
+        }
+
+        .modal-body-custom {
+            padding: 1.5rem;
+        }
+        .modal-footer-custom {
+            display: flex;
+            gap: 10px;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        .modal-footer-custom .btn {
+            flex: 1;
+        }
+
+        /* Dark mode support */
+        body.dark-mode .modal-content-custom {
+            background: var(--white);
+            color: var(--text-dark);
+        }
+        body.dark-mode .modal-header-custom {
+            background: var(--white);
+            border-bottom-color: var(--border);
+        }
+        body.dark-mode .modal-footer-custom {
+            background: var(--surface);
+            border-top-color: var(--border);
+        }
+
+        /* ============================================================
+           DISABLE STICKY HEADER KHI MODAL MỞ
+        ============================================================ */
+        body.modal-open thead.sticky-top th {
+            position: static !important;
+            z-index: auto !important;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* ============================================================
+           MODAL VIP DETAIL
+        ============================================================ */
+        .vip-detail-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .vip-detail-modal-backdrop.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .vip-detail-modal-content {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+            max-width: 560px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1.2);
+            position: relative;
+            z-index: 10000;
+        }
+        .vip-detail-modal-backdrop.show .vip-detail-modal-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .vip-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.45rem 1.75rem 1rem;
+            border-bottom: 0;
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 10;
+        }
+        .vip-detail-header h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .vip-detail-body {
+            padding: 0 1.75rem 1.25rem;
+        }
+
+        .vip-profile-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #eef7ff, #dff1ff);
+        }
+        body.dark-mode .vip-profile-card {
+            background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(14,165,233,0.12));
+        }
+        .vip-profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: #d7e7ff;
+            color: #2452b8;
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+        .vip-profile-name {
+            color: var(--text-dark);
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+        .vip-profile-company {
+            color: var(--text-mid);
+            font-size: 0.78rem;
+        }
+
+        .vip-info-section {
+            margin-bottom: 1.25rem;
+        }
+        .vip-info-section-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .vip-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .vip-info-grid.full {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .vip-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 62px;
+            padding: 11px 12px;
+            border-radius: 9px;
+            background: var(--surface);
+        }
+        .vip-info-label {
+            font-size: 0.66rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+        .vip-info-value {
+            font-size: 0.86rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .vip-info-value.edit-mode,
+        .vip-edit-input.edit-mode {
+            display: none;
+        }
+        .vip-detail-modal-content.editing .vip-info-value.view-mode {
+            display: none;
+        }
+        .vip-detail-modal-content.editing .vip-info-value.edit-mode,
+        .vip-detail-modal-content.editing .vip-edit-input.edit-mode {
+            display: block;
+        }
+
+        .vip-edit-input {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            width: 100%;
+        }
+
+        .vip-notes-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .vip-note-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px;
+            border: 0;
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            background: var(--surface);
+        }
+        .vip-note-content {
+            flex: 1;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .vip-note-date {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        .vip-note-actions {
+            display: flex;
+            gap: 6px;
+            margin-left: 10px;
+        }
+        .vip-note-delete-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0;
+        }
+
+        .vip-detail-footer {
+            display: flex;
+            gap: 10px;
+            padding: 1rem 1.75rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        .vip-notes-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .vip-notes-heading .vip-info-section-title {
+            margin-bottom: 0;
+        }
+        .vip-notes-count {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 11px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+        .vip-detail-footer.edit-mode .view-actions {
+            display: none;
+        }
+        .vip-detail-footer.edit-mode .edit-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .vip-detail-footer .edit-actions {
+            display: none;
+        }
+        .vip-detail-footer .view-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        .vip-detail-footer .btn {
+            flex: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .vip-detail-modal-content {
+                width: 100%;
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+            .vip-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .modal-content-custom {
+                width: 100%;
+                margin: 1rem;
+                max-height: calc(100vh - 2rem);
+            }
+            .modal-header-custom {
+                padding: 1rem;
+            }
+            .modal-body-custom {
+                padding: 1rem;
+            }
+            .modal-footer-custom {
+                padding: 1rem;
+                flex-direction: column;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold" href="/">HỆ THỐNG CRM NỘI BỘ</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="/"><i class="fa-solid fa-house-chimney me-1"></i>Màn hình chính</a>
+            <a class="nav-link active" href="/khach-hang"><i class="fa-solid fa-users me-1"></i><%= user.role === 'can_bo' ? 'Khách hàng của tôi' : 'Quản lý Khách Hàng & VIP' %></a>
+            <% if (user.role !== 'can_bo') { %>
+                <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Quản lý Chức Vụ</a>
+            <% } %>
+            <a class="nav-link" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
+            <% if (user.role === 'admin') { %>
+                <a class="nav-link" href="/users"><i class="fa-solid fa-users-gear me-1"></i>Tài khoản</a>
+            <% } %>
+        </div>
+        <div class="navbar-clock">
+            <div class="text-white text-end" style="font-size:.68rem;line-height:1.25;">
+                <strong><%= user.full_name || user.username %></strong><br>
+                <span style="opacity:.75;"><%= user.role %></span>
+            </div>
+            <div class="clock-display">
+                <i class="fa-regular fa-clock"></i>
+                <div>
+                    <div class="clock-time" id="clockTime">--:--:--</div>
+                    <div class="clock-date" id="clockDate">--/--/----</div>
+                </div>
+            </div>
+            <form action="/logout" method="POST">
+                <button class="btn btn-sm btn-outline-light" type="submit" title="Đăng xuất"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </form>
+            <% const tongSuKien = suKienHomNay.length + suKienSapToi.length; %>
+            <div class="notification-wrap" id="notificationWrap">
+                <button type="button"
+                        class="notification-bell <%= suKienHomNay.length > 0 ? 'has-today' : '' %>"
+                        id="notificationBell"
+                        onclick="toggleNotificationPanel(event)"
+                        title="Thông báo sinh nhật và ngày thành lập"
+                        aria-label="Mở thông báo">
+                    <i class="fa-solid fa-bell"></i>
+                    <% if (tongSuKien > 0) { %>
+                        <span class="notification-count"><%= tongSuKien > 99 ? '99+' : tongSuKien %></span>
+                    <% } %>
+                </button>
+                <div class="notification-panel" id="notificationPanel">
+                    <div class="notification-header">
+                        <i class="fa-solid fa-bell me-2" style="color:var(--accent-dark);"></i>
+                        Thông báo sự kiện
+                    </div>
+                    <% if (tongSuKien === 0) { %>
+                        <div class="notification-empty">
+                            <i class="fa-regular fa-bell-slash d-block mb-2" style="font-size:1.5rem;"></i>
+                            Không có sinh nhật hoặc ngày thành lập trong 7 ngày tới.
+                        </div>
+                    <% } %>
+                    <% if (suKienHomNay.length > 0) { %>
+                        <div class="notification-group-title">Hôm nay</div>
+                        <% suKienHomNay.forEach(event => { %>
+                            <div class="notification-item today">
+                                <div class="notification-item-icon">
+                                    <i class="fa-solid <%= event.type === 'vip' ? 'fa-cake-candles' : 'fa-building' %>"></i>
+                                </div>
+                                <div>
+                                    <div class="notification-item-title"><%= event.title %></div>
+                                    <div class="notification-item-sub">
+                                        <%= event.type === 'vip' ? 'Sinh nhật' : event.subtitle %>
+                                        <% if (event.type === 'vip') { %> · <%= event.subtitle %><% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                    <% if (suKienSapToi.length > 0) { %>
+                        <div class="notification-group-title">Trong 7 ngày tới</div>
+                        <% suKienSapToi.forEach(event => { %>
+                            <div class="notification-item">
+                                <div class="notification-item-icon">
+                                    <i class="fa-solid <%= event.type === 'vip' ? 'fa-cake-candles' : 'fa-building' %>"></i>
+                                </div>
+                                <div>
+                                    <div class="notification-item-title"><%= event.title %></div>
+                                    <div class="notification-item-sub">
+                                        Còn <strong><%= event.daysLeft %> ngày</strong> ·
+                                        <%= event.date.toLocaleDateString('vi-VN') %> ·
+                                        <%= event.type === 'vip' ? event.subtitle : event.subtitle %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<% if (suKienHomNay.length > 0) { %>
+    <div class="celebration-ticker" role="status">
+        <div class="celebration-ticker-track">
+            <% suKienHomNay.forEach(event => { %>
+                <span>
+                    <i class="fa-solid fa-star me-2"></i>
+                    Chúc mừng <strong><%= event.title %></strong>
+                    <%= event.type === 'vip' ? 'có sinh nhật hôm nay' : 'kỷ niệm ngày thành lập hôm nay' %>!
+                </span>
+                <span aria-hidden="true">🎉 🎂 🎊 ✨</span>
+            <% }) %>
+        </div>
+    </div>
+    <div class="celebration-effects" id="celebrationEffects" aria-hidden="true"></div>
+<% } %>
+
+<div class="container-fluid px-4">
+
+    <!-- THỐNG KÊ NHANH -->
+    <div class="row g-3 mb-4 anim-row" id="parallaxHeader">
+        <div class="col-md-3">
+            <div class="stat-card primary">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-label">Tổng Doanh Nghiệp</div>
+                        <div class="stat-value"><%= thongKe.tongKH %></div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card accent">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="stat-label">Nhân Sự VIP</div>
+                        <div class="stat-value"><%= thongKe.tongVip %></div>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% if (user.role === 'admin') { %>
+        <div class="col-md-6 d-flex align-items-center justify-content-end gap-2">
+            <button type="button" class="btn btn-success fw-bold px-4" id="btnThemKhachHangTop" onclick="moFormAddCustomer()">
+                <i class="fa-solid fa-user-plus me-2"></i>Thêm khách hàng
+            </button>
+            <button class="btn btn-outline-primary fw-bold px-4" onclick="moModalImport()">
+                <i class="fa-solid fa-file-import me-2"></i>Import Excel
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- ========== BẢNG DỮ LIỆU (FULL WIDTH) ========== -->
+        <div id="tableCol" class="col-md-12">
+
+            <!-- BẢNG VIP + ACCORDION LỊCH SỬ -->
+            <div class="card border-0 shadow-sm rounded p-3 anim-row">
+                <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                    <div>
+                        <h5 class="section-title mb-1" style="color:#1a8a56;">
+                            <i class="fa-solid fa-crown" style="color:var(--accent-dark);"></i>Danh Sách Nhân Sự VIP
+                        </h5>
+                        <small class="text-muted" style="font-size:0.75rem;">Bấm vào tên để xem lịch sử chăm sóc</small>
+                    </div>
+                    <input type="text" id="searchVip" class="form-control form-control-sm search-input"
+                           style="max-width:280px" placeholder="Tìm theo tên hoặc SĐT..."
+                           value="<%= keyword %>">
+                </div>
+                <!-- BỘ LỌC CHỨC VỤ -->
+                <div class="filter-bar" id="filterBar">
+                    <button class="filter-btn <%= chucVu === 'all' ? 'active' : '' %>" data-filter="all" onclick="filterVip('all', this)">
+                        <i class="fa-solid fa-layer-group me-1"></i>Tất cả
+                    </button>
+                    <% const capCao = ['giám đốc','phó giám đốc','tổng giám đốc','chủ tịch','phó chủ tịch','hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo','bí thư','phó bí thư','viện trưởng'];
+                       const capGiua = ['trưởng phòng','phó trưởng phòng','trưởng ban','trưởng bộ phận','trưởng nhóm','quản lý','tổ trưởng','trưởng khoa','trưởng chi nhánh'];
+                       const chucVuCap1 = listChucVu.filter(cv => capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
+                       const chucVuCap2 = listChucVu.filter(cv => !capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)) && capGiua.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
+                       const chucVuCap3 = listChucVu.filter(cv => !capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)) && !capGiua.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
+                    %>
+                    <% if(chucVuCap1.length > 0) { %>
+                    <button class="filter-btn cap1 <%= chucVu === 'cap1' ? 'active' : '' %>" data-filter="cap1" onclick="filterVip('cap1', this)">
+                        🔴 Lãnh đạo cấp cao
+                    </button>
+                    <% } %>
+                    <% if(chucVuCap2.length > 0) { %>
+                    <button class="filter-btn cap2 <%= chucVu === 'cap2' ? 'active' : '' %>" data-filter="cap2" onclick="filterVip('cap2', this)">
+                        🔵 Quản lý
+                    </button>
+                    <% } %>
+                    <% if(chucVuCap3.length > 0) { %>
+                    <button class="filter-btn cap3 <%= chucVu === 'cap3' ? 'active' : '' %>" data-filter="cap3" onclick="filterVip('cap3', this)">
+                        🟢 Chức vụ khác
+                    </button>
+                    <% } %>
+                    <% listChucVu.forEach(cv => { %>
+                    <button class="filter-btn <%= chucVu === 'cv-' + cv.id ? 'active' : '' %>" data-filter="cv-<%= cv.id %>" onclick="filterVip('cv-<%= cv.id %>', this)">
+                        <%= cv.ten_chuc_vu %>
+                    </button>
+                    <% }) %>
+                </div>
+                <%
+                    const makePageUrl = (targetPage, targetLimit = limit) => {
+                        const query = [`page=${targetPage}`, `limit=${targetLimit}`];
+                        if (keyword) query.push(`keyword=${encodeURIComponent(keyword)}`);
+                        if (chucVu && chucVu !== 'all') query.push(`chucVu=${encodeURIComponent(chucVu)}`);
+                        return `/khach-hang?${query.join('&')}`;
+                    };
+                %>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="tableVip">
+                        <thead class="sticky-top">
+                            <tr class="table-success">
+                                <th style="width:30px"></th>
+                                <th>Họ Tên</th>
+                                <th>Thuộc Đơn Vị</th>
+                                <th>Chức Vụ</th>
+                                <th>Ngày Sinh</th>
+                                <th>Số ĐT</th>
+                                <th>Ghi Chú</th>
+                                <th class="text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (listVip.length === 0) { %>
+                                <tr>
+                                    <td colspan="8" class="text-center py-4 text-muted">
+                                        Không tìm thấy nhân sự VIP phù hợp.
+                                    </td>
+                                </tr>
+                            <% } %>
+                            <% listVip.forEach(vip => {
+                                const ngaySV = vip.ngay_sinh instanceof Date
+                                    ? `${vip.ngay_sinh.getFullYear()}-${String(vip.ngay_sinh.getMonth()+1).padStart(2,'0')}-${String(vip.ngay_sinh.getDate()).padStart(2,'0')}`
+                                    : vip.ngay_sinh;
+                                const lichSuVip = listLichSu.filter(ls => ls.vip_id === vip.id);
+                                // Lấy ngày liên hệ gần nhất
+                                const lastCareDate = lichSuVip.length > 0
+                                    ? lichSuVip.reduce((a,b) => new Date(a.ngay_lien_he) > new Date(b.ngay_lien_he) ? a : b).ngay_lien_he
+                                    : null;
+                                const lastCareStr = lastCareDate
+                                    ? (lastCareDate instanceof Date
+                                        ? `${lastCareDate.getFullYear()}-${String(lastCareDate.getMonth()+1).padStart(2,'0')}-${String(lastCareDate.getDate()).padStart(2,'0')}`
+                                        : String(lastCareDate).split('T')[0])
+                                    : '';
+                            %>
+                                <!-- Dòng xem VIP -->
+                                <tr id="vip-view-<%= vip.id %>" class="vip-item-row"
+                                    data-ngaysinh="<%= ngaySV || '' %>"
+                                    data-lastcare="<%= lastCareStr %>"
+                                    data-chucvu="<%= (vip.chuc_vu || '').toLowerCase() %>"
+                                    data-chucvuid="<%= vip.chuc_vu_id || '' %>"
+                                    data-vip-id="<%= vip.id %>"
+                                    data-vip-ho-ten="<%= vip.ho_ten %>"
+                                    data-vip-email="<%= vip.email || '' %>"
+                                    data-vip-so-dien-thoai="<%= vip.so_dien_thoai || '' %>"
+                                    data-vip-ghi-chu="<%= (vip.ghi_chu || '').replace(/"/g, '&quot;') %>"
+                                    data-vip-khach-hang-id="<%= vip.khach_hang_id %>"
+                                    data-vip-ten-khach-hang="<%= vip.ten_khach_hang %>"
+                                    data-vip-ngay-sinh="<%= vip.ngay_sinh ? new Date(vip.ngay_sinh).toISOString().split('T')[0] : '' %>"
+                                    data-vip-ngay-thanh-lap="<%= vip.ngay_thanh_lap ? new Date(vip.ngay_thanh_lap).toISOString().split('T')[0] : '' %>"
+                                    data-vip-lich-su-count="<%= lichSuVip.length %>">
+                                    <td>
+                                        <button class="btn-accordion" onclick="openVipDetail(<%= vip.id %>)" id="btn-acc-<%= vip.id %>" title="Xem chi tiết VIP">
+                                            <i class="fa-solid fa-chevron-right" id="icon-acc-<%= vip.id %>"></i>
+                                            <% if (lichSuVip.length > 0) { %>
+                                                <span class="acc-count"><%= lichSuVip.length %></span>
+                                            <% } %>
+                                        </button>
+                                    </td>
+                                    <td class="fw-bold text-success vip-search-field" style="cursor:pointer;" onclick="openVipDetail(<%= vip.id %>)">
+                                        <%= vip.ho_ten %>
+                                        <div class="care-progress-wrap">
+                                            <div class="care-progress-bar" data-lastcare="<%= lastCareStr %>"></div>
+                                        </div>
+                                        <div class="care-progress-label"></div>
+                                    </td>
+                                    <td class="small vip-search-field"><%= vip.ten_khach_hang %></td>
+                                    <td><span class="badge bg-secondary"><%= vip.chuc_vu || '---' %></span></td>
+                                    <td>
+                                        <span class="ngay-sinh-display"><%= vip.ngay_sinh ? new Date(vip.ngay_sinh).toLocaleDateString('vi-VN') : '---' %></span>
+                                        <span class="birthday-badge" style="display:none;"></span>
+                                    </td>
+                                    <td class="text-primary vip-search-field"><%= vip.so_dien_thoai %></td>
+                                    <td class="small text-muted fst-italic"><%= vip.ghi_chu || '---' %></td>
+                                    <td class="text-center" style="white-space:nowrap;">
+                                        <% if (user.role === 'admin') { %>
+                                        <button class="btn btn-sm btn-outline-warning me-1 btn-sua-vip" data-id="<%= vip.id %>">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger btn-xoa-vip"
+                                                data-id="<%= vip.id %>"
+                                                data-ten="<%= vip.ho_ten %>">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                        <% } else { %>
+                                            <span class="text-muted">---</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+
+                                <!-- Dòng sửa VIP -->
+                                <tr id="vip-edit-<%= vip.id %>" style="display:none;" class="table-light">
+                                    <td></td>
+                                    <td colspan="6">
+                                        <form id="form-vip-<%= vip.id %>" action="/khach-hang/vip/update" method="POST">
+                                            <input type="hidden" name="id" value="<%= vip.id %>">
+                                            <div class="row g-2">
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control form-control-sm" name="ho_ten"
+                                                           value="<%= vip.ho_ten %>" required placeholder="Họ tên">
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select class="form-select form-select-sm" name="khach_hang_id" required>
+                                                        <% listKhachHang.forEach(kh => { %>
+                                                            <option value="<%= kh.id %>" <%= kh.id == vip.khach_hang_id ? 'selected' : '' %>>
+                                                                <%= kh.ten_khach_hang %>
+                                                            </option>
+                                                        <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <select class="form-select form-select-sm" name="chuc_vu_id" required>
+                                                        <% listChucVu.forEach(cv => { %>
+                                                            <option value="<%= cv.id %>" <%= cv.id == vip.chuc_vu_id ? 'selected' : '' %>>
+                                                                <%= cv.ten_chuc_vu %>
+                                                            </option>
+                                                        <% }) %>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="date" class="form-control form-control-sm" name="ngay_sinh"
+                                                           value="<%= ngaySV %>" required>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input type="text" class="form-control form-control-sm" name="so_dien_thoai"
+                                                           value="<%= vip.so_dien_thoai %>" maxlength="10" required
+                                                           oninput="kiemTraSoDienThoai(this)">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <textarea class="form-control form-control-sm" name="ghi_chu"
+                                                            rows="2" placeholder="Ghi chú cá nhân (sở thích, quà đã tặng...)"
+                                                    ><%= vip.ghi_chu || '' %></textarea>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-success me-1 btn-luu-vip" data-id="<%= vip.id %>">
+                                            <i class="fa-solid fa-floppy-disk"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary btn-huy-vip" data-id="<%= vip.id %>">✕</button>
+                                    </td>
+                                </tr>
+
+                                <!-- ACCORDION: LỊCH SỬ CHĂM SÓC -->
+                                <tr id="acc-<%= vip.id %>" style="display:none;">
+                                    <td colspan="8" style="padding:0;background:var(--surface);">
+                                        <div style="padding:12px 16px 16px 40px;border-top:2px dashed rgba(26,138,86,0.2);">
+
+                                            <!-- Header lịch sử -->
+                                            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                                                <span style="font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent-dark);">
+                                                    <i class="fa-solid fa-clipboard-list me-1"></i>Lịch Sử Chăm Sóc — <%= vip.ho_ten %>
+                                                </span>
+                                                <% if (user.role === 'admin' || user.role === 'can_bo') { %>
+                                                <button class="btn btn-sm fw-bold text-dark px-3"
+                                                        style="background:var(--accent);border:none;border-radius:var(--radius-sm);font-size:0.78rem;"
+                                                        onclick="moFormThemLS(<%= vip.id %>)">
+                                                    <i class="fa-solid fa-plus me-1"></i>Thêm lịch sử
+                                                </button>
+                                                <% } %>
+                                            </div>
+
+                                            <!-- Form thêm lịch sử (ẩn mặc định) -->
+                                            <div id="form-them-ls-<%= vip.id %>" style="display:none;" class="mb-3">
+                                                <div class="section-box">
+                                                    <form action="/lich-su/add" method="POST">
+                                                        <input type="hidden" name="vip_id" value="<%= vip.id %>">
+                                                        <div class="row g-2">
+                                                            <div class="col-md-2">
+                                                                <label class="form-label">Ngày Liên Hệ <span class="text-danger">*</span></label>
+                                                                <input type="date" class="form-control form-control-sm" name="ngay_lien_he" required>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label class="form-label">Nội Dung <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="noi_dung" required
+                                                                       placeholder="Ví dụ: Gọi điện chúc sinh nhật">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label">Quà Tặng</label>
+                                                                <input type="text" class="form-control form-control-sm" name="qua_tang"
+                                                                       placeholder="Ví dụ: Hộp bánh kem">
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <label class="form-label">Người Phụ Trách <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control form-control-sm" name="nguoi_phu_trach" required
+                                                                       placeholder="Tên người thực hiện">
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-2 d-flex gap-2">
+                                                            <button type="submit" class="btn btn-sm fw-bold px-3 text-dark"
+                                                                    style="background:var(--accent);border:none;border-radius:var(--radius-sm);">
+                                                                <i class="fa-solid fa-floppy-disk me-1"></i>Lưu
+                                                            </button>
+                                                            <button type="button" class="btn btn-outline-secondary btn-sm"
+                                                                    onclick="dongFormThemLS(<%= vip.id %>)">Đóng</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <!-- Bảng lịch sử -->
+                                            <% if (lichSuVip.length === 0) { %>
+                                                <div style="text-align:center;padding:16px;color:var(--text-light);font-size:0.82rem;">
+                                                    <i class="fa-regular fa-folder-open me-1"></i>Chưa có lịch sử chăm sóc nào.
+                                                </div>
+                                            <% } else { %>
+                                                <table class="table table-sm align-middle mb-0" style="background:var(--white);border-radius:var(--radius);overflow:hidden;">
+                                                    <thead>
+                                                        <tr style="background:rgba(212,175,55,0.1);">
+                                                            <th style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-dark);padding:8px 12px;">Ngày Liên Hệ</th>
+                                                            <th style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-dark);padding:8px 12px;">Nội Dung</th>
+                                                            <th style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-dark);padding:8px 12px;">Quà Tặng</th>
+                                                            <th style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-dark);padding:8px 12px;">Người P.Trách</th>
+                                                            <th style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:var(--accent-dark);padding:8px 12px;text-align:center;">Thao Tác</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% lichSuVip.forEach(ls => {
+                                                            const ngayLH = ls.ngay_lien_he instanceof Date
+                                                                ? `${ls.ngay_lien_he.getFullYear()}-${String(ls.ngay_lien_he.getMonth()+1).padStart(2,'0')}-${String(ls.ngay_lien_he.getDate()).padStart(2,'0')}`
+                                                                : ls.ngay_lien_he;
+                                                        %>
+                                                            <!-- Dòng xem lịch sử -->
+                                                            <tr id="ls-view-<%= ls.id %>" class="ls-item-row">
+                                                                <td style="padding:8px 12px;">
+                                                                    <span class="badge bg-light text-dark border" style="font-size:0.72rem;">
+                                                                        <i class="fa-regular fa-calendar me-1"></i><%= new Date(ls.ngay_lien_he).toLocaleDateString('vi-VN') %>
+                                                                    </span>
+                                                                </td>
+                                                                <td style="padding:8px 12px;font-size:0.85rem;"><%= ls.noi_dung %></td>
+                                                                <td style="padding:8px 12px;">
+                                                                    <% if (ls.qua_tang) { %>
+                                                                        <span class="badge bg-warning text-dark" style="font-size:0.72rem;"><i class="fa-solid fa-gift me-1"></i><%= ls.qua_tang %></span>
+                                                                    <% } else { %>
+                                                                        <span class="text-muted small">---</span>
+                                                                    <% } %>
+                                                                </td>
+                                                                <td style="padding:8px 12px;font-size:0.85rem;"><%= ls.nguoi_phu_trach %></td>
+                                                                <td style="padding:8px 12px;text-align:center;white-space:nowrap;">
+                                                                    <% if (user.role === 'admin' || user.role === 'can_bo') { %>
+                                                                    <button class="btn btn-sm btn-outline-warning me-1 ls-btn-sua" data-id="<%= ls.id %>">
+                                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                                    </button>
+                                                                    <% } %>
+                                                                    <% if (user.role === 'admin') { %>
+                                                                    <button class="btn btn-sm btn-outline-danger ls-btn-xoa"
+                                                                            data-id="<%= ls.id %>"
+                                                                            data-ten="<%= ls.ten_vip %>">
+                                                                        <i class="fa-solid fa-trash-can"></i>
+                                                                    </button>
+                                                                    <% } %>
+                                                                    <% if (user.role === 'truong_phong') { %><span class="text-muted">---</span><% } %>
+                                                                </td>
+                                                            </tr>
+                                                            <!-- Dòng sửa lịch sử -->
+                                                            <tr id="ls-edit-<%= ls.id %>" style="display:none;" class="table-light">
+                                                                <td colspan="4" style="padding:8px 12px;">
+                                                                    <form id="form-ls-<%= ls.id %>" action="/lich-su/update" method="POST">
+                                                                        <input type="hidden" name="id" value="<%= ls.id %>">
+                                                                        <input type="hidden" name="vip_id" value="<%= ls.vip_id %>">
+                                                                        <div class="row g-2">
+                                                                            <div class="col-md-2">
+                                                                                <input type="date" class="form-control form-control-sm"
+                                                                                       name="ngay_lien_he" value="<%= ngayLH %>" required>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <input type="text" class="form-control form-control-sm"
+                                                                                       name="noi_dung" value="<%= ls.noi_dung %>" required>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <input type="text" class="form-control form-control-sm"
+                                                                                       name="qua_tang" value="<%= ls.qua_tang || '' %>"
+                                                                                       placeholder="Quà tặng (nếu có)">
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <input type="text" class="form-control form-control-sm"
+                                                                                       name="nguoi_phu_trach" value="<%= ls.nguoi_phu_trach %>" required>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </td>
+                                                                <td style="padding:8px 12px;text-align:center;white-space:nowrap;">
+                                                                    <button class="btn btn-sm btn-success me-1 ls-btn-luu" data-id="<%= ls.id %>">
+                                                                        <i class="fa-solid fa-floppy-disk"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-secondary ls-btn-huy" data-id="<%= ls.id %>">✕</button>
+                                                                </td>
+                                                            </tr>
+                                                        <% }) %>
+                                                    </tbody>
+                                                </table>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <%
+                    const rangeStart = totalFilteredVip === 0 ? 0 : (page - 1) * limit + 1;
+                    const rangeEnd = Math.min(page * limit, totalFilteredVip);
+                    const firstPage = Math.max(1, Math.min(page - 2, totalPages - 4));
+                    const lastPage = Math.min(totalPages, firstPage + 4);
+                %>
+                <div class="pagination-bar">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="pagination-info">
+                            Hiển thị <strong><%= rangeStart %>–<%= rangeEnd %></strong>
+                            trên tổng <strong><%= totalFilteredVip %></strong> bản ghi
+                        </span>
+                        <select class="form-select form-select-sm pagination-limit" id="paginationLimit">
+                            <option value="20" <%= limit === 20 ? 'selected' : '' %>>20 dòng</option>
+                            <option value="50" <%= limit === 50 ? 'selected' : '' %>>50 dòng</option>
+                        </select>
+                    </div>
+                    <div class="pagination-controls">
+                        <a class="pagination-link <%= page <= 1 ? 'disabled' : '' %>"
+                           href="<%= page <= 1 ? '#' : makePageUrl(page - 1) %>" aria-label="Trang trước">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                        <% for (let pageNumber = firstPage; pageNumber <= lastPage; pageNumber++) { %>
+                            <a class="pagination-link <%= pageNumber === page ? 'active' : '' %>"
+                               href="<%= makePageUrl(pageNumber) %>"><%= pageNumber %></a>
+                        <% } %>
+                        <a class="pagination-link <%= page >= totalPages ? 'disabled' : '' %>"
+                           href="<%= page >= totalPages ? '#' : makePageUrl(page + 1) %>" aria-label="Trang sau">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XÓA LỊCH SỬ -->
+<div class="modal fade" id="modalXoaLichSu" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa lịch sử</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc muốn xóa bản ghi này?</p>
+                <p class="text-danger fw-bold" id="tenLichSuCanXoa"></p>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalLS">Hủy bỏ</button>
+                <a id="linkXacNhanXoaLS" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XÓA DOANH NGHIỆP -->
+<div class="modal fade" id="modalXoa" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa Doanh nghiệp</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc chắn muốn xóa không?</p>
+                <p class="text-danger fw-bold" id="tenCanXoa"></p>
+                <small class="text-muted">* Xóa doanh nghiệp sẽ xóa toàn bộ nhân sự VIP trực thuộc!</small>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalKH">Hủy bỏ</button>
+                <a id="linkXacNhanXoa" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL XÓA VIP -->
+<div class="modal fade" id="modalXoaVip" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận xóa VIP</h5>
+            </div>
+            <div class="modal-body p-4">
+                <p class="mb-1">Bạn có chắc chắn muốn xóa nhân sự VIP này?</p>
+                <p class="text-danger fw-bold" id="tenVipCanXoa"></p>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-secondary" id="btnHuyModalVip">Hủy bỏ</button>
+                <a id="linkXacNhanXoaVip" href="#" class="btn btn-danger fw-bold">Đồng ý Xóa</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL IMPORT EXCEL ===== -->
+<div class="modal fade" id="modalImport" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header" style="background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;">
+                <h5 class="modal-title fw-bold">
+                    <i class="fa-solid fa-file-import me-2"></i>Import Khách Hàng Từ Excel
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+
+                <!-- BƯỚC 1: CHỌN FILE -->
+                <div id="importStep1">
+                    <div class="mb-3 p-3" style="background:var(--surface);border-radius:var(--radius);border:2px dashed var(--border);" id="dropZone">
+                        <div class="text-center py-3">
+                            <i class="fa-solid fa-cloud-arrow-up" style="font-size:2.5rem;color:var(--primary);margin-bottom:12px;display:block;"></i>
+                            <div class="fw-bold mb-1" style="color:var(--text-dark);">Kéo thả file Excel vào đây</div>
+                            <div class="text-muted small mb-3">hoặc</div>
+                            <label class="btn btn-dark fw-bold px-4" style="cursor:pointer;">
+                                <i class="fa-solid fa-folder-open me-2"></i>Chọn file
+                                <input type="file" id="importFile" accept=".xlsx,.xls" style="display:none;" onchange="previewImport(this)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Hướng dẫn cột -->
+                    <div class="p-3" style="background:rgba(212,175,55,0.08);border-radius:var(--radius);border:1px solid rgba(212,175,55,0.25);">
+                        <div style="font-size:0.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent-dark);margin-bottom:8px;">
+                            <i class="fa-solid fa-circle-info me-1"></i>Cấu trúc file Excel yêu cầu
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0" style="font-size:0.75rem;">
+                                <thead>
+                                    <tr style="background:rgba(140,29,64,0.07);">
+                                        <th>Mã KH</th><th>Tên KH</th><th>Ngày thành lập</th>
+                                        <th>Tên lãnh đạo</th><th>Ngày sinh lãnh đạo</th><th>SĐT lãnh đạo</th>
+                                        <th>Tên kế toán</th><th>Ngày sinh kế toán</th><th>SĐT kế toán</th>
+                                        <th>Cán bộ quản lý</th><th>Ngày sinh CBQL</th><th>SĐT CBQL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="text-muted">
+                                        <td>KH001</td><td>Cty ABC</td><td>01/01/2000</td>
+                                        <td>Nguyễn A</td><td>01/01/1980</td><td>0901...</td>
+                                        <td>Trần B</td><td>01/01/1985</td><td>0902...</td>
+                                        <td>Lê C</td><td>01/01/1990</td><td>0903...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BƯỚC 2: KẾT QUẢ IMPORT -->
+                <div id="importStep2" style="display:none;">
+                    <div class="d-flex gap-3 mb-3 flex-wrap">
+                        <div class="flex-fill p-3 text-center" style="background:rgba(26,138,86,0.08);border-radius:var(--radius);border:1px solid rgba(26,138,86,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:#1a8a56;" id="importCountMoi">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:#1a8a56;">Thêm mới</div>
+                        </div>
+                        <div class="flex-fill p-3 text-center" style="background:rgba(37,99,235,0.08);border-radius:var(--radius);border:1px solid rgba(37,99,235,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:#2563EB;" id="importCountCapNhat">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:#2563EB;">Cập nhật</div>
+                        </div>
+                        <div class="flex-fill p-3 text-center" style="background:rgba(140,29,64,0.08);border-radius:var(--radius);border:1px solid rgba(140,29,64,0.2);">
+                            <div style="font-size:1.8rem;font-weight:800;color:var(--primary);" id="importCountLoi">0</div>
+                            <div style="font-size:0.72rem;font-weight:700;color:var(--primary);">Lỗi</div>
+                        </div>
+                    </div>
+
+                    <!-- Chi tiết từng dòng -->
+                    <div style="max-height:260px;overflow-y:auto;">
+                        <table class="table table-sm align-middle mb-0" id="importDetailTable">
+                            <thead style="position:sticky;top:0;">
+                                <tr style="background:var(--surface);">
+                                    <th style="font-size:0.7rem;">Dòng</th>
+                                    <th style="font-size:0.7rem;">Mã KH</th>
+                                    <th style="font-size:0.7rem;">Tên KH</th>
+                                    <th style="font-size:0.7rem;">Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody id="importDetailBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- LOADING -->
+                <div id="importLoading" style="display:none;text-align:center;padding:40px;">
+                    <div class="spinner-border" style="color:var(--primary);width:3rem;height:3rem;" role="status"></div>
+                    <div class="mt-3 fw-bold" style="color:var(--text-mid);">Đang xử lý file...</div>
+                </div>
+
+            </div>
+            <div class="modal-footer" style="background:var(--surface);border-top:1px solid var(--border);">
+                <span id="importFileName" class="text-muted small me-auto fst-italic"></span>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-dark fw-bold px-4" id="btnImport" onclick="thucHienImport()" style="display:none;">
+                    <i class="fa-solid fa-upload me-2"></i>Import ngay
+                </button>
+                <button type="button" class="btn btn-outline-success fw-bold px-4" id="btnImportDone" onclick="location.reload()" style="display:none;">
+                    <i class="fa-solid fa-rotate me-2"></i>Tải lại trang
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== COMMAND PALETTE ===== -->
+<div id="cmdOverlay" onclick="closeCmdPalette(event)">
+    <div id="cmdBox">
+        <input id="cmdInput" type="text"
+               placeholder="🔍  Tìm VIP, doanh nghiệp, hoặc gõ lệnh..."
+               autocomplete="off"
+               oninput="cmdSearch(this.value)"
+               onkeydown="cmdKeyNav(event)">
+        <div id="cmdResults"></div>
+        <div id="cmdFooter">
+            <span class="cmd-hint"><kbd>↑</kbd><kbd>↓</kbd> Điều hướng</span>
+            <span class="cmd-hint"><kbd>Enter</kbd> Chọn</span>
+            <span class="cmd-hint"><kbd>Esc</kbd> Đóng</span>
+            <span class="cmd-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> Mở/Đóng</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+// ======== TOAST NOTIFICATION ========
+const TOAST_DURATION = 3500; // ms
+
+function showToast(message, type = 'success') {
+    const icons = { success: '✅', error: '❌', warning: '⚠️' };
+    const container = document.getElementById('toast-container');
+
+    const toast = document.createElement('div');
+    toast.className = `toast-item toast-${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${icons[type] || '✅'}</span>
+        <span class="toast-msg">${message}</span>
+        <button class="toast-close" onclick="removeToast(this.parentElement)">✕</button>
+    `;
+    // Progress bar duration
+    const bar = document.createElement('style');
+    const uid = 'tp' + Date.now();
+    toast.id = uid;
+    bar.textContent = `#${uid}::before { animation-duration: ${TOAST_DURATION}ms; }`;
+    document.head.appendChild(bar);
+
+    container.appendChild(toast);
+
+    setTimeout(() => removeToast(toast), TOAST_DURATION);
+}
+
+function removeToast(toast) {
+    if (!toast || toast.classList.contains('removing')) return;
+    toast.classList.add('removing');
+    setTimeout(() => toast.remove(), 350);
+}
+
+// Đọc ?toast= từ URL và hiện thông báo
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    const msg   = params.get('toast');
+    const type  = params.get('type') || 'success';
+    if (msg) {
+        // Xóa param khỏi URL (không reload trang)
+        const url = new URL(window.location);
+        url.searchParams.delete('toast');
+        url.searchParams.delete('type');
+        window.history.replaceState({}, '', url);
+        // Hiện toast sau khi DOM sẵn sàng
+        setTimeout(() => showToast(decodeURIComponent(msg), type), 300);
+    }
+})();
+// ======== TEMPLATE SELECT CHỨC VỤ (để clone) ========
+const chucVuOptions = `
+    <option value="">-- Chọn chức vụ --</option>
+    <% listChucVu.forEach(cv => { %>
+        <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+    <% }) %>
+`;
+
+// ======== THÊM VIP MỚI ĐỘNG ========
+let vipCount = 1;
+function themVipMoi() {
+    vipCount++;
+    const container = document.getElementById('vipContainer');
+    const div = document.createElement('div');
+    div.className = 'section-box mb-3 vip-block';
+    div.id = `vip-block-${vipCount-1}`;
+    div.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="vip-block-header">
+                <span class="badge bg-primary me-1">${vipCount}</span> Thông Tin Khách VIP Thứ ${vipCount}
+            </span>
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.vip-block').remove()">✕ Xóa</button>
+        </div>
+        <div class="row g-2">
+            <div class="col-12">
+                <label class="form-label">Họ Và Tên VIP <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="ho_ten" required placeholder="Ví dụ: Trần Thị B">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Chức Vụ <span class="text-danger">*</span></label>
+                <select class="form-select" name="chuc_vu_id" required>
+                    ${document.querySelector('#vipContainer select[name="chuc_vu_id"]').innerHTML}
+                </select>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Ngày Sinh Nhật <span class="text-danger">*</span></label>
+                <input type="date" class="form-control" name="ngay_sinh" required oninput="kiemTraNgaySinh(this)">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Số Điện Thoại <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="so_dien_thoai" required
+                       placeholder="Ví dụ: 0987112233" maxlength="10" oninput="kiemTraSoDienThoai(this)">
+            </div>
+        </div>
+    `;
+    container.appendChild(div);
+
+    // Cập nhật nút thêm
+    const addBtn = document.querySelector('button[onclick="themVipMoi()"]');
+    addBtn.textContent = `+ Thêm thông tin VIP thứ ${vipCount + 1}`;
+}
+
+function resetForm() {
+    dongFormAddCustomer();
+}
+
+// ======== MỞ/ĐÓNG MODAL THÊM KHÁCH HÀNG ========
+function moFormAddCustomer() {
+    const modal = document.getElementById('addCustomerModalBackdrop');
+    if (!modal) return;
+    
+    // Reset form trước khi mở
+    resetFormFields();
+    
+    // Show modal với animation
+    modal.classList.add('show');
+    
+    // Add modal-open class để disable sticky header
+    document.body.classList.add('modal-open');
+    
+    // Disable scroll body
+    document.body.style.overflow = 'hidden';
+    
+    // Focus trường đầu tiên
+    setTimeout(() => {
+        const firstInput = modal.querySelector('input, select, textarea');
+        if (firstInput) firstInput.focus();
+    }, 150);
+}
+
+function dongFormAddCustomer() {
+    const modal = document.getElementById('addCustomerModalBackdrop');
+    if (!modal) return;
+    
+    // Hide modal với animation
+    modal.classList.remove('show');
+    
+    // Remove modal-open class để restore sticky header
+    document.body.classList.remove('modal-open');
+    
+    // Enable scroll body
+    document.body.style.overflow = '';
+    
+    // Reset form sau animation
+    setTimeout(() => {
+        resetFormFields();
+    }, 300);
+}
+
+// Đóng modal khi click vào backdrop (ngoài form)
+function dongFormAddCustomerIfBackdrop(event) {
+    if (event.target.id === 'addCustomerModalBackdrop') {
+        dongFormAddCustomer();
+    }
+}
+
+// Reset form fields
+function resetFormFields() {
+    const form = document.getElementById('formAddAll');
+    if (form) {
+        form.reset();
+    }
+    // Xóa các VIP block thêm động
+    const blocks = document.querySelectorAll('.vip-block:not(#vip-block-0)');
+    blocks.forEach(b => b.remove());
+    vipCount = 1;
+    const addBtn = document.querySelector('button[onclick="themVipMoi()"]');
+    if (addBtn) {
+        addBtn.innerHTML = '<i class="fa-solid fa-plus me-1"></i> Thêm thông tin VIP thứ hai';
+    }
+}
+
+// ======== MODAL VIP DETAIL ========
+let currentVipEditData = {};
+let currentVipId = null;
+
+function getVipInitials(name) {
+    return String(name || '')
+        .trim()
+        .split(/\s+/)
+        .slice(-2)
+        .map(part => part.charAt(0))
+        .join('')
+        .toUpperCase() || 'VIP';
+}
+
+function setVipDetailArrow(vipId, active) {
+    const button = document.getElementById('btn-acc-' + vipId);
+    const icon = document.getElementById('icon-acc-' + vipId);
+    if (button) button.classList.toggle('open', active);
+    if (icon) {
+        icon.classList.toggle('fa-chevron-right', !active);
+        icon.classList.toggle('fa-chevron-down', active);
+    }
+}
+
+async function openVipDetail(vipId) {
+    try {
+        // Fetch dữ liệu VIP + ghi chú
+        const response = await fetch(`/api/vip/${vipId}`);
+        if (!response.ok) {
+            console.error('API Error:', response.status, response.statusText);
+            alert('Không thể lấy thông tin VIP: ' + response.status);
+            return;
+        }
+        
+        const responseText = await response.text();
+        console.log('API Response:', responseText);
+        
+        let data;
+        try {
+            data = JSON.parse(responseText);
+        } catch (parseErr) {
+            console.error('JSON Parse Error:', parseErr, 'Response was:', responseText);
+            alert('Lỗi parse JSON: ' + parseErr.message);
+            return;
+        }
+        
+        const vip = data.vip;
+        const lichSu = data.lichSu || [];
+
+        // Lưu dữ liệu hiện tại để restore khi hủy edit
+        currentVipEditData = JSON.parse(JSON.stringify(vip));
+        if (currentVipId !== null && currentVipId !== vipId) {
+            setVipDetailArrow(currentVipId, false);
+        }
+        currentVipId = vipId;
+        setVipDetailArrow(vipId, true);
+
+        // Populate dữ liệu vào modal
+        document.getElementById('vipDetailId').value = vip.id;
+        document.getElementById('vipDetailKhachHangId').value = vip.khach_hang_id;
+        document.getElementById('vipDetailName').textContent = vip.ho_ten;
+        document.getElementById('vipDetailHoTen').textContent = vip.ho_ten;
+        document.getElementById('vipEditHoTen').value = vip.ho_ten;
+        document.getElementById('vipDetailAvatar').textContent = getVipInitials(vip.ho_ten);
+        document.getElementById('vipDetailProfileName').textContent = vip.ho_ten;
+        document.getElementById('vipDetailProfileCompany').textContent = vip.ten_khach_hang || 'Chưa có doanh nghiệp';
+        
+        document.getElementById('vipDetailChucVu').textContent = vip.chuc_vu || '---';
+        document.getElementById('vipEditChucVu').value = vip.chuc_vu_id || '';
+        
+        const ngaySinh = vip.ngay_sinh ? new Date(vip.ngay_sinh).toLocaleDateString('vi-VN') : '---';
+        document.getElementById('vipDetailNgaySinh').textContent = ngaySinh;
+        document.getElementById('vipEditNgaySinh').value = vip.ngay_sinh ? new Date(vip.ngay_sinh).toISOString().split('T')[0] : '';
+        
+        document.getElementById('vipDetailSdt').textContent = vip.so_dien_thoai || '---';
+        document.getElementById('vipEditSdt').value = vip.so_dien_thoai || '';
+        
+        document.getElementById('vipDetailEmail').textContent = vip.email || '---';
+        document.getElementById('vipEditEmail').value = vip.email || '';
+        
+        document.getElementById('vipDetailTenKh').textContent = vip.ten_khach_hang || '---';
+        document.getElementById('vipEditTenKh').value = vip.ten_khach_hang || '';
+        
+        const ngayThanhLap = vip.ngay_thanh_lap ? new Date(vip.ngay_thanh_lap).toLocaleDateString('vi-VN') : '---';
+        document.getElementById('vipDetailNgayThanhLap').textContent = ngayThanhLap;
+        document.getElementById('vipEditNgayThanhLap').value = vip.ngay_thanh_lap ? new Date(vip.ngay_thanh_lap).toISOString().split('T')[0] : '';
+
+        // Populate ghi chú chăm sóc
+        const notesList = document.getElementById('vipDetailNotesList');
+        document.getElementById('vipDetailNotesCount').textContent = lichSu.length;
+        if (lichSu.length === 0) {
+            notesList.innerHTML = '<li style="text-align: center; color: var(--text-light); padding: 10px;">Chưa có ghi chú nào</li>';
+        } else {
+            notesList.innerHTML = lichSu.map(note => `
+                <li class="vip-note-item">
+                    <div>
+                        <div class="vip-note-content">${note.noi_dung || ''}</div>
+                        <div class="vip-note-date">📅 ${new Date(note.ngay_lien_he).toLocaleDateString('vi-VN')}</div>
+                    </div>
+                    <div class="vip-note-actions">
+                        <button type="button" class="vip-note-delete-btn" onclick="deleteNote(${note.id})">🗑</button>
+                    </div>
+                </li>
+            `).join('');
+        }
+
+        // Ẩn form thêm ghi chú
+        document.getElementById('vipAddNoteForm').style.display = 'none';
+        document.getElementById('vipNewNoteContent').value = '';
+        document.getElementById('vipNewNoteDate').value = new Date().toISOString().split('T')[0];
+
+        // Exit edit mode
+        const modalContent = document.querySelector('.vip-detail-modal-content');
+        modalContent.classList.remove('editing');
+        document.querySelector('.vip-detail-footer').classList.remove('edit-mode');
+
+        // Show modal
+        const backdrop = document.getElementById('vipDetailModalBackdrop');
+        backdrop.classList.add('show');
+        document.body.classList.add('modal-open');
+    } catch (error) {
+        setVipDetailArrow(vipId, false);
+        console.error('Lỗi mở VIP detail:', error);
+        alert('Lỗi: ' + error.message);
+    }
+}
+
+function closeVipDetail() {
+    const backdrop = document.getElementById('vipDetailModalBackdrop');
+    backdrop.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    if (currentVipId !== null) setVipDetailArrow(currentVipId, false);
+    
+    setTimeout(() => {
+        currentVipEditData = {};
+        currentVipId = null;
+    }, 300);
+}
+
+function closeVipDetailIfBackdrop(event) {
+    if (event.target.id === 'vipDetailModalBackdrop') {
+        closeVipDetail();
+    }
+}
+
+function toggleVipEditMode() {
+    const modalContent = document.querySelector('.vip-detail-modal-content');
+    const footer = document.querySelector('.vip-detail-footer');
+    
+    modalContent.classList.add('editing');
+    footer.classList.add('edit-mode');
+}
+
+function cancelVipEdit() {
+    const modalContent = document.querySelector('.vip-detail-modal-content');
+    const footer = document.querySelector('.vip-detail-footer');
+    
+    // Restore dữ liệu cũ
+    document.getElementById('vipEditHoTen').value = currentVipEditData.ho_ten || '';
+    document.getElementById('vipEditChucVu').value = currentVipEditData.chuc_vu_id || '';
+    document.getElementById('vipEditNgaySinh').value = currentVipEditData.ngay_sinh ? currentVipEditData.ngay_sinh.split('T')[0] : '';
+    document.getElementById('vipEditSdt').value = currentVipEditData.so_dien_thoai || '';
+    document.getElementById('vipEditEmail').value = currentVipEditData.email || '';
+    document.getElementById('vipEditTenKh').value = currentVipEditData.ten_khach_hang || '';
+    document.getElementById('vipEditNgayThanhLap').value = currentVipEditData.ngay_thanh_lap ? currentVipEditData.ngay_thanh_lap.split('T')[0] : '';
+    
+    modalContent.classList.remove('editing');
+    footer.classList.remove('edit-mode');
+}
+
+async function saveVipEdit() {
+    try {
+        const vipData = {
+            id: document.getElementById('vipDetailId').value,
+            ho_ten: document.getElementById('vipEditHoTen').value,
+            chuc_vu_id: document.getElementById('vipEditChucVu').value,
+            ngay_sinh: document.getElementById('vipEditNgaySinh').value,
+            so_dien_thoai: document.getElementById('vipEditSdt').value,
+            email: document.getElementById('vipEditEmail').value,
+            khach_hang_id: document.getElementById('vipDetailKhachHangId').value
+        };
+
+        const khachHangData = {
+            ten_khach_hang: document.getElementById('vipEditTenKh').value,
+            ngay_thanh_lap: document.getElementById('vipEditNgayThanhLap').value
+        };
+
+        // Cập nhật VIP
+        const vipRes = await fetch('/khach-hang/vip/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(vipData)
+        });
+
+        if (!vipRes.ok) throw new Error('Lỗi cập nhật VIP');
+
+        // Cập nhật Khách Hàng
+        const khRes = await fetch('/khach-hang/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                id: document.getElementById('vipDetailKhachHangId').value,
+                ...khachHangData
+            })
+        });
+
+        if (!khRes.ok) throw new Error('Lỗi cập nhật doanh nghiệp');
+
+        // Reload dữ liệu
+        await openVipDetail(currentVipId);
+        showToast('Cập nhật thành công!', 'success');
+    } catch (error) {
+        console.error('Lỗi lưu:', error);
+        alert('Lỗi: ' + error.message);
+    }
+}
+
+function openAddNoteForm() {
+    document.getElementById('vipAddNoteForm').style.display = 'block';
+    document.getElementById('vipNewNoteDate').value = new Date().toISOString().split('T')[0];
+}
+
+function cancelAddNote() {
+    document.getElementById('vipAddNoteForm').style.display = 'none';
+    document.getElementById('vipNewNoteContent').value = '';
+}
+
+async function saveNote() {
+    const content = document.getElementById('vipNewNoteContent').value.trim();
+    const date = document.getElementById('vipNewNoteDate').value;
+
+    if (!content) {
+        alert('Vui lòng nhập nội dung ghi chú!');
+        return;
+    }
+
+    try {
+        const res = await fetch('/lich-su/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                vip_id: currentVipId,
+                ngay_lien_he: date,
+                noi_dung: content,
+                nguoi_phu_trach: ''
+            })
+        });
+
+        if (res.ok) {
+            // Reload modal
+            await openVipDetail(currentVipId);
+            showToast('Thêm ghi chú thành công!', 'success');
+        }
+    } catch (error) {
+        console.error('Lỗi thêm ghi chú:', error);
+        alert('Lỗi: ' + error.message);
+    }
+}
+
+async function deleteNote(noteId) {
+    if (!confirm('Xóa ghi chú này?')) return;
+
+    try {
+        const res = await fetch(`/lich-su/delete/${noteId}`);
+        if (res.ok) {
+            await openVipDetail(currentVipId);
+            showToast('Xóa ghi chú thành công!', 'success');
+        }
+    } catch (error) {
+        console.error('Lỗi xóa ghi chú:', error);
+        alert('Lỗi: ' + error.message);
+    }
+}
+
+// ======== MODAL & EVENT DELEGATION ========
+let modalXoa, modalVip;
+document.addEventListener('DOMContentLoaded', function () {
+    modalXoa = new bootstrap.Modal(document.getElementById('modalXoa'));
+    modalVip = new bootstrap.Modal(document.getElementById('modalXoaVip'));
+
+    document.getElementById('btnHuyModalKH').onclick = () => modalXoa.hide();
+    document.getElementById('btnHuyModalVip').onclick = () => modalVip.hide();
+
+    // ---- ESC key để đóng modal thêm khách hàng ----
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('addCustomerModalBackdrop');
+            if (modal && modal.classList.contains('show')) {
+                dongFormAddCustomer();
+            }
+        }
+    });
+
+    // ---- Khách hàng ----
+    document.querySelector('table').addEventListener('click', function(e) {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const id = btn.dataset.id;
+        if (btn.classList.contains('btn-sua-kh')) {
+            document.getElementById('row-view-' + id).style.display = 'none';
+            document.getElementById('row-edit-' + id).style.display = '';
+        } else if (btn.classList.contains('btn-huy-kh')) {
+            document.getElementById('row-edit-' + id).style.display = 'none';
+            document.getElementById('row-view-' + id).style.display = '';
+        } else if (btn.classList.contains('btn-luu-kh')) {
+            document.getElementById('form-kh-' + id).submit();
+        } else if (btn.classList.contains('btn-xoa-kh')) {
+            document.getElementById('tenCanXoa').innerText = btn.dataset.ten;
+            document.getElementById('linkXacNhanXoa').href = '/khach-hang/delete/' + id;
+            modalXoa.show();
+        }
+    });
+
+    // ---- VIP ----
+    const vipTable = document.querySelectorAll('table')[1];
+    if (vipTable) {
+        vipTable.addEventListener('click', function(e) {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const id = btn.dataset.id;
+            if (btn.classList.contains('btn-sua-vip')) {
+                document.getElementById('vip-view-' + id).style.display = 'none';
+                document.getElementById('vip-edit-' + id).style.display = '';
+            } else if (btn.classList.contains('btn-huy-vip')) {
+                document.getElementById('vip-edit-' + id).style.display = 'none';
+                document.getElementById('vip-view-' + id).style.display = '';
+            } else if (btn.classList.contains('btn-luu-vip')) {
+                document.getElementById('form-vip-' + id).submit();
+            } else if (btn.classList.contains('btn-xoa-vip')) {
+                document.getElementById('tenVipCanXoa').innerText = btn.dataset.ten;
+                document.getElementById('linkXacNhanXoaVip').href = '/khach-hang/vip/delete/' + id;
+                modalVip.show();
+            }
+        });
+    }
+
+    // ---- Tìm kiếm và giới hạn dòng phía server ----
+    let searchTimer;
+    document.getElementById('searchVip').addEventListener('input', function() {
+        clearTimeout(searchTimer);
+        const keywordValue = this.value.trim();
+        searchTimer = setTimeout(() => {
+            updateCustomerListQuery({ keyword: keywordValue, page: 1 });
+        }, 350);
+    });
+
+    document.getElementById('paginationLimit').addEventListener('change', function() {
+        updateCustomerListQuery({ limit: this.value, page: 1 });
+    });
+});
+
+function updateCustomerListQuery(changes) {
+    const url = new URL(window.location.href);
+    Object.entries(changes).forEach(([key, value]) => {
+        if (value === '' || value === null || value === undefined || (key === 'chucVu' && value === 'all')) {
+            url.searchParams.delete(key);
+        } else {
+            url.searchParams.set(key, value);
+        }
+    });
+    window.location.href = url.toString();
+}
+
+function toggleNotificationPanel(event) {
+    event.stopPropagation();
+    const panel = document.getElementById('notificationPanel');
+    const bell = document.getElementById('notificationBell');
+    const isOpen = panel.classList.toggle('show');
+    bell.classList.toggle('active', isOpen);
+}
+
+function closeNotificationPanel() {
+    document.getElementById('notificationPanel')?.classList.remove('show');
+    document.getElementById('notificationBell')?.classList.remove('active');
+}
+
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('#notificationWrap')) closeNotificationPanel();
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') closeNotificationPanel();
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const effects = document.getElementById('celebrationEffects');
+    if (!effects) return;
+
+    const symbols = ['🎉', '🎊', '✨', '🎂', '⭐'];
+    for (let i = 0; i < 34; i++) {
+        const particle = document.createElement('span');
+        particle.className = 'celebration-particle';
+        particle.textContent = symbols[i % symbols.length];
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.setProperty('--duration', `${3 + Math.random() * 3}s`);
+        particle.style.setProperty('--drift', `${-80 + Math.random() * 160}px`);
+        particle.style.animationDelay = `${Math.random() * 1.4}s`;
+        effects.appendChild(particle);
+    }
+
+    setTimeout(() => effects.remove(), 7000);
+});
+
+// ======== VALIDATION ========
+function kiemTraNgaySinh(input) {
+    if (!input.value) return;
+    const y = parseInt(input.value.split('-')[0]);
+    if (y > new Date().getFullYear()) {
+        input.setCustomValidity('Năm sinh không hợp lệ!');
+    } else { input.setCustomValidity(''); }
+}
+function kiemTraSoDienThoai(input) {
+    const sdt = input.value;
+    if (!sdt) { input.setCustomValidity(''); return; }
+    if (!/^(03|04|07|08|09)[0-9]{8}$/.test(sdt)) {
+        input.setCustomValidity('SĐT phải đủ 10 số, bắt đầu bằng 03/04/07/08/09.');
+    } else { input.setCustomValidity(''); }
+}
+
+// ======== BADGE CHỨC VỤ THEO CẤP BẬC ========
+// Cấp 1: Lãnh đạo cao nhất
+const CAP1 = ['giám đốc','phó giám đốc','tổng giám đốc','phó tổng giám đốc',
+               'chủ tịch','phó chủ tịch','chủ tịch hội đồng quản trị','phó chủ tịch hội đồng quản trị',
+               'hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo',
+               'bí thư','phó bí thư','chủ tịch ubnd','phó chủ tịch ubnd',
+               'giám đốc sở','phó giám đốc sở','viện trưởng','phó viện trưởng'];
+// Cấp 2: Quản lý trung cấp
+const CAP2 = ['trưởng phòng','phó trưởng phòng','trưởng ban','phó ban','trưởng bộ phận',
+               'trưởng nhóm','team lead','quản lý','manager','supervisor',
+               'trưởng khoa','phó trưởng khoa','tổ trưởng','tổ phó',
+               'trưởng chi nhánh','phó chi nhánh','giám sát'];
+
+function getChucVuBadgeClass(ten) {
+    if (!ten) return 'badge-cap3';
+    const lower = ten.toLowerCase().trim();
+    if (CAP1.some(k => lower.includes(k))) return 'badge-cap1';
+    if (CAP2.some(k => lower.includes(k))) return 'badge-cap2';
+    return 'badge-cap3';
+}
+
+// Áp dụng cho tất cả badge chức vụ sau khi DOM load
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Static stat values (animation removed)
+
+    // ---- FAVICON & TITLE ĐỘNG ----
+    (function updateFaviconTitle() {
+        // Đếm số sinh nhật hôm nay từ badge "Hôm nay!"
+        const todayBadges = document.querySelectorAll('.birthday-badge.today');
+        const count = todayBadges.length;
+
+        // Cập nhật title tab
+        if (count > 0) {
+            document.title = `🎂 ${count} sinh nhật | CRM Agribank`;
+        } else {
+            document.title = 'Quản lý Khách hàng & VIP | CRM Agribank';
+        }
+
+        // Tạo favicon động bằng Canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = 32; canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+
+        // Nền tròn đỏ đô
+        ctx.beginPath();
+        ctx.arc(16, 16, 15, 0, 2 * Math.PI);
+        ctx.fillStyle = '#8C1D40';
+        ctx.fill();
+
+        if (count > 0) {
+            // Có sinh nhật hôm nay — hiện số
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(count > 9 ? '9+' : count.toString(), 16, 17);
+        } else {
+            // Không có — hiện chữ "A" (Agribank)
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 18px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('A', 16, 17);
+        }
+
+        // Gán favicon
+        let link = document.querySelector("link[rel~='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = canvas.toDataURL();
+    })();
+    document.querySelectorAll('.badge.bg-secondary').forEach(function (badge) {
+        const text = badge.textContent.trim();
+        if (!text || text === '---') return;
+        const cls = getChucVuBadgeClass(text);
+        badge.classList.remove('bg-secondary');
+        badge.classList.add(cls);
+    });
+
+    // ---- THANH TIẾN TRÌNH CHĂM SÓC ----
+    document.querySelectorAll('.care-progress-bar').forEach(function(bar) {
+        const label = bar.closest('td').querySelector('.care-progress-label');
+        const lastCare = bar.dataset.lastcare;
+
+        if (!lastCare) {
+            bar.classList.add('never');
+            if (label) { label.className = 'care-progress-label never'; label.textContent = 'Chưa có lịch sử'; }
+            return;
+        }
+
+        // Parse chuẩn — tránh lệch múi giờ
+        const parts = String(lastCare).split('T')[0].split('-');
+        if (parts.length < 3) return;
+        const last = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const days = Math.round((today - last) / (1000 * 60 * 60 * 24));
+
+        // Nếu days âm (dữ liệu lạ) → coi như vừa chăm sóc
+        const d = Math.max(0, days);
+
+        let cls, text, pct;
+        if (d <= 30) {
+            cls = 'fresh';
+            pct = Math.max(15, 100 - (d / 30) * 65);
+            text = d === 0 ? 'Vừa chăm sóc' : `${d} ngày trước`;
+        } else if (d <= 90) {
+            cls = 'medium';
+            pct = Math.max(10, 35 - ((d - 30) / 60) * 25);
+            text = `${d} ngày trước`;
+        } else {
+            cls = 'stale';
+            pct = 10;
+            text = d > 365
+                ? `Hơn ${Math.floor(d / 365)} năm trước`
+                : `${d} ngày trước`;
+        }
+
+        bar.classList.add(cls);
+        if (label) { label.className = 'care-progress-label ' + cls; label.textContent = text; }
+        setTimeout(() => { bar.style.width = pct + '%'; }, 120);
+    });
+
+    // ---- HIGHLIGHT SINH NHẬT SẮP TỚI ----
+    function tinhNgayConLai(ngaySinhStr) {
+        if (!ngaySinhStr) return null;
+        const today = new Date();
+        const parts = ngaySinhStr.split('-');
+        if (parts.length < 3) return null;
+        const month = parseInt(parts[1]) - 1;
+        const day   = parseInt(parts[2]);
+        let birthday = new Date(today.getFullYear(), month, day);
+        const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        if (birthday < todayMidnight) {
+            birthday = new Date(today.getFullYear() + 1, month, day);
+        }
+        return Math.round((birthday - todayMidnight) / (1000 * 60 * 60 * 24));
+    }
+
+    document.querySelectorAll('.vip-item-row[data-ngaysinh]').forEach(function(row) {
+        const days = tinhNgayConLai(row.dataset.ngaysinh);
+        if (days === null) return;
+        const badge = row.querySelector('.birthday-badge');
+        if (!badge) return;
+
+        if (days === 0) {
+            badge.className = 'birthday-badge today';
+            badge.innerHTML = '🎂 Hôm nay!';
+            badge.style.display = 'inline-flex';
+            row.classList.add('birthday-today');
+        } else if (days <= 3) {
+            badge.className = 'birthday-badge soon-3';
+            badge.innerHTML = `⏰ Còn ${days} ngày`;
+            badge.style.display = 'inline-flex';
+        } else if (days <= 7) {
+            badge.className = 'birthday-badge soon-7';
+            badge.innerHTML = `🔔 Còn ${days} ngày`;
+            badge.style.display = 'inline-flex';
+        }
+    });
+
+    // ---- EVENT DELEGATION: LỊCH SỬ (trong accordion) ----
+    const modalLS = new bootstrap.Modal(document.getElementById('modalXoaLichSu'));
+    document.getElementById('btnHuyModalLS').onclick = () => modalLS.hide();
+
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const id = btn.dataset.id;
+
+        if (btn.classList.contains('ls-btn-sua')) {
+            document.getElementById('ls-view-' + id).style.display = 'none';
+            document.getElementById('ls-edit-' + id).style.display = '';
+        } else if (btn.classList.contains('ls-btn-huy')) {
+            document.getElementById('ls-edit-' + id).style.display = 'none';
+            document.getElementById('ls-view-' + id).style.display = '';
+        } else if (btn.classList.contains('ls-btn-luu')) {
+            document.getElementById('form-ls-' + id).submit();
+        } else if (btn.classList.contains('ls-btn-xoa')) {
+            document.getElementById('tenLichSuCanXoa').textContent = btn.dataset.ten;
+            document.getElementById('linkXacNhanXoaLS').href = '/lich-su/delete/' + id;
+            modalLS.show();
+        }
+    });
+});
+
+// ======== ACCORDION LỊCH SỬ ========
+function toggleAccordion(vipId) {
+    const row = document.getElementById('acc-' + vipId);
+    const btn = document.getElementById('btn-acc-' + vipId);
+    const isOpen = row.style.display !== 'none';
+
+    if (isOpen) {
+        row.style.display = 'none';
+        btn.classList.remove('open');
+    } else {
+        row.style.display = '';
+        btn.classList.add('open');
+        setTimeout(() => row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+        timelineRows.forEach(tr => {
+            const idx = parseInt(tr.dataset.index) || 0;
+            const delay = 300 + idx * 110; // bắt đầu sau 300ms, mỗi dòng cách nhau 110ms
+            setTimeout(() => tr.classList.add('revealed'), delay);
+        });
+    }
+}
+
+function moFormThemLS(vipId) {
+    const form = document.getElementById('form-them-ls-' + vipId);
+    form.style.display = form.style.display === 'none' ? '' : 'none';
+}
+
+function dongFormThemLS(vipId) {
+    document.getElementById('form-them-ls-' + vipId).style.display = 'none';
+}
+
+// ======== BỘ LỌC CHỨC VỤ VIP ========
+const CAP1_KEYS = ['giám đốc','phó giám đốc','tổng giám đốc','chủ tịch','phó chủ tịch','hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo','bí thư','phó bí thư','viện trưởng'];
+const CAP2_KEYS = ['trưởng phòng','phó trưởng phòng','trưởng ban','trưởng bộ phận','trưởng nhóm','quản lý','tổ trưởng','trưởng khoa','trưởng chi nhánh'];
+
+function getCapFromChucVu(ten) {
+    const l = ten.toLowerCase();
+    if (CAP1_KEYS.some(k => l.includes(k))) return 'cap1';
+    if (CAP2_KEYS.some(k => l.includes(k))) return 'cap2';
+    return 'cap3';
+}
+
+function filterVip(filter, btnEl) {
+    updateCustomerListQuery({ chucVu: filter, page: 1 });
+}
+
+// ======== HOVER NEON CHO TÊN DOANH NGHIỆP TRONG DARK MODE ========
+document.querySelectorAll('.dn-item-row').forEach(function(row) {
+    const nameEl = row.querySelector('.dn-name');
+    if (!nameEl) return;
+    row.addEventListener('mouseenter', function() {
+        if (document.body.classList.contains('dark-mode')) {
+            nameEl.style.setProperty('color', '#60A5FA', 'important');
+            nameEl.style.setProperty('text-shadow', '0 0 10px rgba(96,165,250,0.6)', 'important');
+        }
+    });
+    row.addEventListener('mouseleave', function() {
+        if (document.body.classList.contains('dark-mode')) {
+            nameEl.style.removeProperty('color');
+            nameEl.style.removeProperty('text-shadow');
+        }
+    });
+});
+
+// ======== COMMAND PALETTE ========
+// Thu thập dữ liệu từ DOM sau khi load
+let cmdData = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Lấy danh sách VIP
+    document.querySelectorAll('.vip-item-row').forEach(row => {
+        const name    = row.querySelector('.text-success')?.textContent.trim() || '';
+        const donVi   = row.querySelectorAll('td')[2]?.textContent.trim() || '';
+        const chucVu  = row.querySelector('.badge')?.textContent.trim() || '';
+        const sdt     = row.querySelector('.text-primary')?.textContent.trim() || '';
+        const id      = row.id.replace('vip-view-', '');
+        if (name) cmdData.push({ type:'vip', name, sub: `${donVi} — ${chucVu}`, sdt, id });
+    });
+
+    // Lấy danh sách doanh nghiệp
+    document.querySelectorAll('.dn-item-row').forEach(row => {
+        const name  = row.querySelector('.dn-name')?.textContent.trim() || '';
+        const ngay  = row.querySelectorAll('td')[2]?.textContent.trim() || '';
+        const id    = row.querySelectorAll('td')[0]?.textContent.trim() || '';
+        if (name) cmdData.push({ type:'dn', name, sub: `Ngày thành lập: ${ngay}`, id });
+    });
+});
+
+// Lệnh điều hướng nhanh
+const CMD_NAV = [
+    { type:'nav', name:'Màn hình chính', sub:'Chuyển đến trang Dashboard', icon:'fa-house-chimney', url:'/' },
+    { type:'nav', name:'Quản lý Chức Vụ', sub:'Thêm, sửa, xóa chức vụ', icon:'fa-layer-group', url:'/chuc-vu' },
+];
+
+let cmdSelected = -1;
+
+function openCmdPalette() {
+    const overlay = document.getElementById('cmdOverlay');
+    overlay.classList.add('open');
+    setTimeout(() => {
+        const input = document.getElementById('cmdInput');
+        input.value = '';
+        input.focus();
+        cmdSearch('');
+    }, 50);
+    cmdSelected = -1;
+}
+
+function closeCmdPalette(e) {
+    if (!e || e.target === document.getElementById('cmdOverlay')) {
+        document.getElementById('cmdOverlay').classList.remove('open');
+        cmdSelected = -1;
+    }
+}
+
+function highlight(text, query) {
+    if (!query) return text;
+    const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+}
+
+function cmdSearch(query) {
+    const q = query.trim().toLowerCase();
+    const results = document.getElementById('cmdResults');
+    cmdSelected = -1;
+    let html = '';
+
+    // Lệnh điều hướng
+    const navItems = CMD_NAV.filter(n => !q || n.name.toLowerCase().includes(q));
+    if (navItems.length) {
+        html += `<div class="cmd-group-label">⚡ Lệnh nhanh</div>`;
+        navItems.forEach((item, i) => {
+            html += `<div class="cmd-item" data-url="${item.url}" onclick="cmdGo('${item.url}')">
+                <div class="cmd-icon nav"><i class="fa-solid ${item.icon}"></i></div>
+                <div class="flex-1">
+                    <div class="cmd-name">${highlight(item.name, query)}</div>
+                    <div class="cmd-sub">${item.sub}</div>
+                </div>
+                <span class="cmd-tag">Trang</span>
+            </div>`;
+        });
+    }
+
+    if (q) {
+        // VIP results
+        const vipItems = cmdData.filter(d => d.type === 'vip' &&
+            (d.name.toLowerCase().includes(q) || d.sdt.includes(q) || d.sub.toLowerCase().includes(q)));
+        if (vipItems.length) {
+            html += `<div class="cmd-group-label">👑 Nhân Sự VIP</div>`;
+            vipItems.slice(0, 6).forEach(item => {
+                html += `<div class="cmd-item" onclick="cmdScrollToVip('${item.id}')">
+                    <div class="cmd-icon vip"><i class="fa-solid fa-crown"></i></div>
+                    <div class="flex-1">
+                        <div class="cmd-name">${highlight(item.name, query)}</div>
+                        <div class="cmd-sub">${item.sub}</div>
+                    </div>
+                    <span class="cmd-tag">VIP</span>
+                </div>`;
+            });
+        }
+
+        // DN results
+        const dnItems = cmdData.filter(d => d.type === 'dn' &&
+            d.name.toLowerCase().includes(q));
+        if (dnItems.length) {
+            html += `<div class="cmd-group-label">🏢 Doanh Nghiệp</div>`;
+            dnItems.slice(0, 5).forEach(item => {
+                html += `<div class="cmd-item" onclick="cmdScrollToDN('${item.id}')">
+                    <div class="cmd-icon dn"><i class="fa-solid fa-building"></i></div>
+                    <div class="flex-1">
+                        <div class="cmd-name">${highlight(item.name, query)}</div>
+                        <div class="cmd-sub">${item.sub}</div>
+                    </div>
+                    <span class="cmd-tag">DN</span>
+                </div>`;
+            });
+        }
+
+        if (!navItems.length && !vipItems.length && !dnItems.length) {
+            html = `<div id="cmdEmpty"><i class="fa-regular fa-face-frown-open" style="font-size:1.5rem;margin-bottom:8px;display:block;"></i>Không tìm thấy kết quả cho "<strong>${query}</strong>"</div>`;
+        }
+    }
+
+    results.innerHTML = html;
+}
+
+function cmdGo(url) {
+    closeCmdPalette({target: document.getElementById('cmdOverlay')});
+    window.location.href = url;
+}
+
+function cmdScrollToVip(id) {
+    closeCmdPalette({target: document.getElementById('cmdOverlay')});
+    const row = document.getElementById('vip-view-' + id);
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Highlight dòng tìm được
+    row.style.transition = 'box-shadow 0.3s ease';
+    row.style.boxShadow = '0 0 0 3px rgba(212,175,55,0.6)';
+    setTimeout(() => { row.style.boxShadow = ''; }, 2000);
+    // Mở accordion
+    setTimeout(() => toggleAccordion(parseInt(id)), 400);
+}
+
+function cmdScrollToDN(id) {
+    closeCmdPalette({target: document.getElementById('cmdOverlay')});
+    const rows = document.querySelectorAll('.dn-item-row');
+    rows.forEach(row => {
+        const idCell = row.querySelectorAll('td')[0]?.textContent.trim();
+        if (idCell === id) {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            row.style.transition = 'box-shadow 0.3s ease';
+            row.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.6)';
+            setTimeout(() => { row.style.boxShadow = ''; }, 2000);
+        }
+    });
+}
+
+function cmdKeyNav(e) {
+    const items = document.querySelectorAll('#cmdResults .cmd-item');
+    if (!items.length) return;
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        cmdSelected = Math.min(cmdSelected + 1, items.length - 1);
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        cmdSelected = Math.max(cmdSelected - 1, 0);
+    } else if (e.key === 'Enter' && cmdSelected >= 0) {
+        e.preventDefault();
+        items[cmdSelected]?.click();
+        return;
+    } else if (e.key === 'Escape') {
+        closeCmdPalette({target: document.getElementById('cmdOverlay')});
+        return;
+    }
+
+    items.forEach((item, i) => item.classList.toggle('selected', i === cmdSelected));
+    if (cmdSelected >= 0) items[cmdSelected].scrollIntoView({ block: 'nearest' });
+}
+
+// Ctrl+K để mở/đóng
+document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        const overlay = document.getElementById('cmdOverlay');
+        if (overlay.classList.contains('open')) {
+            closeCmdPalette({target: overlay});
+        } else {
+            openCmdPalette();
+        }
+    }
+});
+
+// ======== IMPORT EXCEL ========
+let importModal;
+document.addEventListener('DOMContentLoaded', function() {
+    importModal = new bootstrap.Modal(document.getElementById('modalImport'));
+
+    // Drag & Drop
+    const dropZone = document.getElementById('dropZone');
+    if (dropZone) {
+        dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.style.borderColor = 'var(--primary)'; dropZone.style.background = 'rgba(140,29,64,0.04)'; });
+        dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = 'var(--border)'; dropZone.style.background = 'var(--surface)'; });
+        dropZone.addEventListener('drop', e => {
+            e.preventDefault();
+            dropZone.style.borderColor = 'var(--border)';
+            dropZone.style.background = 'var(--surface)';
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                const input = document.getElementById('importFile');
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+                previewImport(input);
+            }
+        });
+    }
+});
+
+function moModalImport() {
+    // Reset về bước 1
+    document.getElementById('importStep1').style.display = '';
+    document.getElementById('importStep2').style.display = 'none';
+    document.getElementById('importLoading').style.display = 'none';
+    document.getElementById('btnImport').style.display = 'none';
+    document.getElementById('btnImportDone').style.display = 'none';
+    document.getElementById('importFileName').textContent = '';
+    document.getElementById('importFile').value = '';
+    importModal.show();
+}
+
+function previewImport(input) {
+    const file = input.files[0];
+    if (!file) return;
+    document.getElementById('importFileName').textContent = `📄 ${file.name} (${(file.size/1024).toFixed(1)} KB)`;
+    document.getElementById('btnImport').style.display = '';
+}
+
+async function thucHienImport() {
+    const file = document.getElementById('importFile').files[0];
+    if (!file) { alert('Vui lòng chọn file Excel!'); return; }
+
+    // Hiện loading
+    document.getElementById('importStep1').style.display = 'none';
+    document.getElementById('importStep2').style.display = 'none';
+    document.getElementById('importLoading').style.display = '';
+    document.getElementById('btnImport').style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const res  = await fetch('/import-excel', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        document.getElementById('importLoading').style.display = 'none';
+
+        if (!data.success) {
+            alert('Lỗi: ' + (data.error || 'Không xác định'));
+            document.getElementById('importStep1').style.display = '';
+            document.getElementById('btnImport').style.display = '';
+            return;
+        }
+
+        // Hiện kết quả
+        document.getElementById('importCountMoi').textContent    = data.them_moi;
+        document.getElementById('importCountCapNhat').textContent = data.cap_nhat;
+        document.getElementById('importCountLoi').textContent    = data.loi;
+
+        // Chi tiết từng dòng
+        const tbody = document.getElementById('importDetailBody');
+        tbody.innerHTML = '';
+        (data.chi_tiet || []).forEach(row => {
+            const color = row.trang_thai === 'Thêm mới' ? '#1a8a56'
+                        : row.trang_thai === 'Cập nhật' ? '#2563EB'
+                        : 'var(--primary)';
+            tbody.innerHTML += `<tr>
+                <td style="font-size:0.75rem;color:var(--text-light);">${row.dong}</td>
+                <td style="font-size:0.75rem;font-weight:700;">${row.maKH || ''}</td>
+                <td style="font-size:0.75rem;">${row.tenKH || ''}</td>
+                <td>
+                    <span style="font-size:0.7rem;font-weight:700;padding:2px 8px;border-radius:10px;background:${color}15;color:${color};">
+                        ${row.trang_thai}${row.loi ? ' — ' + row.loi : ''}
+                    </span>
+                </td>
+            </tr>`;
+        });
+
+        document.getElementById('importStep2').style.display = '';
+        document.getElementById('btnImportDone').style.display = '';
+
+        // Toast thông báo
+        if (typeof showToast === 'function') {
+            showToast(`Import xong! +${data.them_moi} mới, ~${data.cap_nhat} cập nhật, ${data.loi} lỗi`, 'success');
+        }
+
+    } catch (err) {
+        document.getElementById('importLoading').style.display = 'none';
+        document.getElementById('importStep1').style.display = '';
+        document.getElementById('btnImport').style.display = '';
+        alert('Lỗi kết nối: ' + err.message);
+    }
+}
+
+// ======== DARK MODE AUTO + ĐỒNG HỒ THỰC ========
+const DARK_START = 18; // 19:00
+const DARK_END   = 6;  // 06:00
+
+let manualOverride = false; // true khi user tự bấm nút
+
+function isDarkHour(h) {
+    return h >= DARK_START || h < DARK_END;
+}
+
+function applyDarkMode(dark) {
+    document.body.classList.toggle('dark-mode', dark);
+    const icon = document.getElementById('darkToggleIcon');
+    const text = document.getElementById('darkToggleText');
+    if (icon) icon.textContent = dark ? '☀️' : '🌙';
+    if (text) text.textContent = dark ? 'Sáng' : 'Tối';
+    localStorage.setItem('crm-dark-override', dark ? '1' : '0');
+}
+
+function toggleDarkManual() {
+    manualOverride = true;
+    const isDark = document.body.classList.contains('dark-mode');
+    applyDarkMode(!isDark);
+    // Lưu timestamp để giữ trạng thái qua các trang
+    localStorage.setItem('crm-dark-manual-ts', Date.now().toString());
+    setTimeout(() => {
+        manualOverride = false;
+        localStorage.removeItem('crm-dark-manual-ts');
+    }, 2 * 60 * 60 * 1000);
+}
+
+function updateClock() {
+    const now  = new Date();
+    const h    = now.getHours();
+    const m    = String(now.getMinutes()).padStart(2, '0');
+    const s    = String(now.getSeconds()).padStart(2, '0');
+    const d    = String(now.getDate()).padStart(2, '0');
+    const mo   = String(now.getMonth() + 1).padStart(2, '0');
+    const y    = now.getFullYear();
+    const hStr = String(h).padStart(2, '0');
+
+    const timeEl = document.getElementById('clockTime');
+    const dateEl = document.getElementById('clockDate');
+    if (timeEl) timeEl.textContent = `${hStr}:${m}:${s}`;
+    if (dateEl) dateEl.textContent = `${d}/${mo}/${y}`;
+
+    // Auto switch chỉ khi không có manual override
+    if (!manualOverride) {
+        const shouldDark = isDarkHour(h);
+        const isDark = document.body.classList.contains('dark-mode');
+        if (shouldDark !== isDark) applyDarkMode(shouldDark);
+    }
+}
+
+// Khởi tạo khi load
+(function initDarkMode() {
+    const now = new Date();
+    const savedTs = localStorage.getItem('crm-dark-manual-ts');
+    const savedVal = localStorage.getItem('crm-dark-override');
+
+    if (savedTs && Date.now() - parseInt(savedTs) < 2 * 60 * 60 * 1000) {
+        // Còn trong thời gian override — giữ nguyên trạng thái đã chọn
+        applyDarkMode(savedVal === '1');
+        manualOverride = true;
+        const remaining = 2 * 60 * 60 * 1000 - (Date.now() - parseInt(savedTs));
+        setTimeout(() => {
+            manualOverride = false;
+            localStorage.removeItem('crm-dark-manual-ts');
+        }, remaining);
+    } else {
+        // Hết override hoặc chưa có — theo giờ tự động
+        localStorage.removeItem('crm-dark-manual-ts');
+        applyDarkMode(isDarkHour(now.getHours()));
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+})();
+
+</script>
+
+<!-- ========== MODAL THÊM KHÁCH HÀNG ========== -->
+<div id="addCustomerModalBackdrop" class="modal-backdrop-custom" onclick="dongFormAddCustomerIfBackdrop(event)">
+    <div class="modal-content-custom" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="modal-header-custom">
+            <h5>
+                <i class="fa-solid fa-user-plus" style="color: var(--primary);"></i>
+                Thêm Khách Hàng Mới
+            </h5>
+            <button type="button" class="modal-close-btn" onclick="dongFormAddCustomer()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="modal-body-custom">
+            <form action="/khach-hang/add-all" method="POST" id="formAddAll">
+                <!-- PHẦN 1: THÔNG TIN DOANH NGHIỆP -->
+                <div class="section-box mb-3">
+                    <div class="section-box-title">
+                        <i class="fa-solid fa-building-columns"></i>
+                        Thông Tin Doanh Nghiệp / Đơn Vị
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-12">
+                            <label class="form-label">Tên Khách Hàng / Cơ Quan <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="ten_khach_hang" required
+                                   placeholder="Ví dụ: Công ty TNHH XYZ hoặc Trường TH Chu Văn An">
+                        </div>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label">Ngày Thành Lập <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="ngay_thanh_lap" required>
+                        <div class="form-text">Định dạng kỷ niệm ngày thành lập doanh nghiệp</div>
+                    </div>
+                </div>
+
+                <!-- PHẦN 2: THÔNG TIN VIP (động) -->
+                <div id="vipContainer">
+                    <div class="section-box mb-3 vip-block" id="vip-block-0">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="vip-block-header">
+                                <span class="badge bg-primary me-1">1</span> Thông Tin Khách VIP Thứ Nhất
+                            </span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <label class="form-label">Họ Và Tên VIP <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="ho_ten" required placeholder="Ví dụ: Nguyễn Văn A">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Chức Vụ <span class="text-danger">*</span></label>
+                                <select class="form-select" name="chuc_vu_id" required>
+                                    <option value="">-- Chọn chức vụ --</option>
+                                    <% listChucVu.forEach(cv => { %>
+                                        <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Ngày Sinh Nhật <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" name="ngay_sinh" required oninput="kiemTraNgaySinh(this)">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Số Điện Thoại <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="so_dien_thoai" required
+                                       placeholder="Ví dụ: 0912345678" maxlength="10" oninput="kiemTraSoDienThoai(this)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút thêm VIP -->
+                <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-3 fw-bold" onclick="themVipMoi()">
+                    <i class="fa-solid fa-plus me-1"></i> Thêm thông tin VIP thứ hai
+                </button>
+
+                <!-- Footer -->
+                <div class="modal-footer-custom">
+                    <button type="reset" class="btn btn-outline-secondary fw-bold" onclick="resetForm()">
+                        <i class="fa-solid fa-xmark me-1"></i>Hủy bỏ
+                    </button>
+                    <button type="submit" class="btn btn-dark fw-bold">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Lưu khách hàng
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========== MODAL VIP DETAIL ========== -->
+<div id="vipDetailModalBackdrop" class="vip-detail-modal-backdrop" onclick="closeVipDetailIfBackdrop(event)">
+    <div class="vip-detail-modal-content" onclick="event.stopPropagation()">
+        <!-- Header -->
+        <div class="vip-detail-header">
+            <h4 id="vipDetailName">---</h4>
+            <button type="button" class="modal-close-btn" onclick="closeVipDetail()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="vip-detail-body">
+            <form id="vipDetailForm">
+                <input type="hidden" id="vipDetailId" name="id">
+                <input type="hidden" id="vipDetailKhachHangId" name="khach_hang_id">
+
+                <div class="vip-profile-card">
+                    <div class="vip-profile-avatar" id="vipDetailAvatar">VIP</div>
+                    <div>
+                        <div class="vip-profile-name" id="vipDetailProfileName">---</div>
+                        <div class="vip-profile-company" id="vipDetailProfileCompany">---</div>
+                    </div>
+                </div>
+
+                <!-- THÔNG TIN VIP -->
+                <div class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-user"></i> Thông Tin VIP
+                    </div>
+                    <div class="vip-info-grid">
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Họ Tên</span>
+                            <span class="vip-info-value view-mode" id="vipDetailHoTen">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditHoTen" name="ho_ten">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Chức Vụ</span>
+                            <span class="vip-info-value view-mode" id="vipDetailChucVu">---</span>
+                            <select class="vip-edit-input edit-mode" id="vipEditChucVu" name="chuc_vu_id">
+                                <option value="">-- Chọn chức vụ --</option>
+                                <% listChucVu.forEach(cv => { %>
+                                    <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Ngày Sinh</span>
+                            <span class="vip-info-value view-mode" id="vipDetailNgaySinh">---</span>
+                            <input type="date" class="vip-edit-input edit-mode" id="vipEditNgaySinh" name="ngay_sinh">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Số Điện Thoại</span>
+                            <span class="vip-info-value view-mode" id="vipDetailSdt">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditSdt" name="so_dien_thoai" placeholder="0912345678">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Email</span>
+                            <span class="vip-info-value view-mode" id="vipDetailEmail">---</span>
+                            <input type="email" class="vip-edit-input edit-mode" id="vipEditEmail" name="email" placeholder="example@company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- THÔNG TIN DOANH NGHIỆP -->
+                <div class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-building"></i> Thông Tin Doanh Nghiệp
+                    </div>
+                    <div class="vip-info-grid full">
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Tên Doanh Nghiệp</span>
+                            <span class="vip-info-value view-mode" id="vipDetailTenKh">---</span>
+                            <input type="text" class="vip-edit-input edit-mode" id="vipEditTenKh" name="ten_khach_hang" placeholder="Tên công ty">
+                        </div>
+                        <div class="vip-info-item">
+                            <span class="vip-info-label">Ngày Thành Lập</span>
+                            <span class="vip-info-value view-mode" id="vipDetailNgayThanhLap">---</span>
+                            <input type="date" class="vip-edit-input edit-mode" id="vipEditNgayThanhLap" name="ngay_thanh_lap">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GHI CHÚ CHĂM SÓC -->
+                <div class="vip-info-section">
+                    <div class="vip-notes-heading">
+                        <div class="vip-info-section-title">
+                            <i class="fa-solid fa-note-sticky"></i> Ghi Chú Chăm Sóc
+                            <span class="vip-notes-count" id="vipDetailNotesCount">0</span>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="openAddNoteForm()">
+                            <i class="fa-solid fa-plus me-1"></i>Thêm ghi chú
+                        </button>
+                    </div>
+                    <ul class="vip-notes-list" id="vipDetailNotesList">
+                        <li style="text-align: center; color: var(--text-light); padding: 10px;">Đang tải...</li>
+                    </ul>
+                </div>
+
+                <!-- FORM THÊM GHI CHÚ (ẩn theo mặc định) -->
+                <div id="vipAddNoteForm" style="display: none;" class="vip-info-section">
+                    <div class="vip-info-section-title">
+                        <i class="fa-solid fa-pen"></i> Ghi Chú Mới
+                    </div>
+                    <div class="vip-info-item mb-3">
+                        <label class="vip-info-label">Nội Dung</label>
+                        <textarea id="vipNewNoteContent" class="vip-edit-input" placeholder="Ghi chú chăm sóc..." rows="3" style="resize: vertical;"></textarea>
+                    </div>
+                    <div class="vip-info-item mb-3">
+                        <label class="vip-info-label">Ngày Liên Hệ</label>
+                        <input type="date" id="vipNewNoteDate" class="vip-edit-input">
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="cancelAddNote()">Hủy</button>
+                        <button type="button" class="btn btn-sm btn-success" onclick="saveNote()">Lưu Ghi Chú</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="vip-detail-footer">
+            <div class="view-actions">
+                <button type="button" class="btn btn-outline-secondary" onclick="closeVipDetail()">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="toggleVipEditMode()">
+                    <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh Sửa
+                </button>
+            </div>
+            <div class="edit-actions">
+                <button type="button" class="btn btn-outline-secondary" onclick="cancelVipEdit()">Hủy</button>
+                <button type="button" class="btn btn-success" onclick="saveVipEdit()">
+                    <i class="fa-solid fa-floppy-disk me-1"></i> Lưu
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
