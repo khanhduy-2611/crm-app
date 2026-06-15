@@ -1803,28 +1803,31 @@ body.dark-mode .vip-profile-card {
 }
 .vip-card-role {
     display: inline-flex;
+    align-items: center;
     max-width: 100%;
-    padding: 3px 7px;
-    border: 1px solid transparent;
+    padding: 4px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.28);
     border-radius: 999px;
-    font-size: 0.67rem;
-    font-weight: 700;
+    font-size: 0.68rem;
+    font-weight: 800;
     line-height: 1.25;
+    letter-spacing: 0.15px;
+    box-shadow: 0 3px 8px rgba(24, 32, 56, 0.2);
 }
 .vip-card-role.role-color-cap-cao {
-    border-color: rgba(140, 29, 64, 0.2);
-    background: rgba(140, 29, 64, 0.1);
-    color: #8c1d40;
+    background: linear-gradient(135deg, #7f1235, #b42355);
+    color: #fff;
+    box-shadow: 0 3px 9px rgba(127, 18, 53, 0.34);
 }
 .vip-card-role.role-color-quan-ly {
-    border-color: rgba(25, 103, 210, 0.2);
-    background: rgba(25, 103, 210, 0.1);
-    color: #1557a0;
+    background: linear-gradient(135deg, #16458f, #2471d6);
+    color: #fff;
+    box-shadow: 0 3px 9px rgba(22, 69, 143, 0.32);
 }
 .vip-card-role.role-color-khac {
-    border-color: var(--border);
-    background: var(--surface-2);
-    color: var(--text-mid);
+    background: linear-gradient(135deg, #11675f, #159486);
+    color: #fff;
+    box-shadow: 0 3px 9px rgba(17, 103, 95, 0.3);
 }
 .vip-card-detail {
     display: flex;
@@ -1989,7 +1992,8 @@ body.dark-mode .customer-name {
     text-shadow: none !important;
 }
 body.dark-mode .vip-card-role {
-    color: var(--accent-light);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
     text-shadow: none;
 }
 
@@ -2057,9 +2061,8 @@ body.dark-mode .vip-card-role {
     font-size: 0.76rem;
 }
 .vip-compact-card .vip-card-role {
-    color: var(--text-mid);
     font-size: 0.63rem;
-    font-weight: 600;
+    font-weight: 800;
 }
 .vip-compact-card .vip-card-detail {
     font-size: 0.62rem;
