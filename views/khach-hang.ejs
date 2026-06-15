@@ -11,14 +11,12 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg mb-4">
+<nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold" href="/">HỆ THỐNG CRM NỘI BỘ</a>
         <div class="navbar-nav">
             <a class="nav-link" href="/"><i class="fa-solid fa-house-chimney me-1"></i>Màn hình chính</a>
             <a class="nav-link active" href="/khach-hang"><i class="fa-solid fa-users me-1"></i>Quản lý Khách Hàng & VIP</a>
-            <a class="nav-link" href="/chuc-vu"><i class="fa-solid fa-layer-group me-1"></i>Quản lý Chức Vụ</a>
-            <a class="nav-link" href="/cbql"><i class="fa-solid fa-clipboard-user me-1"></i>Nhật ký cán bộ</a>
         </div>
         <div class="navbar-clock">
             <div class="clock-display">
@@ -112,7 +110,7 @@
 <div class="container-fluid px-4">
 
     <!-- THỐNG KÊ NHANH -->
-    <div class="row g-3 mb-4 anim-row" id="parallaxHeader">
+    <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="stat-card primary">
                 <div class="d-flex justify-content-between align-items-center">
@@ -155,58 +153,26 @@
         <div id="tableCol" class="col-md-12">
 
             <!-- BẢNG VIP + ACCORDION LỊCH SỬ -->
-            <div class="card border-0 shadow-sm rounded p-3 anim-row">
+            <div class="card border-0 shadow-sm rounded p-3">
                 <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
                     <div>
-                        <h5 class="section-title mb-1" style="color:#1a8a56;">
-                            <i class="fa-solid fa-crown" style="color:var(--accent-dark);"></i>Danh Sách Nhân Sự VIP
+                        <h5 class="section-title mb-1">
+                            <i class="fa-solid fa-building-user"></i>Danh sách khách hàng
                         </h5>
-                        <small class="text-muted" style="font-size:0.75rem;">Bấm vào tên để xem lịch sử chăm sóc</small>
+                        <small class="text-muted" style="font-size:0.75rem;">Mỗi khách hàng hoặc cơ quan được hiển thị trên một dòng</small>
                     </div>
                     <input type="text" id="searchVip" class="form-control form-control-sm search-input"
-                           style="max-width:280px" placeholder="Tìm theo tên hoặc SĐT..."
+                           style="max-width:520px; width:min(100%, 520px);" placeholder="Tìm theo tên hoặc SĐT... Nhấn Enter để tìm"
                            value="<%= keyword %>">
                 </div>
-                <!-- BỘ LỌC CHỨC VỤ -->
-                <div class="filter-bar" id="filterBar">
-                    <button class="filter-btn <%= chucVu === 'all' ? 'active' : '' %>" data-filter="all" onclick="filterVip('all', this)">
-                        <i class="fa-solid fa-layer-group me-1"></i>Tất cả
-                    </button>
-                    <% const capCao = ['giám đốc','phó giám đốc','tổng giám đốc','chủ tịch','phó chủ tịch','hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo','bí thư','phó bí thư','viện trưởng'];
-                       const capGiua = ['trưởng phòng','phó trưởng phòng','trưởng ban','trưởng bộ phận','trưởng nhóm','quản lý','tổ trưởng','trưởng khoa','trưởng chi nhánh'];
-                       const chucVuCap1 = listChucVu.filter(cv => capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
-                       const chucVuCap2 = listChucVu.filter(cv => !capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)) && capGiua.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
-                       const chucVuCap3 = listChucVu.filter(cv => !capCao.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)) && !capGiua.some(k => cv.ten_chuc_vu.toLowerCase().includes(k)));
-                    %>
-                    <% if(chucVuCap1.length > 0) { %>
-                    <button class="filter-btn cap1 <%= chucVu === 'cap1' ? 'active' : '' %>" data-filter="cap1" onclick="filterVip('cap1', this)">
-                        🔴 Lãnh đạo cấp cao
-                    </button>
-                    <% } %>
-                    <% if(chucVuCap2.length > 0) { %>
-                    <button class="filter-btn cap2 <%= chucVu === 'cap2' ? 'active' : '' %>" data-filter="cap2" onclick="filterVip('cap2', this)">
-                        🔵 Quản lý
-                    </button>
-                    <% } %>
-                    <% if(chucVuCap3.length > 0) { %>
-                    <button class="filter-btn cap3 <%= chucVu === 'cap3' ? 'active' : '' %>" data-filter="cap3" onclick="filterVip('cap3', this)">
-                        🟢 Chức vụ khác
-                    </button>
-                    <% } %>
-                    <% listChucVu.forEach(cv => { %>
-                    <button class="filter-btn <%= chucVu === 'cv-' + cv.id ? 'active' : '' %>" data-filter="cv-<%= cv.id %>" onclick="filterVip('cv-<%= cv.id %>', this)">
-                        <%= cv.ten_chuc_vu %>
-                    </button>
-                    <% }) %>
-                </div>
                 <%- include('partials/vip-table', {
-                    listVip,
+                    listKhachHangGrouped,
                     listKhachHang,
                     listChucVu,
                     page,
                     limit,
                     totalPages,
-                    totalFilteredVip,
+                    totalFilteredKhachHang,
                     keyword,
                     chucVu
                 }) %>

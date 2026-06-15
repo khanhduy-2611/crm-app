@@ -1069,10 +1069,6 @@ tr.dn-item-row:hover .dn-name {
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
 }
-tr.vip-item-row td { cursor: default; }
-tr.vip-item-row td[onclick] { cursor: pointer; }
-tr.vip-item-row td[onclick]:hover { color: #1a6641 !important; text-decoration: underline; }
-
 /* ============================================================
    SEARCH BAR
 ============================================================ */
@@ -1687,6 +1683,435 @@ body.dark-mode .vip-profile-card {
     .modal-footer-custom {
         padding: 1rem;
         flex-direction: column;
+    }
+}
+
+/* ============================================================
+   CUSTOMER-GROUPED VIP TABLE
+============================================================ */
+.vip-company-table-wrap {
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow-x: auto;
+}
+.vip-company-table {
+    min-width: 1320px;
+    table-layout: fixed;
+}
+.vip-company-table thead th {
+    position: static;
+    padding: 13px 14px;
+    background: #f8f9fb !important;
+    border-bottom: 1px solid var(--border) !important;
+    color: #687386 !important;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.vip-company-table th:nth-child(1) { width: 7%; }
+.vip-company-table th:nth-child(2) { width: 19%; }
+.vip-company-table th:nth-child(3) { width: 9%; }
+.vip-company-table th:nth-child(4),
+.vip-company-table th:nth-child(5),
+.vip-company-table th:nth-child(6) { width: 17%; }
+.vip-company-table th:nth-child(7) { width: 14%; }
+.vip-company-row > td {
+    padding: 18px 14px;
+    border-bottom: 1px solid #cfd5dd;
+    background: var(--white);
+    vertical-align: top;
+    transition: background-color 0.2s ease;
+}
+.vip-company-row:hover > td {
+    background: rgba(140,29,64,0.025);
+}
+.customer-code,
+.customer-date {
+    padding-top: 24px !important;
+    color: var(--text-mid);
+    font-size: 0.76rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.customer-name {
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1.45;
+}
+.customer-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 9px;
+    color: var(--text-light);
+    font-size: 0.66rem;
+}
+.customer-note-count {
+    padding: 3px 7px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text-mid);
+}
+.vip-slot-cell {
+    min-height: 150px;
+}
+.vip-card {
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+.vip-card.is-active {
+    outline: 2px solid rgba(212,175,55,0.45);
+    outline-offset: 5px;
+    border-radius: 5px;
+}
+.vip-card-main {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+}
+.vip-card-main:hover .vip-card-name {
+    color: var(--primary);
+}
+.vip-card-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dark);
+    font-size: 0.79rem;
+    font-weight: 800;
+    line-height: 1.35;
+    transition: color 0.2s ease;
+}
+.vip-card-name i {
+    color: var(--accent-dark);
+    font-size: 0.72rem;
+}
+.vip-card-role {
+    display: inline-flex;
+    max-width: 100%;
+    padding: 3px 7px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.67rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+.vip-card-role.role-color-cap-cao {
+    border-color: rgba(140, 29, 64, 0.2);
+    background: rgba(140, 29, 64, 0.1);
+    color: #8c1d40;
+}
+.vip-card-role.role-color-quan-ly {
+    border-color: rgba(25, 103, 210, 0.2);
+    background: rgba(25, 103, 210, 0.1);
+    color: #1557a0;
+}
+.vip-card-role.role-color-khac {
+    border-color: var(--border);
+    background: var(--surface-2);
+    color: var(--text-mid);
+}
+.vip-card-detail {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-light);
+    font-size: 0.65rem;
+    line-height: 1.35;
+}
+.vip-card-detail i {
+    width: 11px;
+    color: #7d8796;
+}
+.vip-card .care-progress-wrap {
+    height: 3px;
+    margin-top: 8px;
+}
+.vip-card .care-progress-label {
+    margin-top: 3px;
+    font-size: 0.57rem;
+}
+.vip-card-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+.vip-mini-action,
+.customer-action {
+    position: relative;
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--white);
+    color: #687386;
+    font-size: 0.7rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.vip-mini-action:hover,
+.customer-action:hover {
+    border-color: var(--primary);
+    background: rgba(140,29,64,0.06);
+    color: var(--primary);
+}
+.vip-mini-action.danger:hover,
+.customer-action.danger:hover {
+    border-color: #dc3545;
+    background: rgba(220,53,69,0.06);
+    color: #dc3545;
+}
+.vip-mini-action .acc-count {
+    top: -6px;
+    right: -6px;
+}
+.vip-empty {
+    display: inline-block;
+    padding-top: 22px;
+    color: var(--text-light);
+}
+.customer-actions {
+    padding-top: 21px !important;
+    white-space: normal;
+}
+.more-vip-badge {
+    display: block;
+    margin: 9px auto 0;
+    padding: 4px 9px;
+    border: 1px solid rgba(140,29,64,0.18);
+    border-radius: 12px;
+    background: rgba(140,29,64,0.06);
+    color: var(--primary);
+    font-size: 0.64rem;
+    font-weight: 800;
+}
+.customer-edit-row td,
+.customer-detail-row td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #cfd5dd;
+    background: var(--surface);
+}
+.more-vip-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+.more-vip-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--white);
+    color: var(--text-dark);
+    text-align: left;
+}
+.more-vip-item span {
+    color: var(--text-light);
+    font-size: 0.66rem;
+}
+.customer-history-content {
+    padding: 4px 6px;
+}
+.history-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.history-panel-header > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.history-panel-header strong {
+    color: var(--primary);
+    font-size: 0.77rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+.history-panel-header span {
+    color: var(--text-mid);
+    font-size: 0.72rem;
+}
+.history-add-form {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+}
+.vip-card.birthday-today {
+    padding-left: 7px;
+    border-left: 3px solid var(--accent);
+}
+.vip-company-table .birthday-badge {
+    margin: 4px 0 0;
+    font-size: 0.58rem;
+}
+body.dark-mode .vip-company-table thead th {
+    background: var(--surface-2) !important;
+}
+body.dark-mode .vip-company-row > td,
+body.dark-mode .vip-mini-action,
+body.dark-mode .customer-action,
+body.dark-mode .more-vip-item,
+body.dark-mode .history-add-form {
+    background: var(--white);
+}
+body.dark-mode .vip-company-row:hover > td {
+    background: var(--surface-2) !important;
+}
+body.dark-mode .vip-card-name,
+body.dark-mode .customer-name {
+    color: var(--text-dark) !important;
+    text-shadow: none !important;
+}
+body.dark-mode .vip-card-role {
+    color: var(--accent-light);
+    text-shadow: none;
+}
+
+@media (max-width: 900px) {
+    .more-vip-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   CUSTOMER LIST - ONE CUSTOMER PER ROW
+============================================================ */
+.vip-company-table {
+    min-width: 1440px;
+    table-layout: fixed;
+}
+.vip-company-table th:nth-child(1) { width: 7%; }
+.vip-company-table th:nth-child(2) { width: 17%; }
+.vip-company-table th:nth-child(3) { width: 8%; }
+.vip-company-table th:nth-child(4) { width: 15%; }
+.vip-company-table th:nth-child(5) { width: 13%; }
+.vip-company-table th:nth-child(6) { width: 15%; }
+.vip-company-table th:nth-child(7) { width: 15%; }
+.vip-company-table th:nth-child(8) { width: 10%; }
+
+.vip-company-row > td {
+    padding: 14px 12px;
+    vertical-align: top;
+    transition: none;
+}
+.vip-company-row:hover > td {
+    background: rgba(140,29,64,0.02);
+}
+.customer-code,
+.customer-date,
+.customer-actions {
+    padding-top: 17px !important;
+}
+.customer-main-cell {
+    padding-top: 15px !important;
+}
+.customer-name {
+    color: var(--primary);
+    font-size: 0.84rem;
+    line-height: 1.45;
+}
+.vip-group-cell,
+.officer-cell {
+    padding-top: 10px !important;
+}
+.vip-compact-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+.vip-compact-card:last-child {
+    border-bottom: 0;
+}
+.vip-compact-card .vip-card-main {
+    gap: 2px;
+}
+.vip-compact-card .vip-card-name {
+    font-size: 0.76rem;
+}
+.vip-compact-card .vip-card-role {
+    color: var(--text-mid);
+    font-size: 0.63rem;
+    font-weight: 600;
+}
+.vip-compact-card .vip-card-detail {
+    font-size: 0.62rem;
+}
+.vip-compact-card .vip-card-actions {
+    align-self: start;
+    margin-top: 0;
+}
+.vip-compact-card .vip-mini-action {
+    width: 24px;
+    height: 24px;
+    font-size: 0.62rem;
+}
+.vip-empty {
+    padding-top: 7px;
+}
+.officer-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+.officer-item:last-child {
+    border-bottom: 0;
+}
+.officer-item strong {
+    color: var(--text-dark);
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+.officer-item span {
+    color: var(--text-light);
+    font-size: 0.64rem;
+}
+.customer-actions {
+    white-space: nowrap;
+}
+.stat-card:hover {
+    transform: none;
+}
+body.dark-mode .customer-name {
+    color: var(--accent-light) !important;
+}
+body.dark-mode .vip-compact-card,
+body.dark-mode .officer-item {
+    border-bottom-color: var(--border);
+}
+
+@media (max-width: 768px) {
+    .vip-company-table-wrap {
+        border-radius: 6px;
     }
 }
 

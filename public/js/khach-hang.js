@@ -174,13 +174,8 @@ function getVipInitials(name) {
 }
 
 function setVipDetailArrow(vipId, active) {
-    const button = document.getElementById('btn-acc-' + vipId);
-    const icon = document.getElementById('icon-acc-' + vipId);
-    if (button) button.classList.toggle('open', active);
-    if (icon) {
-        icon.classList.toggle('fa-chevron-right', !active);
-        icon.classList.toggle('fa-chevron-down', active);
-    }
+    const card = document.getElementById('vip-view-' + vipId);
+    if (card) card.classList.toggle('is-active', active);
 }
 
 async function openVipDetail(vipId) {
@@ -453,40 +448,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---- Khách hàng ----
-    document.querySelector('table').addEventListener('click', function(e) {
-        const btn = e.target.closest('button');
-        if (!btn) return;
-        const id = btn.dataset.id;
-        if (btn.classList.contains('btn-sua-kh')) {
-            document.getElementById('row-view-' + id).style.display = 'none';
-            document.getElementById('row-edit-' + id).style.display = '';
-        } else if (btn.classList.contains('btn-huy-kh')) {
-            document.getElementById('row-edit-' + id).style.display = 'none';
-            document.getElementById('row-view-' + id).style.display = '';
-        } else if (btn.classList.contains('btn-luu-kh')) {
-            document.getElementById('form-kh-' + id).submit();
-        } else if (btn.classList.contains('btn-xoa-kh')) {
-            document.getElementById('tenCanXoa').innerText = btn.dataset.ten;
-            document.getElementById('linkXacNhanXoa').href = '/khach-hang/delete/' + id;
-            modalXoa.show();
-        }
-    });
-
-    // ---- VIP ----
-    const vipTable = document.querySelectorAll('table')[1];
+    const vipTable = document.getElementById('tableVip');
     if (vipTable) {
         vipTable.addEventListener('click', function(e) {
             const btn = e.target.closest('button');
             if (!btn) return;
             const id = btn.dataset.id;
-            if (btn.classList.contains('btn-sua-vip')) {
-                document.getElementById('vip-view-' + id).style.display = 'none';
-                document.getElementById('vip-edit-' + id).style.display = '';
-            } else if (btn.classList.contains('btn-huy-vip')) {
-                document.getElementById('vip-edit-' + id).style.display = 'none';
-                document.getElementById('vip-view-' + id).style.display = '';
-            } else if (btn.classList.contains('btn-luu-vip')) {
-                document.getElementById('form-vip-' + id).submit();
+            if (btn.classList.contains('btn-edit-customer')) {
+                document.getElementById('customer-view-' + id).style.display = 'none';
+                document.getElementById('customer-edit-' + id).style.display = '';
+            } else if (btn.classList.contains('btn-cancel-customer')) {
+                document.getElementById('customer-edit-' + id).style.display = 'none';
+                document.getElementById('customer-view-' + id).style.display = '';
+            } else if (btn.classList.contains('btn-xoa-kh')) {
+                document.getElementById('tenCanXoa').innerText = btn.dataset.ten;
+                document.getElementById('linkXacNhanXoa').href = '/khach-hang/delete/' + id;
+                modalXoa.show();
+            } else if (btn.classList.contains('btn-edit-vip-card')) {
+                openVipDetail(Number(id)).then(() => toggleVipEditMode());
             } else if (btn.classList.contains('btn-xoa-vip')) {
                 document.getElementById('tenVipCanXoa').innerText = btn.dataset.ten;
                 document.getElementById('linkXacNhanXoaVip').href = '/khach-hang/vip/delete/' + id;
@@ -496,17 +475,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ---- Tìm kiếm và giới hạn dòng phía server ----
-    let searchTimer;
-    document.getElementById('searchVip').addEventListener('input', function() {
-        clearTimeout(searchTimer);
-        const keywordValue = this.value.trim();
-        searchTimer = setTimeout(() => {
-            updateCustomerListQuery({ keyword: keywordValue, page: 1 });
-        }, 350);
+    document.getElementById('searchVip').addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        updateCustomerListQuery({ keyword: this.value.trim(), chucVu: 'all', page: 1 });
     });
 
     document.getElementById('paginationLimit').addEventListener('change', function() {
-        updateCustomerListQuery({ limit: this.value, page: 1 });
+        updateCustomerListQuery({ limit: this.value, chucVu: 'all', page: 1 });
     });
 });
 
@@ -721,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return Math.round((birthday - todayMidnight) / (1000 * 60 * 60 * 24));
     }
 
-    document.querySelectorAll('.vip-item-row[data-ngaysinh]').forEach(function(row) {
+    document.querySelectorAll('.vip-card[data-ngaysinh]').forEach(function(row) {
         const days = tinhNgayConLai(row.dataset.ngaysinh);
         if (days === null) return;
         const badge = row.querySelector('.birthday-badge');
@@ -910,12 +886,14 @@ async function loadLichSu(vipId, forceReload = false) {
 
         const vipRow = document.getElementById('vip-view-' + vipId);
         if (vipRow) vipRow.dataset.vipLichSuCount = String(lichSu.length);
-        const button = document.getElementById('btn-acc-' + vipId);
+        const button = document.querySelector(`button[onclick^="openVipHistory(${Number(vipId)},"]`);
         const count = button?.querySelector('.acc-count');
         if (count) {
             count.textContent = lichSu.length;
             count.style.display = lichSu.length ? '' : 'none';
         }
+        const summaryCount = vipRow?.querySelector('.acc-summary-count');
+        if (summaryCount) summaryCount.textContent = String(lichSu.length);
     } catch (error) {
         container.innerHTML = `
             <div style="text-align:center;padding:16px;color:var(--primary);font-size:0.82rem;">
@@ -930,30 +908,63 @@ async function loadLichSu(vipId, forceReload = false) {
     }
 }
 
-async function toggleAccordion(vipId) {
-    const row = document.getElementById('acc-' + vipId);
-    const btn = document.getElementById('btn-acc-' + vipId);
-    const isOpen = row.style.display !== 'none';
+async function openVipHistory(vipId, customerId) {
+    const row = document.getElementById('customer-history-' + customerId);
+    const content = document.getElementById('customer-history-content-' + customerId);
+    if (!row || !content) return;
 
-    if (isOpen) {
-        row.style.display = 'none';
-        btn.classList.remove('open');
-        const icon = document.getElementById('icon-acc-' + vipId);
-        if (icon) {
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-right');
-        }
-    } else {
-        row.style.display = '';
-        btn.classList.add('open');
-        const icon = document.getElementById('icon-acc-' + vipId);
-        if (icon) {
-            icon.classList.remove('fa-chevron-right');
-            icon.classList.add('fa-chevron-down');
-        }
-        await loadLichSu(vipId);
-        setTimeout(() => row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-    }
+    const sameVipOpen = row.style.display !== 'none' && content.dataset.vipId === String(vipId);
+    document.querySelectorAll('.customer-detail-row[id^="customer-history-"]').forEach(item => {
+        item.style.display = 'none';
+    });
+    if (sameVipOpen) return;
+
+    const vipName = document.getElementById('vip-view-' + vipId)
+        ?.querySelector('.vip-card-name')?.textContent.trim() || 'VIP';
+    content.dataset.vipId = String(vipId);
+    content.innerHTML = `
+        <div class="history-panel-header">
+            <div>
+                <strong>Lịch sử chăm sóc</strong>
+                <span>${escapeHistoryHtml(vipName)}</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-accent" onclick="moFormThemLS(${Number(vipId)})">
+                <i class="fa-solid fa-plus me-1"></i>Thêm lịch sử
+            </button>
+        </div>
+        <div id="form-them-ls-${Number(vipId)}" class="history-add-form" style="display:none;">
+            <form action="/lich-su/add" method="POST">
+                <input type="hidden" name="vip_id" value="${Number(vipId)}">
+                <div class="row g-2">
+                    <div class="col-md-2">
+                        <label class="form-label">Ngày liên hệ</label>
+                        <input type="date" class="form-control form-control-sm" name="ngay_lien_he" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Nội dung</label>
+                        <input type="text" class="form-control form-control-sm" name="noi_dung" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Quà tặng</label>
+                        <input type="text" class="form-control form-control-sm" name="qua_tang">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Người phụ trách</label>
+                        <input type="text" class="form-control form-control-sm" name="nguoi_phu_trach" required>
+                    </div>
+                </div>
+                <div class="mt-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-sm btn-success">Lưu</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="dongFormThemLS(${Number(vipId)})">Đóng</button>
+                </div>
+            </form>
+        </div>
+        <div id="lich-su-content-${Number(vipId)}" class="lich-su-lazy-content"
+             data-user-role="admin" data-loaded="false"></div>
+    `;
+    row.style.display = '';
+    await loadLichSu(vipId);
+    row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 function moFormThemLS(vipId) {
@@ -965,6 +976,12 @@ function dongFormThemLS(vipId) {
     document.getElementById('form-them-ls-' + vipId).style.display = 'none';
 }
 
+function toggleCustomerVipList(customerId) {
+    const row = document.getElementById('customer-more-vip-' + customerId);
+    if (!row) return;
+    row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
 // ======== BỘ LỌC CHỨC VỤ VIP ========
 const CAP1_KEYS = ['giám đốc','phó giám đốc','tổng giám đốc','chủ tịch','phó chủ tịch','hiệu trưởng','phó hiệu trưởng','hiệu phó','lãnh đạo','bí thư','phó bí thư','viện trưởng'];
 const CAP2_KEYS = ['trưởng phòng','phó trưởng phòng','trưởng ban','trưởng bộ phận','trưởng nhóm','quản lý','tổ trưởng','trưởng khoa','trưởng chi nhánh'];
@@ -974,10 +991,6 @@ function getCapFromChucVu(ten) {
     if (CAP1_KEYS.some(k => l.includes(k))) return 'cap1';
     if (CAP2_KEYS.some(k => l.includes(k))) return 'cap2';
     return 'cap3';
-}
-
-function filterVip(filter, btnEl) {
-    updateCustomerListQuery({ chucVu: filter, page: 1 });
 }
 
 // ======== HOVER NEON CHO TÊN DOANH NGHIỆP TRONG DARK MODE ========
@@ -1004,20 +1017,22 @@ let cmdData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     // Lấy danh sách VIP
-    document.querySelectorAll('.vip-item-row').forEach(row => {
-        const name    = row.querySelector('.text-success')?.textContent.trim() || '';
-        const donVi   = row.querySelectorAll('td')[2]?.textContent.trim() || '';
-        const chucVu  = row.querySelector('.badge')?.textContent.trim() || '';
-        const sdt     = row.querySelector('.text-primary')?.textContent.trim() || '';
+    document.querySelectorAll('.vip-card').forEach(row => {
+        const name    = row.querySelector('.vip-card-name')?.textContent.trim() || '';
+        const customerRow = row.closest('.vip-company-row');
+        const donVi   = customerRow?.querySelector('.customer-name')?.textContent.trim() || '';
+        const chucVu  = row.querySelector('.vip-card-role')?.textContent.trim() || '';
+        const details = row.querySelectorAll('.vip-card-detail');
+        const sdt     = details.length ? details[details.length - 1].textContent.trim() : '';
         const id      = row.id.replace('vip-view-', '');
         if (name) cmdData.push({ type:'vip', name, sub: `${donVi} — ${chucVu}`, sdt, id });
     });
 
     // Lấy danh sách doanh nghiệp
-    document.querySelectorAll('.dn-item-row').forEach(row => {
-        const name  = row.querySelector('.dn-name')?.textContent.trim() || '';
+    document.querySelectorAll('.vip-company-row').forEach(row => {
+        const name  = row.querySelector('.customer-name')?.textContent.trim() || '';
         const ngay  = row.querySelectorAll('td')[2]?.textContent.trim() || '';
-        const id    = row.querySelectorAll('td')[0]?.textContent.trim() || '';
+        const id    = row.dataset.customerId || '';
         if (name) cmdData.push({ type:'dn', name, sub: `Ngày thành lập: ${ngay}`, id });
     });
 });
@@ -1025,7 +1040,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Lệnh điều hướng nhanh
 const CMD_NAV = [
     { type:'nav', name:'Màn hình chính', sub:'Chuyển đến trang Dashboard', icon:'fa-house-chimney', url:'/' },
-    { type:'nav', name:'Quản lý Chức Vụ', sub:'Thêm, sửa, xóa chức vụ', icon:'fa-layer-group', url:'/chuc-vu' },
 ];
 
 let cmdSelected = -1;
@@ -1135,15 +1149,14 @@ function cmdScrollToVip(id) {
     row.style.boxShadow = '0 0 0 3px rgba(212,175,55,0.6)';
     setTimeout(() => { row.style.boxShadow = ''; }, 2000);
     // Mở accordion
-    setTimeout(() => toggleAccordion(parseInt(id)), 400);
+    setTimeout(() => openVipDetail(parseInt(id)), 400);
 }
 
 function cmdScrollToDN(id) {
     closeCmdPalette({target: document.getElementById('cmdOverlay')});
-    const rows = document.querySelectorAll('.dn-item-row');
+    const rows = document.querySelectorAll('.vip-company-row');
     rows.forEach(row => {
-        const idCell = row.querySelectorAll('td')[0]?.textContent.trim();
-        if (idCell === id) {
+        if (String(row.dataset.customerId) === String(id)) {
             row.scrollIntoView({ behavior: 'smooth', block: 'center' });
             row.style.transition = 'box-shadow 0.3s ease';
             row.style.boxShadow = '0 0 0 3px rgba(96,165,250,0.6)';

@@ -242,9 +242,6 @@ async function renderCanBoQuanLy(req, res) {
     }
 }
 
-app.get('/cbql', renderCanBoQuanLy);
-app.get('/cbql/:id', renderCanBoQuanLy);
-
 // ==================== QUAN LY TAI KHOAN ====================
 app.get('/users', async (req, res) => {
     try {
@@ -378,6 +375,10 @@ app.post('/users/:id/delete', async (req, res) => {
     }
 });
 
+app.use('/chuc-vu', (req, res) => {
+    res.status(404).send('Trang quan ly chuc vu da duoc go bo');
+});
+
 app.get('/chuc-vu', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM chuc_vu ORDER BY id ASC');
@@ -481,11 +482,20 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         headerRow.eachCell((cell, col) => {
             headers[String(cell.value || '').trim().toLowerCase()] = col;
         });
+
+        function normalizeExcelText(value) {
+            return String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .toLowerCase()
+                .trim();
+        }
  
         function getCellByKey(row, ...keys) {
             for (const key of keys) {
                 for (const [h, col] of Object.entries(headers)) {
-                    if (h.includes(key)) {
+                    if (normalizeExcelText(h).includes(normalizeExcelText(key))) {
                         const v = row.getCell(col).value;
                         return v != null ? String(v).trim() : null;
                     }
@@ -497,7 +507,7 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
         function getDateByKey(row, ...keys) {
             for (const key of keys) {
                 for (const [h, col] of Object.entries(headers)) {
-                    if (h.includes(key)) {
+                    if (normalizeExcelText(h).includes(normalizeExcelText(key))) {
                         return parseExcelDate(row.getCell(col).value);
                     }
                 }
@@ -519,6 +529,57 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
             }
             return null;
         }
+
+        async function findOrCreateCV(keys, fallbackName) {
+            for (const key of keys) {
+                const existingId = findCV(key);
+                if (existingId) return existingId;
+            }
+
+            const existing = await client.query(
+                'SELECT id FROM chuc_vu WHERE LOWER(TRIM(ten_chuc_vu)) = LOWER(TRIM($1)) LIMIT 1',
+                [fallbackName]
+            );
+            if (existing.rows[0]) {
+                const id = existing.rows[0].id;
+                cvMap[fallbackName.toLowerCase().trim()] = id;
+                return id;
+            }
+
+            const inserted = await client.query(
+                'INSERT INTO chuc_vu (ten_chuc_vu) VALUES ($1) RETURNING id',
+                [fallbackName]
+            );
+            const id = inserted.rows[0].id;
+            cvMap[fallbackName.toLowerCase().trim()] = id;
+            return id;
+        }
+
+        async function findOrCreateCanBo(hoTen, phongBan) {
+            if (!hoTen) return null;
+
+            const existing = await client.query(
+                'SELECT id FROM can_bo_quan_ly WHERE LOWER(TRIM(ho_ten)) = LOWER(TRIM($1)) LIMIT 1',
+                [hoTen]
+            );
+            if (existing.rows[0]) {
+                await client.query(
+                    `UPDATE can_bo_quan_ly
+                     SET phong_ban = $1
+                     WHERE id = $2
+                       AND $1 IS NOT NULL
+                       AND phong_ban IS DISTINCT FROM $1`,
+                    [phongBan || null, existing.rows[0].id]
+                );
+                return existing.rows[0].id;
+            }
+
+            const inserted = await client.query(
+                'INSERT INTO can_bo_quan_ly (ho_ten, phong_ban) VALUES ($1, $2) RETURNING id',
+                [hoTen, phongBan || null]
+            );
+            return inserted.rows[0].id;
+        }
  
         for (let r = 2; r <= sheet.rowCount; r++) {
             const row = sheet.getRow(r);
@@ -533,26 +594,26 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
             const tenKT       = getCellByKey(row, 'tên kế toán', 'ten ke toan', 'kế toán');
             const ngaySinhKT  = getDateByKey(row, 'sinh kế', 'sinh ke');
             const sdtKT       = getCellByKey(row, 'điện thoại kế', 'thoai ke', 'sdt ke');
-            const tenCBQL     = getCellByKey(row, 'cán bộ', 'can bo', 'cbql', 'quản lý');
-            const ngaySinhCBQL = getDateByKey(row, 'sinh cán', 'sinh can', 'sinh quản');
-            const sdtCBQL     = getCellByKey(row, 'điện thoại cán', 'thoai can', 'sdt can', 'sdt cbql');
+            const tenCBQL     = getCellByKey(row, 'can bo quan ly');
+            const phongBan    = getCellByKey(row, 'phong nghiep vu');
  
             try {
+                const canBoId = await findOrCreateCanBo(tenCBQL, phongBan);
                 const existKH = await client.query('SELECT id FROM khach_hang WHERE ma_kh=$1', [maKH]);
                 let khId;
  
                 if (existKH.rows.length > 0) {
                     khId = existKH.rows[0].id;
                     await client.query(
-                        'UPDATE khach_hang SET ten_khach_hang=$1, ngay_thanh_lap=$2 WHERE id=$3',
-                        [tenKH, ngayTL, khId]
+                        'UPDATE khach_hang SET ten_khach_hang=$1, ngay_thanh_lap=$2, can_bo_id=$3 WHERE id=$4',
+                        [tenKH, ngayTL, canBoId, khId]
                     );
                     await client.query('DELETE FROM vip WHERE khach_hang_id=$1', [khId]);
                     results.cap_nhat++;
                 } else {
                     const ins = await client.query(
-                        'INSERT INTO khach_hang (ma_kh, ten_khach_hang, ngay_thanh_lap) VALUES ($1,$2,$3) RETURNING id',
-                        [maKH, tenKH, ngayTL]
+                        'INSERT INTO khach_hang (ma_kh, ten_khach_hang, ngay_thanh_lap, can_bo_id) VALUES ($1,$2,$3,$4) RETURNING id',
+                        [maKH, tenKH, ngayTL, canBoId]
                     );
                     khId = ins.rows[0].id;
                     results.them_moi++;
@@ -561,13 +622,12 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
                 const vipList = [
                     { ten: tenLD,   ngay: ngaySinhLD,   sdt: sdtLD,   cvKey: ['lãnh đạo','giám đốc','hiệu trưởng'] },
                     { ten: tenKT,   ngay: ngaySinhKT,   sdt: sdtKT,   cvKey: ['kế toán','ke toan'] },
-                    { ten: tenCBQL, ngay: ngaySinhCBQL, sdt: sdtCBQL, cvKey: ['quản lý','trưởng phòng','cán bộ'] },
                 ];
  
-                for (const vip of vipList) {
+                const fallbackRoles = ['Giám đốc', 'Kế toán'];
+                for (const [vipIndex, vip] of vipList.entries()) {
                     if (!vip.ten) continue;
-                    let cvId = null;
-                    for (const k of vip.cvKey) { cvId = findCV(k); if (cvId) break; }
+                    const cvId = await findOrCreateCV(vip.cvKey, fallbackRoles[vipIndex]);
                     await client.query(
                         'INSERT INTO vip (khach_hang_id, chuc_vu_id, ho_ten, ngay_sinh, so_dien_thoai) VALUES ($1,$2,$3,$4,$5)',
                         [khId, cvId, vip.ten, vip.ngay, vip.sdt]

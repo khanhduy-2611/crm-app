@@ -1,15 +1,18 @@
 function updateDashboardClock() {
     const now = new Date();
     const pad = value => String(value).padStart(2, '0');
-    const clock = document.getElementById('dashboardClock');
-    const date = document.getElementById('dashboardDate');
+    const clock = document.getElementById('clockTime');
+    const navbarDate = document.getElementById('clockDate');
+    const dashboardDate = document.getElementById('dashboardDate');
+    const formattedDate = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
 
-    if (clock) clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
-    if (date) date.textContent = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()}`;
+    if (clock) clock.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    if (navbarDate) navbarDate.textContent = formattedDate;
+    if (dashboardDate) dashboardDate.textContent = formattedDate;
 }
 
 updateDashboardClock();
-setInterval(updateDashboardClock, 30000);
+setInterval(updateDashboardClock, 1000);
 
 function toggleDashboardNotifications(event) {
     event.stopPropagation();

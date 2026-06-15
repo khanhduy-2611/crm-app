@@ -9,7 +9,7 @@ module.exports = function createKhachHangRouter({ pool }) {
             const requestedLimit = parseInt(req.query.limit, 10) || 20;
             const limit = requestedLimit === 50 ? 50 : 20;
             const keyword = String(req.query.keyword || '').trim();
-            const chucVu = String(req.query.chucVu || 'all');
+            const chucVu = 'all';
 
             const chucVuResult = await pool.query('SELECT * FROM chuc_vu ORDER BY id ASC');
             const capCao = ['giám đốc', 'phó giám đốc', 'tổng giám đốc', 'chủ tịch', 'phó chủ tịch', 'hiệu trưởng', 'phó hiệu trưởng', 'hiệu phó', 'lãnh đạo', 'bí thư', 'phó bí thư', 'viện trưởng'];
@@ -21,14 +21,15 @@ module.exports = function createKhachHangRouter({ pool }) {
                 return 'cap3';
             };
 
-            const whereParts = [];
+            const vipMatchParts = [];
             const filterParams = [];
             if (keyword) {
                 filterParams.push(`%${keyword}%`);
-                whereParts.push(`(
-                    v.ho_ten ILIKE $${filterParams.length}
+                vipMatchParts.push(`(
+                    kh.ten_khach_hang ILIKE $${filterParams.length}
+                    OR COALESCE(kh.ma_kh, '') ILIKE $${filterParams.length}
+                    OR v.ho_ten ILIKE $${filterParams.length}
                     OR COALESCE(v.so_dien_thoai, '') ILIKE $${filterParams.length}
-                    OR COALESCE(kh.ten_khach_hang, '') ILIKE $${filterParams.length}
                 )`);
             }
 
@@ -36,7 +37,7 @@ module.exports = function createKhachHangRouter({ pool }) {
                 const chucVuId = parseInt(chucVu.replace('cv-', ''), 10);
                 if (Number.isInteger(chucVuId)) {
                     filterParams.push(chucVuId);
-                    whereParts.push(`v.chuc_vu_id = $${filterParams.length}`);
+                    vipMatchParts.push(`v.chuc_vu_id = $${filterParams.length}`);
                 }
             } else if (['cap1', 'cap2', 'cap3'].includes(chucVu)) {
                 const ids = chucVuResult.rows
@@ -44,82 +45,212 @@ module.exports = function createKhachHangRouter({ pool }) {
                     .map(cv => cv.id);
                 filterParams.push(ids);
                 const idCondition = `v.chuc_vu_id = ANY($${filterParams.length}::int[])`;
-                whereParts.push(chucVu === 'cap3'
+                vipMatchParts.push(chucVu === 'cap3'
                     ? `(${idCondition} OR v.chuc_vu_id IS NULL)`
                     : idCondition);
             }
 
-            const whereClause = whereParts.length ? `WHERE ${whereParts.join(' AND ')}` : '';
+            const customerWhereClause = vipMatchParts.length
+                ? `WHERE EXISTS (
+                    SELECT 1
+                    FROM vip v
+                    LEFT JOIN chuc_vu filter_cv ON filter_cv.id = v.chuc_vu_id
+                    WHERE v.khach_hang_id = kh.id
+                      AND LOWER(TRIM(COALESCE(filter_cv.ten_chuc_vu, ''))) <> LOWER('Quản lý')
+                      AND ${vipMatchParts.join(' AND ')}
+                )`
+                : '';
             const totalResult = await pool.query(`
                 SELECT COUNT(*)::int AS total
-                FROM vip v
-                LEFT JOIN khach_hang kh ON v.khach_hang_id = kh.id
-                LEFT JOIN chuc_vu cv ON v.chuc_vu_id = cv.id
-                ${whereClause}
+                FROM khach_hang kh
+                ${customerWhereClause}
             `, filterParams);
 
-            const totalFilteredVip = totalResult.rows[0].total;
-            const totalPages = Math.max(1, Math.ceil(totalFilteredVip / limit));
+            const totalFilteredKhachHang = totalResult.rows[0].total;
+            const totalPages = Math.max(1, Math.ceil(totalFilteredKhachHang / limit));
             const page = Math.min(Math.max(requestedPage, 1), totalPages);
             const offset = (page - 1) * limit;
 
-            const vipParams = [...filterParams, limit, offset];
-            const vipResult = await pool.query(`
-                SELECT v.*, cv.ten_chuc_vu AS chuc_vu, kh.ten_khach_hang
-                FROM vip v
-                LEFT JOIN khach_hang kh ON v.khach_hang_id = kh.id
-                LEFT JOIN chuc_vu cv ON v.chuc_vu_id = cv.id
-                ${whereClause}
-                ORDER BY v.id DESC
-                LIMIT $${vipParams.length - 1} OFFSET $${vipParams.length}
-            `, vipParams);
+            const customerParams = [...filterParams, limit, offset];
+            const customerResult = await pool.query(`
+                SELECT
+                    kh.*,
+                    COALESCE(kh.ma_kh, 'KH' || LPAD(kh.id::text, 3, '0')) AS ma_kh,
+                    cb.ho_ten AS can_bo_cham_soc,
+                    cb.phong_ban
+                FROM khach_hang kh
+                LEFT JOIN can_bo_quan_ly cb ON kh.can_bo_id = cb.id
+                ${customerWhereClause}
+                ORDER BY kh.id DESC
+                LIMIT $${customerParams.length - 1} OFFSET $${customerParams.length}
+            `, customerParams);
+            const customerIds = customerResult.rows.map(customer => customer.id);
 
-            const vipIds = vipResult.rows.map(vip => vip.id);
-            if (vipIds.length > 0) {
-                const careResult = await pool.query(`
-                    SELECT vip_id,
-                           COUNT(*)::int AS lich_su_count,
-                           MAX(ngay_lien_he) AS last_care_date
-                    FROM lich_su_cham_soc
-                    WHERE vip_id = ANY($1::int[])
-                    GROUP BY vip_id
-                `, [vipIds]);
-                const careByVip = new Map(careResult.rows.map(row => [row.vip_id, row]));
-
-                vipResult.rows.forEach(vip => {
-                    const care = careByVip.get(vip.id);
-                    vip.lich_su_count = care?.lich_su_count || 0;
-                    vip.last_care_date = care?.last_care_date || null;
-                });
+            let vipRows = [];
+            if (customerIds.length > 0) {
+                const vipResult = await pool.query(`
+                    SELECT
+                        v.*,
+                        cv.ten_chuc_vu AS chuc_vu,
+                        cb.ho_ten AS can_bo_quan_ly,
+                        cb.phong_ban AS phong_ban_can_bo,
+                        COALESCE(care.lich_su_count, 0)::int AS lich_su_count,
+                        care.last_care_date
+                    FROM vip v
+                    LEFT JOIN chuc_vu cv ON v.chuc_vu_id = cv.id
+                    LEFT JOIN can_bo_quan_ly cb ON cb.id = v.can_bo_quan_ly_id
+                    LEFT JOIN (
+                        SELECT
+                            vip_id,
+                            COUNT(*)::int AS lich_su_count,
+                            MAX(ngay_lien_he) AS last_care_date
+                        FROM lich_su_cham_soc
+                        WHERE vip_id IN (
+                            SELECT id FROM vip WHERE khach_hang_id = ANY($1::int[])
+                        )
+                        GROUP BY vip_id
+                    ) care ON care.vip_id = v.id
+                    WHERE v.khach_hang_id = ANY($1::int[])
+                      AND LOWER(TRIM(COALESCE(cv.ten_chuc_vu, ''))) <> LOWER('Quản lý')
+                    ORDER BY v.khach_hang_id, v.id DESC
+                `, [customerIds]);
+                vipRows = vipResult.rows;
             }
 
-            const scopedKhachHangSql = 'SELECT id, ten_khach_hang, ngay_thanh_lap, ma_kh FROM khach_hang ORDER BY id DESC LIMIT $1 OFFSET $2';
-            const scopedKhachHangParams = [limit, offset];
-            const scopedOptionsSql = 'SELECT id, ten_khach_hang FROM khach_hang ORDER BY ten_khach_hang ASC';
+            const normalizeRole = value => String(value || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .toLowerCase();
+            const rolePriority = value => {
+                const role = normalizeRole(value);
+                const priorities = [
+                    ['tong giam doc', 10],
+                    ['pho giam doc', 30],
+                    ['giam doc', 20],
+                    ['hieu truong', 40],
+                    ['pho hieu truong', 50],
+                    ['hieu pho', 50],
+                    ['lanh dao', 60],
+                    ['ke toan truong', 70],
+                    ['ke toan', 80],
+                    ['nhan vien', 90],
+                    ['chuyen vien', 100]
+                ];
+                return priorities.find(([key]) => role.includes(key))?.[1] || 999;
+            };
+            const getVipGroup = value => {
+                const role = normalizeRole(value);
+                if (role.includes('ke toan')) return 'ke_toan';
+
+                const leadershipKeys = [
+                    'giam doc',
+                    'chu tich',
+                    'hieu truong',
+                    'hieu pho',
+                    'lanh dao',
+                    'bi thu',
+                    'vien truong',
+                    'truong phong',
+                    'truong ban',
+                    'truong bo phan',
+                    'truong nhom',
+                    'quan ly',
+                    'to truong',
+                    'truong khoa',
+                    'truong chi nhanh'
+                ];
+                return leadershipKeys.some(key => role.includes(key)) ? 'lanh_dao' : 'khac';
+            };
+            const getRoleColorGroup = value => {
+                const role = normalizeRole(value);
+                const topLeadershipKeys = [
+                    'lanh dao',
+                    'giam doc',
+                    'hieu truong',
+                    'hieu pho',
+                    'chu tich',
+                    'bi thu',
+                    'vien truong'
+                ];
+                if (topLeadershipKeys.some(key => role.includes(key))) return 'cap-cao';
+
+                const managementKeys = [
+                    'ke toan',
+                    'quan ly',
+                    'truong phong',
+                    'pho truong phong'
+                ];
+                if (managementKeys.some(key => role.includes(key))) return 'quan-ly';
+
+                return 'khac';
+            };
+            const vipByCustomer = new Map();
+            vipRows.forEach(vip => {
+                if (!vipByCustomer.has(vip.khach_hang_id)) vipByCustomer.set(vip.khach_hang_id, []);
+                vipByCustomer.get(vip.khach_hang_id).push(vip);
+            });
+            const listKhachHangGrouped = customerResult.rows.map(customer => {
+                const dsVip = (vipByCustomer.get(customer.id) || [])
+                    .filter(vip => normalizeRole(vip.chuc_vu).trim() !== 'quan ly')
+                    .sort((a, b) => rolePriority(a.chuc_vu) - rolePriority(b.chuc_vu) || b.id - a.id);
+                return {
+                    ...customer,
+                    ds_vip: dsVip.map(vip => ({
+                        ...vip,
+                        nhom_hien_thi: getVipGroup(vip.chuc_vu),
+                        nhom_mau_chuc_vu: getRoleColorGroup(vip.chuc_vu)
+                    })),
+                    lich_su_count: dsVip.reduce((sum, vip) => sum + Number(vip.lich_su_count || 0), 0),
+                    ghi_chu_count: dsVip.filter(vip => String(vip.ghi_chu || '').trim()).length
+                };
+            });
+
+            const scopedOptionsSql = `
+                SELECT
+                    kh.id,
+                    kh.ten_khach_hang,
+                    cb.ho_ten AS can_bo_cham_soc,
+                    cb.phong_ban
+                FROM khach_hang kh
+                LEFT JOIN can_bo_quan_ly cb ON cb.id = kh.can_bo_id
+                ORDER BY kh.ten_khach_hang ASC
+            `;
             const scopedCountKhSql = 'SELECT COUNT(*)::int AS total FROM khach_hang';
-            const scopedCountVipSql = 'SELECT COUNT(*)::int AS total FROM vip';
+            const scopedCountVipSql = `
+                SELECT COUNT(*)::int AS total
+                FROM vip v
+                LEFT JOIN chuc_vu cv ON cv.id = v.chuc_vu_id
+                WHERE LOWER(TRIM(COALESCE(cv.ten_chuc_vu, ''))) <> LOWER('Quản lý')
+            `;
             const [
-                khachHangResult,
                 khachHangOptionsResult,
                 tongKhachHangResult,
                 tongVipResult,
                 suKienKhachHangResult,
                 suKienVipResult
             ] = await Promise.all([
-                pool.query(scopedKhachHangSql, scopedKhachHangParams),
                 pool.query(scopedOptionsSql),
                 pool.query(scopedCountKhSql),
                 pool.query(scopedCountVipSql),
                 pool.query(`
-                    SELECT id, ten_khach_hang, ngay_thanh_lap
-                    FROM khach_hang
-                    WHERE ngay_thanh_lap IS NOT NULL
+                    SELECT
+                        kh.id,
+                        kh.ten_khach_hang,
+                        kh.ngay_thanh_lap,
+                        cb.ho_ten AS can_bo_cham_soc,
+                        cb.phong_ban
+                    FROM khach_hang kh
+                    LEFT JOIN can_bo_quan_ly cb ON cb.id = kh.can_bo_id
+                    WHERE kh.ngay_thanh_lap IS NOT NULL
                 `),
                 pool.query(`
                     SELECT v.id, v.ho_ten, v.ngay_sinh, kh.ten_khach_hang
                     FROM vip v
                     LEFT JOIN khach_hang kh ON v.khach_hang_id = kh.id
+                    LEFT JOIN chuc_vu cv ON cv.id = v.chuc_vu_id
                     WHERE v.ngay_sinh IS NOT NULL
+                      AND LOWER(TRIM(COALESCE(cv.ten_chuc_vu, ''))) <> LOWER('Quản lý')
                 `)
             ]);
 
@@ -173,8 +304,7 @@ module.exports = function createKhachHangRouter({ pool }) {
 
             res.render('khach-hang', {
                 listKhachHang: khachHangOptionsResult.rows,
-                listKhachHangPage: khachHangResult.rows,
-                listVip: vipResult.rows,
+                listKhachHangGrouped,
                 listChucVu: chucVuResult.rows,
                 thongKe: { tongKH, tongVip },
                 page,
@@ -182,7 +312,7 @@ module.exports = function createKhachHangRouter({ pool }) {
                 totalPages,
                 totalKhachHang: tongKH,
                 totalVip: tongVip,
-                totalFilteredVip,
+                totalFilteredKhachHang,
                 keyword,
                 chucVu,
                 suKienHomNay,
@@ -205,6 +335,12 @@ module.exports = function createKhachHangRouter({ pool }) {
                 [ten_khach_hang, ngay_thanh_lap || null]
             );
             const newKhachHangId = khResult.rows[0].id;
+            await client.query(
+                `UPDATE khach_hang
+                 SET ma_kh = COALESCE(ma_kh, 'KH' || LPAD(id::text, 3, '0'))
+                 WHERE id = $1`,
+                [newKhachHangId]
+            );
 
             const ho_ten_arr = [].concat(req.body.ho_ten || []);
             const chuc_vu_id_arr = [].concat(req.body.chuc_vu_id || []);
