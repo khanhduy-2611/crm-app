@@ -3,7 +3,12 @@ const TOAST_DURATION = 3500; // ms
 
 function showToast(message, type = 'success') {
     const icons = { success: '✅', error: '❌', warning: '⚠️' };
-    const container = document.getElementById('toast-container');
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
 
     const toast = document.createElement('div');
     toast.className = `toast-item toast-${type}`;
@@ -47,6 +52,12 @@ function removeToast(toast) {
 })();
 // ======== THÊM VIP MỚI ĐỘNG ========
 let vipCount = 1;
+function getVipBlockTitle(index) {
+    if (index === 1) return 'Thông tin lãnh đạo';
+    if (index === 2) return 'Thông tin kế toán';
+    return `Thông Tin Khách VIP Thứ ${index}`;
+}
+
 function themVipMoi() {
     vipCount++;
     const container = document.getElementById('vipContainer');
@@ -56,7 +67,7 @@ function themVipMoi() {
     div.innerHTML = `
         <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="vip-block-header">
-                <span class="badge bg-primary me-1">${vipCount}</span> Thông Tin Khách VIP Thứ ${vipCount}
+                <span class="badge bg-primary me-1">${vipCount}</span> ${getVipBlockTitle(vipCount)}
             </span>
             <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('.vip-block').remove()">✕ Xóa</button>
         </div>
@@ -155,86 +166,38 @@ function resetFormFields() {
     vipCount = 1;
     const addBtn = document.querySelector('button[onclick="themVipMoi()"]');
     if (addBtn) {
-        addBtn.innerHTML = '<i class="fa-solid fa-plus me-1"></i> Thêm thông tin VIP thứ hai';
+        addBtn.innerHTML = '<i class="fa-solid fa-plus me-1"></i> Thêm thông tin kế toán';
     }
 }
 
 // ======== MODAL CẬP NHẬT KHÁCH HÀNG THEO DÒNG ========
-function getVietnameseOrdinal(index) {
-    const words = ['Thứ Nhất', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm'];
-    return words[index] || `Thứ ${index + 1}`;
-}
-
-function renderEditFullVipBlock(vip = {}, index = 0, canRemove = false) {
-    const chucVuOptions = document.getElementById('editFullChucVuOptions')?.innerHTML || '';
-    const removeButton = canRemove ? `
-        <button type="button" class="edit-full-remove-vip" onclick="this.closest('.edit-full-vip-section').remove(); refreshEditFullVipTitles();" title="Xóa thông tin VIP vừa thêm">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-    ` : '';
-
+function renderEditFullVipBlock(vip = {}, index = 0) {
     return `
         <div class="section-box edit-full-section edit-full-vip-section mb-4">
             <div class="section-box-title edit-full-vip-title">
                 <span>
                     <span class="edit-full-index">${index + 1}</span>
-                    <span class="edit-full-title-text">Thông Tin Khách VIP ${getVietnameseOrdinal(index)}</span>
+                    <span class="edit-full-title-text">${getVipBlockTitle(index + 1)}</span>
                 </span>
-                ${removeButton}
             </div>
             <input type="hidden" name="vip_id" value="${escapeHistoryHtml(vip.id || '')}">
+            <input type="hidden" name="chuc_vu_id" value="${escapeHistoryHtml(vip.chuc_vu_id || '')}">
             <div class="row g-3">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Họ và tên VIP <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="ho_ten" value="${escapeHistoryHtml(vip.ho_ten || '')}" required>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Chức vụ <span class="text-danger">*</span></label>
-                    <select class="form-select edit-full-chuc-vu" name="chuc_vu_id" data-selected="${escapeHistoryHtml(vip.chuc_vu_id || '')}" required>
-                        ${chucVuOptions}
-                    </select>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Ngày sinh nhật <span class="text-danger">*</span></label>
                     <input type="date" class="form-control" name="ngay_sinh" value="${escapeHistoryHtml(vip.ngay_sinh || '')}" required oninput="kiemTraNgaySinh(this)">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" name="so_dien_thoai" value="${escapeHistoryHtml(vip.so_dien_thoai || '')}" maxlength="10" required oninput="kiemTraSoDienThoai(this)">
                 </div>
             </div>
         </div>
     `;
-}
-
-function applyEditFullVipSelectValues(scope = document) {
-    scope.querySelectorAll('.edit-full-chuc-vu').forEach(select => {
-        select.value = select.dataset.selected || '';
-    });
-}
-
-function refreshEditFullVipTitles() {
-    document.querySelectorAll('#editFullVipContainer .edit-full-vip-section').forEach((section, index) => {
-        const indexEl = section.querySelector('.edit-full-index');
-        const titleEl = section.querySelector('.edit-full-title-text');
-        if (indexEl) indexEl.textContent = index + 1;
-        if (titleEl) titleEl.textContent = `Thông Tin Khách VIP ${getVietnameseOrdinal(index)}`;
-    });
-}
-
-function themVipMoiTrongFormEdit() {
-    const vipContainer = document.getElementById('editFullVipContainer');
-    if (!vipContainer) return;
-
-    const emptyState = vipContainer.querySelector('.edit-full-empty');
-    if (emptyState) emptyState.remove();
-
-    const index = vipContainer.querySelectorAll('.edit-full-vip-section').length;
-    vipContainer.insertAdjacentHTML('beforeend', renderEditFullVipBlock({}, index, true));
-
-    const newBlock = vipContainer.lastElementChild;
-    applyEditFullVipSelectValues(newBlock);
-    newBlock.querySelector('input[name="ho_ten"]')?.focus();
 }
 
 function moFormEditCustomer(customerId) {
@@ -267,8 +230,6 @@ function moFormEditCustomer(customerId) {
             <div class="text-muted small">Doanh nghiệp này chưa có thông tin VIP để cập nhật.</div>
         </div>
     `;
-
-    applyEditFullVipSelectValues(vipContainer);
 
     modal.classList.add('show');
     document.body.classList.add('modal-open');
@@ -1192,11 +1153,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const name    = row.querySelector('.vip-card-name')?.textContent.trim() || '';
         const customerRow = row.closest('.vip-company-row');
         const donVi   = customerRow?.querySelector('.customer-name')?.textContent.trim() || '';
-        const chucVu  = row.querySelector('.vip-card-role')?.textContent.trim() || '';
         const details = row.querySelectorAll('.vip-card-detail');
         const sdt     = details.length ? details[details.length - 1].textContent.trim() : '';
         const id      = row.id.replace('vip-view-', '');
-        if (name) cmdData.push({ type:'vip', name, sub: `${donVi} — ${chucVu}`, sdt, id });
+        if (name) cmdData.push({ type:'vip', name, sub: donVi, sdt, id });
     });
 
     // Lấy danh sách doanh nghiệp

@@ -49,9 +49,6 @@
                  data-vip-lich-su-count="<%= vip.lich_su_count || 0 %>">
             <button type="button" class="vip-card-main" onclick="openVipDetail(<%= vip.id %>)">
                 <span class="vip-card-name"><%= vip.ho_ten %></span>
-                <span class="vip-card-role role-color-<%= vip.nhom_mau_chuc_vu || 'khac' %>">
-                    <%= vip.chuc_vu || 'Chưa có chức vụ' %>
-                </span>
                 <span class="vip-card-detail vip-birth-date">
                     <i class="fa-regular fa-calendar"></i>
                     SN: <%= formatDate(vip.ngay_sinh) %>
