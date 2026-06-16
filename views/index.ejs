@@ -42,7 +42,6 @@
     ...birthdaysToday.map(item => ({ type: 'vip', title: item.ho_ten, subtitle: item.ten_khach_hang || 'Chưa có doanh nghiệp' }))
 ]; %>
 <% const totalNotifications = birthdays.length + anniversaries.length; %>
-<% const dashboardUrl = (nextKhPage, nextVipPage) => `/?khPage=${nextKhPage}&vipPage=${nextVipPage}`; %>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-4">
@@ -129,9 +128,9 @@
 <main class="container-fluid px-lg-4 py-4">
     <section class="dashboard-heading">
         <div>
-            <span class="eyebrow">Theo dõi sự kiện định kỳ</span>
-            <h1>Sự kiện trong 7 ngày tới</h1>
-            <p>Danh sách tự động tính từ ngày hiện tại. Cập nhật đến ngày <span id="dashboardDate"></span>.</p>
+            <span class="eyebrow">Chăm sóc và gắn kết khách hàng</span>
+            <h1>Sinh nhật và ngày kỷ niệm sắp tới</h1>
+            <p>Thông tin được cập nhật tự động nhằm ghi nhận những dấu mốc ý nghĩa.</p>
         </div>
         <a class="btn btn-agribank" href="/khach-hang">
             <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Mở danh sách VIP
@@ -142,8 +141,8 @@
         <section class="dashboard-panel">
             <header class="panel-header">
                 <div>
-                    <span class="eyebrow">Doanh nghiệp</span>
-                    <h2>Ngày thành lập trong 7 ngày tới</h2>
+                    <span class="eyebrow panel-eyebrow"><i class="fa-solid fa-building"></i> Doanh nghiệp</span>
+                    <h2>Kỷ niệm ngày thành lập</h2>
                 </div>
                 <span class="panel-count"><%= totalKhachHang %> doanh nghiệp</span>
             </header>
@@ -170,26 +169,13 @@
                     </article>
                 <% }) %>
             </div>
-            <% if (tongTrangKhachHang > 1) { %>
-                <nav class="panel-pagination" aria-label="Phân trang doanh nghiệp">
-                    <a class="page-button <%= khPage <= 1 ? 'disabled' : '' %>"
-                       href="<%= khPage <= 1 ? '#' : dashboardUrl(khPage - 1, vipPage) %>">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                    <span>Trang <strong><%= khPage %></strong>/<%= tongTrangKhachHang %></span>
-                    <a class="page-button <%= khPage >= tongTrangKhachHang ? 'disabled' : '' %>"
-                       href="<%= khPage >= tongTrangKhachHang ? '#' : dashboardUrl(khPage + 1, vipPage) %>">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </nav>
-            <% } %>
         </section>
 
         <section class="dashboard-panel">
             <header class="panel-header">
                 <div>
-                    <span class="eyebrow">Khách hàng VIP</span>
-                    <h2>Sinh nhật trong 7 ngày tới</h2>
+                    <span class="eyebrow panel-eyebrow"><i class="fa-solid fa-cake-candles"></i> Khách hàng VIP</span>
+                    <h2>Dịp sinh nhật đáng nhớ</h2>
                 </div>
                 <span class="panel-count"><%= totalVip %> VIP</span>
             </header>
@@ -215,19 +201,6 @@
                     </article>
                 <% }) %>
             </div>
-            <% if (tongTrangVip > 1) { %>
-                <nav class="panel-pagination" aria-label="Phân trang VIP">
-                    <a class="page-button <%= vipPage <= 1 ? 'disabled' : '' %>"
-                       href="<%= vipPage <= 1 ? '#' : dashboardUrl(khPage, vipPage - 1) %>">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                    <span>Trang <strong><%= vipPage %></strong>/<%= tongTrangVip %></span>
-                    <a class="page-button <%= vipPage >= tongTrangVip ? 'disabled' : '' %>"
-                       href="<%= vipPage >= tongTrangVip ? '#' : dashboardUrl(khPage, vipPage + 1) %>">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </nav>
-            <% } %>
         </section>
     </div>
 
