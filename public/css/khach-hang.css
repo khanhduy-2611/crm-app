@@ -1871,6 +1871,17 @@ body.dark-mode .vip-profile-card {
     color: var(--accent-dark);
     font-size: 0.72rem;
 }
+.vip-role-icon {
+    width: 14px;
+    flex: 0 0 14px;
+    text-align: center;
+}
+.vip-role-icon-leader {
+    color: var(--accent-dark) !important;
+}
+.vip-role-icon-accounting {
+    color: #0f8f78 !important;
+}
 .vip-card-role {
     display: inline-flex;
     align-items: center;

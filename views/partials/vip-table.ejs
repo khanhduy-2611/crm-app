@@ -48,7 +48,14 @@
                  data-vip-ngay-thanh-lap="<%= isoDate(customer.ngay_thanh_lap) %>"
                  data-vip-lich-su-count="<%= vip.lich_su_count || 0 %>">
             <button type="button" class="vip-card-main" onclick="openVipDetail(<%= vip.id %>)">
-                <span class="vip-card-name"><%= vip.ho_ten %></span>
+                <span class="vip-card-name">
+                    <% if (vip.nhom_hien_thi === 'lanh_dao') { %>
+                        <i class="fa-solid fa-user-tie vip-role-icon vip-role-icon-leader" aria-hidden="true"></i>
+                    <% } else if (vip.nhom_hien_thi === 'ke_toan') { %>
+                        <i class="fa-solid fa-calculator vip-role-icon vip-role-icon-accounting" aria-hidden="true"></i>
+                    <% } %>
+                    <%= vip.ho_ten %>
+                </span>
                 <span class="vip-card-detail vip-birth-date">
                     <i class="fa-regular fa-calendar"></i>
                     SN: <%= formatDate(vip.ngay_sinh) %>
