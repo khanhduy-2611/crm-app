@@ -2142,7 +2142,7 @@ body.dark-mode .vip-card-role {
 }
 .vip-compact-card {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     gap: 10px;
     padding: 10px 0;
     border-bottom: 1px solid var(--border);

@@ -14,12 +14,35 @@
 <% const birthdaysUpcoming = birthdays.filter(item => item.days_left > 0); %>
 <% const anniversariesToday = anniversaries.filter(item => item.days_left === 0); %>
 <% const anniversariesUpcoming = anniversaries.filter(item => item.days_left > 0); %>
+<% const parseDateValue = (value) => {
+    if (!value) return null;
+    if (value instanceof Date) return Number.isNaN(value.getTime()) ? null : value;
+    const raw = String(value).trim();
+    const isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) return new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]));
+    const vnMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (vnMatch) return new Date(Number(vnMatch[3]), Number(vnMatch[2]) - 1, Number(vnMatch[1]));
+    const parsed = new Date(raw);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+}; %>
+<% const eventDay = (value) => {
+    const date = parseDateValue(value);
+    return date ? date.getDate() : '--';
+}; %>
+<% const eventMonth = (value) => {
+    const date = parseDateValue(value);
+    return date ? date.getMonth() + 1 : '--';
+}; %>
+<% const formatDateValue = (value) => {
+    const date = parseDateValue(value);
+    return date ? date.toLocaleDateString('vi-VN') : '---';
+}; %>
 <% const eventsToday = [
     ...anniversariesToday.map(item => ({ type: 'company', title: item.ten_khach_hang, subtitle: 'Kỷ niệm ngày thành lập' })),
     ...birthdaysToday.map(item => ({ type: 'vip', title: item.ho_ten, subtitle: item.ten_khach_hang || 'Chưa có doanh nghiệp' }))
 ]; %>
 <% const totalNotifications = birthdays.length + anniversaries.length; %>
-<% const dashboardUrl = (nextKhPage, nextVipPage, nextLimit = limit) => `/?khPage=${nextKhPage}&vipPage=${nextVipPage}&limit=${nextLimit}`; %>
+<% const dashboardUrl = (nextKhPage, nextVipPage) => `/?khPage=${nextKhPage}&vipPage=${nextVipPage}`; %>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid px-4">
@@ -107,8 +130,8 @@
     <section class="dashboard-heading">
         <div>
             <span class="eyebrow">Theo dõi sự kiện định kỳ</span>
-            <h1>Sự kiện trong tháng <%= thang %></h1>
-            <p>Danh sách tự động chuyển theo tháng hệ thống. Cập nhật đến ngày <span id="dashboardDate"></span>.</p>
+            <h1>Sự kiện trong 7 ngày tới</h1>
+            <p>Danh sách tự động tính từ ngày hiện tại. Cập nhật đến ngày <span id="dashboardDate"></span>.</p>
         </div>
         <a class="btn btn-agribank" href="/khach-hang">
             <i class="fa-solid fa-arrow-up-right-from-square me-2"></i>Mở danh sách VIP
@@ -120,7 +143,7 @@
             <header class="panel-header">
                 <div>
                     <span class="eyebrow">Doanh nghiệp</span>
-                    <h2>Ngày thành lập trong tháng <%= thang %></h2>
+                    <h2>Ngày thành lập trong 7 ngày tới</h2>
                 </div>
                 <span class="panel-count"><%= totalKhachHang %> doanh nghiệp</span>
             </header>
@@ -128,18 +151,18 @@
                 <% if (danhSachKhachHang.length === 0) { %>
                     <div class="empty-state">
                         <i class="fa-regular fa-calendar-check"></i>
-                        Không có doanh nghiệp kỷ niệm ngày thành lập trong tháng này.
+                        Không có doanh nghiệp kỷ niệm ngày thành lập trong 7 ngày tới.
                     </div>
                 <% } %>
                 <% danhSachKhachHang.forEach(item => { %>
                     <article class="monthly-item <%= item.la_hom_nay ? 'today' : '' %>">
                         <div class="event-date">
-                            <strong><%= new Date(item.ngay_thanh_lap).getDate() %></strong>
-                            <span>Tháng <%= thang %></span>
+                            <strong><%= eventDay(item.next_anniversary) %></strong>
+                            <span>Tháng <%= eventMonth(item.next_anniversary) %></span>
                         </div>
                         <div class="event-info">
                             <strong><%= item.ten_khach_hang %></strong>
-                            <span>Ngày thành lập: <%= new Date(item.ngay_thanh_lap).toLocaleDateString('vi-VN') %></span>
+                            <span>Ngày thành lập: <%= formatDateValue(item.ngay_thanh_lap) %></span>
                             <span>Cán bộ chăm sóc: <%= item.can_bo_cham_soc || '---' %></span>
                             <span>Phòng ban: <%= item.phong_ban || '---' %></span>
                             <% if (item.la_hom_nay) { %><small>Hôm nay</small><% } %>
@@ -166,7 +189,7 @@
             <header class="panel-header">
                 <div>
                     <span class="eyebrow">Khách hàng VIP</span>
-                    <h2>Sinh nhật trong tháng <%= thang %></h2>
+                    <h2>Sinh nhật trong 7 ngày tới</h2>
                 </div>
                 <span class="panel-count"><%= totalVip %> VIP</span>
             </header>
@@ -174,19 +197,19 @@
                 <% if (danhSachVip.length === 0) { %>
                     <div class="empty-state">
                         <i class="fa-regular fa-calendar-check"></i>
-                        Không có khách hàng VIP sinh nhật trong tháng này.
+                        Không có khách hàng VIP sinh nhật trong 7 ngày tới.
                     </div>
                 <% } %>
                 <% danhSachVip.forEach(item => { %>
                     <article class="monthly-item <%= item.la_hom_nay ? 'today' : '' %>">
                         <div class="event-date vip">
-                            <strong><%= new Date(item.ngay_sinh).getDate() %></strong>
-                            <span>Tháng <%= thang %></span>
+                            <strong><%= eventDay(item.next_birthday) %></strong>
+                            <span>Tháng <%= eventMonth(item.next_birthday) %></span>
                         </div>
                         <div class="event-info">
                             <strong><%= item.ho_ten %></strong>
                             <span><%= item.ten_chuc_vu || 'Chưa cập nhật chức vụ' %> · <%= item.ten_khach_hang || 'Chưa có doanh nghiệp' %></span>
-                            <span>Sinh nhật: <%= new Date(item.ngay_sinh).toLocaleDateString('vi-VN') %><% if (item.so_dien_thoai) { %> · <%= item.so_dien_thoai %><% } %></span>
+                            <span>Sinh nhật: <%= formatDateValue(item.ngay_sinh) %><% if (item.so_dien_thoai) { %> · <%= item.so_dien_thoai %><% } %></span>
                             <% if (item.la_hom_nay) { %><small>Chúc mừng sinh nhật hôm nay</small><% } %>
                         </div>
                     </article>
@@ -208,13 +231,6 @@
         </section>
     </div>
 
-    <div class="dashboard-options">
-        <label for="dashboardLimit">Số dòng mỗi danh sách</label>
-        <select id="dashboardLimit" class="form-select form-select-sm">
-            <option value="20" <%= limit === 20 ? 'selected' : '' %>>20</option>
-            <option value="50" <%= limit === 50 ? 'selected' : '' %>>50</option>
-        </select>
-    </div>
 </main>
 
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

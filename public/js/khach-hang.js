@@ -693,55 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Static stat values (animation removed)
 
-    // ---- FAVICON & TITLE ĐỘNG ----
-    (function updateFaviconTitle() {
-        // Đếm số sinh nhật hôm nay từ badge "Hôm nay!"
-        const todayBadges = document.querySelectorAll('.birthday-badge.today');
-        const count = todayBadges.length;
-
-        // Cập nhật title tab
-        if (count > 0) {
-            document.title = `🎂 ${count} sinh nhật | CRM Agribank`;
-        } else {
-            document.title = 'Quản lý Khách hàng & VIP | CRM Agribank';
-        }
-
-        // Tạo favicon động bằng Canvas
-        const canvas = document.createElement('canvas');
-        canvas.width = 32; canvas.height = 32;
-        const ctx = canvas.getContext('2d');
-
-        // Nền tròn đỏ đô
-        ctx.beginPath();
-        ctx.arc(16, 16, 15, 0, 2 * Math.PI);
-        ctx.fillStyle = '#8C1D40';
-        ctx.fill();
-
-        if (count > 0) {
-            // Có sinh nhật hôm nay — hiện số
-            ctx.fillStyle = '#D4AF37';
-            ctx.font = 'bold 18px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(count > 9 ? '9+' : count.toString(), 16, 17);
-        } else {
-            // Không có — hiện chữ "A" (Agribank)
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 18px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('A', 16, 17);
-        }
-
-        // Gán favicon
-        let link = document.querySelector("link[rel~='icon']");
-        if (!link) {
-            link = document.createElement('link');
-            link.rel = 'icon';
-            document.head.appendChild(link);
-        }
-        link.href = canvas.toDataURL();
-    })();
+    document.title = 'Quản lý Khách hàng & VIP | CRM Agribank';
     document.querySelectorAll('.badge.bg-secondary').forEach(function (badge) {
         const text = badge.textContent.trim();
         if (!text || text === '---') return;
@@ -792,64 +744,6 @@ document.addEventListener('DOMContentLoaded', function () {
         bar.classList.add(cls);
         if (label) { label.className = 'care-progress-label ' + cls; label.textContent = text; }
         setTimeout(() => { bar.style.width = pct + '%'; }, 120);
-    });
-
-    // ---- HIGHLIGHT SINH NHẬT SẮP TỚI ----
-    function tinhNgayConLai(ngaySinhStr) {
-        if (!ngaySinhStr) return null;
-        const today = new Date();
-        const parts = ngaySinhStr.split('-');
-        if (parts.length < 3) return null;
-        const month = parseInt(parts[1]) - 1;
-        const day   = parseInt(parts[2]);
-        let birthday = new Date(today.getFullYear(), month, day);
-        const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        if (birthday < todayMidnight) {
-            birthday = new Date(today.getFullYear() + 1, month, day);
-        }
-        return Math.round((birthday - todayMidnight) / (1000 * 60 * 60 * 24));
-    }
-
-    document.querySelectorAll('.vip-card[data-ngaysinh]').forEach(function(row) {
-        const days = tinhNgayConLai(row.dataset.ngaysinh);
-        if (days === null) return;
-        const badge = row.querySelector('.birthday-badge');
-        if (!badge) return;
-
-        if (days === 0) {
-            badge.className = 'birthday-badge today';
-            badge.innerHTML = '🎂 Hôm nay!';
-            badge.style.display = 'inline-flex';
-            row.classList.add('birthday-today');
-        } else if (days <= 3) {
-            badge.className = 'birthday-badge soon-3';
-            badge.innerHTML = `⏰ Còn ${days} ngày`;
-            badge.style.display = 'inline-flex';
-        } else if (days <= 7) {
-            badge.className = 'birthday-badge soon-7';
-            badge.innerHTML = `🔔 Còn ${days} ngày`;
-            badge.style.display = 'inline-flex';
-        }
-    });
-
-    // ---- EVENT DELEGATION: LỊCH SỬ (trong accordion) ----
-    document.querySelectorAll('.customer-date[data-ngaythanhlap]').forEach(function(cell) {
-        const days = tinhNgayConLai(cell.dataset.ngaythanhlap);
-        if (days === null || days > 7) return;
-
-        const badge = cell.querySelector('.company-event-badge');
-        if (!badge) return;
-
-        if (days === 0) {
-            badge.className = 'birthday-badge company-event-badge today';
-            badge.innerHTML = '<i class="fa-solid fa-building-circle-check"></i> H&ocirc;m nay';
-        } else if (days <= 3) {
-            badge.className = 'birthday-badge company-event-badge soon-3';
-            badge.innerHTML = `<i class="fa-solid fa-clock"></i> C&ograve;n ${days} ng&agrave;y`;
-        } else {
-            badge.className = 'birthday-badge company-event-badge soon-7';
-            badge.innerHTML = `<i class="fa-solid fa-bell"></i> C&ograve;n ${days} ng&agrave;y`;
-        }
     });
 
     const modalLS = new bootstrap.Modal(document.getElementById('modalXoaLichSu'));

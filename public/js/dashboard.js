@@ -37,16 +37,6 @@ document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeDashboardNotifications();
 });
 
-const dashboardLimit = document.getElementById('dashboardLimit');
-dashboardLimit?.addEventListener('change', () => {
-    const params = new URLSearchParams({
-        khPage: '1',
-        vipPage: '1',
-        limit: dashboardLimit.value
-    });
-    window.location.href = `/?${params.toString()}`;
-});
-
 (function showBirthdayCelebration() {
     const effects = document.getElementById('celebrationEffects');
     if (!effects) return;

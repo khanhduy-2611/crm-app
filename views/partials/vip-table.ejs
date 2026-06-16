@@ -64,22 +64,7 @@
                     <i class="fa-solid fa-phone"></i>
                     <%= vip.so_dien_thoai || '---' %>
                 </span>
-                <span class="birthday-badge" style="display:none;"></span>
             </button>
-            <div class="vip-card-actions">
-                <button type="button" class="vip-mini-action"
-                        onclick="openVipHistory(<%= vip.id %>, <%= customer.id %>)"
-                        title="Lịch sử chăm sóc">
-                    <i class="fa-regular fa-clock"></i>
-                    <% if (Number(vip.lich_su_count || 0) > 0) { %>
-                        <span class="acc-count"><%= vip.lich_su_count %></span>
-                    <% } %>
-                </button>
-                <button type="button" class="vip-mini-action danger btn-xoa-vip"
-                        data-id="<%= vip.id %>" data-ten="<%= attr(vip.ho_ten) %>" title="Xóa VIP">
-                    <i class="fa-regular fa-trash-can"></i>
-                </button>
-            </div>
         </article>
     <% }) %>
 <% } %>
@@ -134,7 +119,6 @@
                     </td>
                     <td class="customer-date" data-ngaythanhlap="<%= isoDate(kh.ngay_thanh_lap) %>">
                         <span><%= formatDate(kh.ngay_thanh_lap) %></span>
-                        <span class="birthday-badge company-event-badge"></span>
                     </td>
                     <td class="vip-group-cell"><% renderVipList(lanhDao, kh); %></td>
                     <td class="vip-group-cell"><% renderVipList(keToan, kh); %></td>

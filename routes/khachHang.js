@@ -215,11 +215,11 @@ module.exports = function createKhachHangRouter({ pool }) {
                 const vipEventDays = dsVip
                     .map(vip => getDaysUntilDate(vip.ngay_sinh))
                     .filter(days => days !== null);
-                const eventDays = [
+                const eventDaysInNextWeek = [
                     ...(companyEventDays === null ? [] : [companyEventDays]),
                     ...vipEventDays
-                ];
-                const ngaySuKienSapToi = eventDays.length ? Math.min(...eventDays) : null;
+                ].filter(days => days >= 0 && days <= 7);
+                const ngaySuKienSapToi = eventDaysInNextWeek.length ? Math.min(...eventDaysInNextWeek) : null;
                 return {
                     ...customer,
                     ds_vip: dsVip.map(vip => ({
