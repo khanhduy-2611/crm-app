@@ -255,6 +255,81 @@
     </div>
 </div>
 
+<!-- ========== MODAL CẬP NHẬT KHÁCH HÀNG THEO DÒNG ========== -->
+<div id="editCustomerFullModalBackdrop" class="modal-backdrop-custom" onclick="dongFormEditCustomerIfBackdrop(event)">
+    <div class="modal-content-custom customer-edit-full-modal" onclick="event.stopPropagation()">
+        <div class="modal-header-custom">
+            <div>
+                <h5>
+                    <i class="fa-solid fa-circle" style="font-size:0.65rem;color:var(--primary);"></i>
+                    Cập Nhật Thông Tin Khách Hàng
+                </h5>
+                <div class="modal-subtitle-custom">Mỗi đối tác/cơ quan bao gồm thông tin đơn vị và thông tin khách hàng VIP</div>
+            </div>
+            <button type="button" class="modal-close-btn" onclick="dongFormEditCustomer()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body-custom">
+            <form action="/khach-hang/update-full" method="POST" id="formEditCustomerFull">
+                <input type="hidden" name="id" id="editFullCustomerId">
+
+                <div class="section-box edit-full-section mb-4">
+                    <div class="section-box-title">1. Thông Tin Doanh Nghiệp/Đơn Vị</div>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Mã khách hàng <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="ma_kh" id="editFullMaKh" required>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Tên khách hàng / Cơ quan <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="ten_khach_hang" id="editFullTenKhachHang" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Cán bộ quản lý <span class="text-danger">*</span></label>
+                            <select class="form-select" name="can_bo_id" id="editFullCanBoId" required>
+                                <option value="">-- Chọn cán bộ --</option>
+                                <% (listCanBo || []).forEach(cb => { %>
+                                    <option value="<%= cb.id %>"><%= cb.ho_ten %><%= cb.phong_ban ? ' - ' + cb.phong_ban : '' %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Ngày thành lập <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" name="ngay_thanh_lap" id="editFullNgayThanhLap" required>
+                            <div class="form-text">Định dạng kỷ niệm ngày thành lập doanh nghiệp</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="editFullVipContainer"></div>
+
+                <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-4 fw-bold edit-full-add-vip-btn"
+                        onclick="themVipMoiTrongFormEdit()">
+                    <i class="fa-solid fa-plus me-1"></i>Thêm thông tin khách VIP
+                </button>
+
+                <div class="modal-footer-custom edit-full-footer">
+                    <button type="button" class="btn btn-outline-secondary fw-bold" onclick="dongFormEditCustomer()">
+                        Hủy bỏ
+                    </button>
+                    <button type="submit" class="btn btn-dark fw-bold">
+                        <i class="fa-solid fa-floppy-disk me-1"></i>Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <template id="editFullChucVuOptions">
+            <option value="">-- Chọn chức vụ --</option>
+            <% listChucVu.forEach(cv => { %>
+                <option value="<%= cv.id %>"><%= cv.ten_chuc_vu %></option>
+            <% }) %>
+        </template>
+    </div>
+</div>
+
 <!-- ========== MODAL VIP DETAIL ========== -->
 <div id="vipDetailModalBackdrop" class="vip-detail-modal-backdrop" onclick="closeVipDetailIfBackdrop(event)">
     <div class="vip-detail-modal-content" onclick="event.stopPropagation()">
@@ -379,15 +454,6 @@
         <div class="vip-detail-footer">
             <div class="view-actions">
                 <button type="button" class="btn btn-outline-secondary" onclick="closeVipDetail()">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="toggleVipEditMode()">
-                    <i class="fa-solid fa-pen-to-square me-1"></i> Chỉnh Sửa
-                </button>
-            </div>
-            <div class="edit-actions">
-                <button type="button" class="btn btn-outline-secondary" onclick="cancelVipEdit()">Hủy</button>
-                <button type="button" class="btn btn-success" onclick="saveVipEdit()">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Lưu
-                </button>
             </div>
         </div>
     </div>

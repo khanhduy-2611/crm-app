@@ -159,6 +159,141 @@ function resetFormFields() {
     }
 }
 
+// ======== MODAL CẬP NHẬT KHÁCH HÀNG THEO DÒNG ========
+function getVietnameseOrdinal(index) {
+    const words = ['Thứ Nhất', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm'];
+    return words[index] || `Thứ ${index + 1}`;
+}
+
+function renderEditFullVipBlock(vip = {}, index = 0, canRemove = false) {
+    const chucVuOptions = document.getElementById('editFullChucVuOptions')?.innerHTML || '';
+    const removeButton = canRemove ? `
+        <button type="button" class="edit-full-remove-vip" onclick="this.closest('.edit-full-vip-section').remove(); refreshEditFullVipTitles();" title="Xóa thông tin VIP vừa thêm">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+    ` : '';
+
+    return `
+        <div class="section-box edit-full-section edit-full-vip-section mb-4">
+            <div class="section-box-title edit-full-vip-title">
+                <span>
+                    <span class="edit-full-index">${index + 1}</span>
+                    <span class="edit-full-title-text">Thông Tin Khách VIP ${getVietnameseOrdinal(index)}</span>
+                </span>
+                ${removeButton}
+            </div>
+            <input type="hidden" name="vip_id" value="${escapeHistoryHtml(vip.id || '')}">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Họ và tên VIP <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="ho_ten" value="${escapeHistoryHtml(vip.ho_ten || '')}" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Chức vụ <span class="text-danger">*</span></label>
+                    <select class="form-select edit-full-chuc-vu" name="chuc_vu_id" data-selected="${escapeHistoryHtml(vip.chuc_vu_id || '')}" required>
+                        ${chucVuOptions}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Ngày sinh nhật <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" name="ngay_sinh" value="${escapeHistoryHtml(vip.ngay_sinh || '')}" required oninput="kiemTraNgaySinh(this)">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" name="so_dien_thoai" value="${escapeHistoryHtml(vip.so_dien_thoai || '')}" maxlength="10" required oninput="kiemTraSoDienThoai(this)">
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function applyEditFullVipSelectValues(scope = document) {
+    scope.querySelectorAll('.edit-full-chuc-vu').forEach(select => {
+        select.value = select.dataset.selected || '';
+    });
+}
+
+function refreshEditFullVipTitles() {
+    document.querySelectorAll('#editFullVipContainer .edit-full-vip-section').forEach((section, index) => {
+        const indexEl = section.querySelector('.edit-full-index');
+        const titleEl = section.querySelector('.edit-full-title-text');
+        if (indexEl) indexEl.textContent = index + 1;
+        if (titleEl) titleEl.textContent = `Thông Tin Khách VIP ${getVietnameseOrdinal(index)}`;
+    });
+}
+
+function themVipMoiTrongFormEdit() {
+    const vipContainer = document.getElementById('editFullVipContainer');
+    if (!vipContainer) return;
+
+    const emptyState = vipContainer.querySelector('.edit-full-empty');
+    if (emptyState) emptyState.remove();
+
+    const index = vipContainer.querySelectorAll('.edit-full-vip-section').length;
+    vipContainer.insertAdjacentHTML('beforeend', renderEditFullVipBlock({}, index, true));
+
+    const newBlock = vipContainer.lastElementChild;
+    applyEditFullVipSelectValues(newBlock);
+    newBlock.querySelector('input[name="ho_ten"]')?.focus();
+}
+
+function moFormEditCustomer(customerId) {
+    const dataNode = document.getElementById('customer-edit-data-' + customerId);
+    const modal = document.getElementById('editCustomerFullModalBackdrop');
+    const form = document.getElementById('formEditCustomerFull');
+    if (!dataNode || !modal || !form) return;
+
+    let data;
+    try {
+        data = JSON.parse(dataNode.textContent || '{}');
+    } catch (error) {
+        console.error('Lỗi đọc dữ liệu khách hàng:', error);
+        alert('Không thể mở dữ liệu chỉnh sửa khách hàng.');
+        return;
+    }
+
+    form.reset();
+    document.getElementById('editFullCustomerId').value = data.id || '';
+    document.getElementById('editFullMaKh').value = data.ma_kh || '';
+    document.getElementById('editFullTenKhachHang').value = data.ten_khach_hang || '';
+    document.getElementById('editFullCanBoId').value = data.can_bo_id || '';
+    document.getElementById('editFullNgayThanhLap').value = data.ngay_thanh_lap || '';
+
+    const vipContainer = document.getElementById('editFullVipContainer');
+    const vipList = Array.isArray(data.ds_vip) ? data.ds_vip : [];
+
+    vipContainer.innerHTML = vipList.length ? vipList.map((vip, index) => renderEditFullVipBlock(vip, index)).join('') : `
+        <div class="section-box edit-full-section mb-4 edit-full-empty">
+            <div class="text-muted small">Doanh nghiệp này chưa có thông tin VIP để cập nhật.</div>
+        </div>
+    `;
+
+    applyEditFullVipSelectValues(vipContainer);
+
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+        document.getElementById('editFullMaKh')?.focus();
+    }, 150);
+}
+
+function dongFormEditCustomer() {
+    const modal = document.getElementById('editCustomerFullModalBackdrop');
+    if (!modal) return;
+
+    modal.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+}
+
+function dongFormEditCustomerIfBackdrop(event) {
+    if (event.target.id === 'editCustomerFullModalBackdrop') {
+        dongFormEditCustomer();
+    }
+}
+
 // ======== MODAL VIP DETAIL ========
 let currentVipEditData = {};
 let currentVipId = null;
@@ -176,6 +311,25 @@ function getVipInitials(name) {
 function setVipDetailArrow(vipId, active) {
     const card = document.getElementById('vip-view-' + vipId);
     if (card) card.classList.toggle('is-active', active);
+}
+
+function toLocalDateObject(value) {
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatLocalDate(value) {
+    const date = toLocalDateObject(value);
+    return date ? date.toLocaleDateString('vi-VN') : '---';
+}
+
+function toLocalDateInputValue(value) {
+    const date = toLocalDateObject(value);
+    if (!date) return '';
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${date.getFullYear()}-${month}-${day}`;
 }
 
 async function openVipDetail(vipId) {
@@ -224,9 +378,9 @@ async function openVipDetail(vipId) {
         document.getElementById('vipDetailChucVu').textContent = vip.chuc_vu || '---';
         document.getElementById('vipEditChucVu').value = vip.chuc_vu_id || '';
         
-        const ngaySinh = vip.ngay_sinh ? new Date(vip.ngay_sinh).toLocaleDateString('vi-VN') : '---';
+        const ngaySinh = formatLocalDate(vip.ngay_sinh);
         document.getElementById('vipDetailNgaySinh').textContent = ngaySinh;
-        document.getElementById('vipEditNgaySinh').value = vip.ngay_sinh ? new Date(vip.ngay_sinh).toISOString().split('T')[0] : '';
+        document.getElementById('vipEditNgaySinh').value = toLocalDateInputValue(vip.ngay_sinh);
         
         document.getElementById('vipDetailSdt').textContent = vip.so_dien_thoai || '---';
         document.getElementById('vipEditSdt').value = vip.so_dien_thoai || '';
@@ -237,9 +391,9 @@ async function openVipDetail(vipId) {
         document.getElementById('vipDetailTenKh').textContent = vip.ten_khach_hang || '---';
         document.getElementById('vipEditTenKh').value = vip.ten_khach_hang || '';
         
-        const ngayThanhLap = vip.ngay_thanh_lap ? new Date(vip.ngay_thanh_lap).toLocaleDateString('vi-VN') : '---';
+        const ngayThanhLap = formatLocalDate(vip.ngay_thanh_lap);
         document.getElementById('vipDetailNgayThanhLap').textContent = ngayThanhLap;
-        document.getElementById('vipEditNgayThanhLap').value = vip.ngay_thanh_lap ? new Date(vip.ngay_thanh_lap).toISOString().split('T')[0] : '';
+        document.getElementById('vipEditNgayThanhLap').value = toLocalDateInputValue(vip.ngay_thanh_lap);
 
         // Populate ghi chú chăm sóc
         const notesList = document.getElementById('vipDetailNotesList');
@@ -314,11 +468,11 @@ function cancelVipEdit() {
     // Restore dữ liệu cũ
     document.getElementById('vipEditHoTen').value = currentVipEditData.ho_ten || '';
     document.getElementById('vipEditChucVu').value = currentVipEditData.chuc_vu_id || '';
-    document.getElementById('vipEditNgaySinh').value = currentVipEditData.ngay_sinh ? currentVipEditData.ngay_sinh.split('T')[0] : '';
+    document.getElementById('vipEditNgaySinh').value = toLocalDateInputValue(currentVipEditData.ngay_sinh);
     document.getElementById('vipEditSdt').value = currentVipEditData.so_dien_thoai || '';
     document.getElementById('vipEditEmail').value = currentVipEditData.email || '';
     document.getElementById('vipEditTenKh').value = currentVipEditData.ten_khach_hang || '';
-    document.getElementById('vipEditNgayThanhLap').value = currentVipEditData.ngay_thanh_lap ? currentVipEditData.ngay_thanh_lap.split('T')[0] : '';
+    document.getElementById('vipEditNgayThanhLap').value = toLocalDateInputValue(currentVipEditData.ngay_thanh_lap);
     
     modalContent.classList.remove('editing');
     footer.classList.remove('edit-mode');
@@ -444,6 +598,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (modal && modal.classList.contains('show')) {
                 dongFormAddCustomer();
             }
+            const editModal = document.getElementById('editCustomerFullModalBackdrop');
+            if (editModal && editModal.classList.contains('show')) {
+                dongFormEditCustomer();
+            }
         }
     });
 
@@ -454,18 +612,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const btn = e.target.closest('button');
             if (!btn) return;
             const id = btn.dataset.id;
-            if (btn.classList.contains('btn-edit-customer')) {
-                document.getElementById('customer-view-' + id).style.display = 'none';
-                document.getElementById('customer-edit-' + id).style.display = '';
-            } else if (btn.classList.contains('btn-cancel-customer')) {
-                document.getElementById('customer-edit-' + id).style.display = 'none';
-                document.getElementById('customer-view-' + id).style.display = '';
+            if (btn.classList.contains('btn-edit-customer-full')) {
+                moFormEditCustomer(id);
             } else if (btn.classList.contains('btn-xoa-kh')) {
                 document.getElementById('tenCanXoa').innerText = btn.dataset.ten;
                 document.getElementById('linkXacNhanXoa').href = '/khach-hang/delete/' + id;
                 modalXoa.show();
-            } else if (btn.classList.contains('btn-edit-vip-card')) {
-                openVipDetail(Number(id)).then(() => toggleVipEditMode());
             } else if (btn.classList.contains('btn-xoa-vip')) {
                 document.getElementById('tenVipCanXoa').innerText = btn.dataset.ten;
                 document.getElementById('linkXacNhanXoaVip').href = '/khach-hang/vip/delete/' + id;
@@ -720,6 +872,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ---- EVENT DELEGATION: LỊCH SỬ (trong accordion) ----
+    document.querySelectorAll('.customer-date[data-ngaythanhlap]').forEach(function(cell) {
+        const days = tinhNgayConLai(cell.dataset.ngaythanhlap);
+        if (days === null || days > 7) return;
+
+        const badge = cell.querySelector('.company-event-badge');
+        if (!badge) return;
+
+        if (days === 0) {
+            badge.className = 'birthday-badge company-event-badge today';
+            badge.innerHTML = '<i class="fa-solid fa-building-circle-check"></i> H&ocirc;m nay';
+        } else if (days <= 3) {
+            badge.className = 'birthday-badge company-event-badge soon-3';
+            badge.innerHTML = `<i class="fa-solid fa-clock"></i> C&ograve;n ${days} ng&agrave;y`;
+        } else {
+            badge.className = 'birthday-badge company-event-badge soon-7';
+            badge.innerHTML = `<i class="fa-solid fa-bell"></i> C&ograve;n ${days} ng&agrave;y`;
+        }
+    });
+
     const modalLS = new bootstrap.Modal(document.getElementById('modalXoaLichSu'));
     document.getElementById('btnHuyModalLS').onclick = () => modalLS.hide();
 

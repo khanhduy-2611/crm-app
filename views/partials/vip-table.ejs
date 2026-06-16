@@ -4,13 +4,28 @@
         if (keyword) query.push(`keyword=${encodeURIComponent(keyword)}`);
         return `/khach-hang?${query.join('&')}`;
     };
-    const formatDate = value => value ? new Date(value).toLocaleDateString('vi-VN') : '---';
-    const isoDate = value => value ? new Date(value).toISOString().split('T')[0] : '';
+    const toLocalDate = value => {
+        if (!value) return null;
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? null : date;
+    };
+    const padDatePart = value => String(value).padStart(2, '0');
+    const formatDate = value => {
+        const date = toLocalDate(value);
+        return date ? `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` : '---';
+    };
+    const isoDate = value => {
+        const date = toLocalDate(value);
+        return date
+            ? `${date.getFullYear()}-${padDatePart(date.getMonth() + 1)}-${padDatePart(date.getDate())}`
+            : '';
+    };
     const attr = value => String(value || '')
         .replace(/&/g, '&amp;')
         .replace(/"/g, '&quot;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+    const safeJson = value => JSON.stringify(value).replace(/</g, '\\u003c');
 %>
 
 <% function renderVipList(vipList, customer) { %>
@@ -25,6 +40,7 @@
                  data-vip-ho-ten="<%= attr(vip.ho_ten) %>"
                  data-vip-email=""
                  data-vip-so-dien-thoai="<%= attr(vip.so_dien_thoai) %>"
+                 data-vip-chuc-vu-id="<%= vip.chuc_vu_id || '' %>"
                  data-vip-ghi-chu="<%= attr(vip.ghi_chu) %>"
                  data-vip-khach-hang-id="<%= customer.id %>"
                  data-vip-ten-khach-hang="<%= attr(customer.ten_khach_hang) %>"
@@ -36,7 +52,14 @@
                 <span class="vip-card-role role-color-<%= vip.nhom_mau_chuc_vu || 'khac' %>">
                     <%= vip.chuc_vu || 'Chưa có chức vụ' %>
                 </span>
-                <span class="vip-card-detail"><%= vip.so_dien_thoai || '---' %></span>
+                <span class="vip-card-detail vip-birth-date">
+                    <i class="fa-regular fa-calendar"></i>
+                    SN: <%= formatDate(vip.ngay_sinh) %>
+                </span>
+                <span class="vip-card-detail">
+                    <i class="fa-solid fa-phone"></i>
+                    <%= vip.so_dien_thoai || '---' %>
+                </span>
                 <span class="birthday-badge" style="display:none;"></span>
             </button>
             <div class="vip-card-actions">
@@ -47,10 +70,6 @@
                     <% if (Number(vip.lich_su_count || 0) > 0) { %>
                         <span class="acc-count"><%= vip.lich_su_count %></span>
                     <% } %>
-                </button>
-                <button type="button" class="vip-mini-action btn-edit-vip-card"
-                        data-id="<%= vip.id %>" title="Sửa VIP">
-                    <i class="fa-solid fa-pen"></i>
                 </button>
                 <button type="button" class="vip-mini-action danger btn-xoa-vip"
                         data-id="<%= vip.id %>" data-ten="<%= attr(vip.ho_ten) %>" title="Xóa VIP">
@@ -70,7 +89,6 @@
                 <th>Thành lập</th>
                 <th>Lãnh đạo</th>
                 <th>Kế toán</th>
-                <th>Khác</th>
                 <th>Cán bộ chăm sóc</th>
                 <th class="text-center">Thao tác</th>
             </tr>
@@ -78,7 +96,7 @@
         <tbody>
             <% if (listKhachHangGrouped.length === 0) { %>
                 <tr>
-                    <td colspan="8" class="text-center py-5 text-muted">
+                    <td colspan="7" class="text-center py-5 text-muted">
                         Không tìm thấy khách hàng hoặc nhân sự VIP phù hợp.
                     </td>
                 </tr>
@@ -87,7 +105,20 @@
             <% listKhachHangGrouped.forEach(kh => {
                 const lanhDao = kh.ds_vip.filter(vip => vip.nhom_hien_thi === 'lanh_dao');
                 const keToan = kh.ds_vip.filter(vip => vip.nhom_hien_thi === 'ke_toan');
-                const khac = kh.ds_vip.filter(vip => vip.nhom_hien_thi === 'khac');
+                const editCustomerData = {
+                    id: kh.id,
+                    ma_kh: kh.ma_kh || `KH${String(kh.id).padStart(3, '0')}`,
+                    ten_khach_hang: kh.ten_khach_hang || '',
+                    ngay_thanh_lap: isoDate(kh.ngay_thanh_lap),
+                    can_bo_id: kh.can_bo_id || '',
+                    ds_vip: kh.ds_vip.map(vip => ({
+                        id: vip.id,
+                        ho_ten: vip.ho_ten || '',
+                        chuc_vu_id: vip.chuc_vu_id || '',
+                        ngay_sinh: isoDate(vip.ngay_sinh),
+                        so_dien_thoai: vip.so_dien_thoai || ''
+                    }))
+                };
             %>
                 <tr id="customer-view-<%= kh.id %>"
                     class="vip-company-row"
@@ -97,10 +128,12 @@
                     <td class="customer-main-cell">
                         <div class="customer-name"><%= kh.ten_khach_hang %></div>
                     </td>
-                    <td class="customer-date"><%= formatDate(kh.ngay_thanh_lap) %></td>
+                    <td class="customer-date" data-ngaythanhlap="<%= isoDate(kh.ngay_thanh_lap) %>">
+                        <span><%= formatDate(kh.ngay_thanh_lap) %></span>
+                        <span class="birthday-badge company-event-badge"></span>
+                    </td>
                     <td class="vip-group-cell"><% renderVipList(lanhDao, kh); %></td>
                     <td class="vip-group-cell"><% renderVipList(keToan, kh); %></td>
-                    <td class="vip-group-cell"><% renderVipList(khac, kh); %></td>
                     <td class="officer-cell">
                         <% if (!kh.can_bo_cham_soc) { %>
                             <span class="vip-empty">---</span>
@@ -112,9 +145,9 @@
                         <% } %>
                     </td>
                     <td class="text-center customer-actions">
-                        <button type="button" class="customer-action btn-edit-customer"
-                                data-id="<%= kh.id %>" title="Sửa doanh nghiệp">
-                            <i class="fa-solid fa-pen"></i>
+                        <button type="button" class="customer-action btn-edit-customer-full"
+                                data-id="<%= kh.id %>" title="Cập nhật thông tin khách hàng">
+                            <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button type="button" class="customer-action danger btn-xoa-kh"
                                 data-id="<%= kh.id %>" data-ten="<%= attr(kh.ten_khach_hang) %>" title="Xóa doanh nghiệp">
@@ -123,31 +156,10 @@
                     </td>
                 </tr>
 
-                <tr id="customer-edit-<%= kh.id %>" class="customer-edit-row" style="display:none;">
-                    <td colspan="8">
-                        <form id="form-kh-<%= kh.id %>" action="/khach-hang/update" method="POST" class="row g-2 align-items-end">
-                            <input type="hidden" name="id" value="<%= kh.id %>">
-                            <div class="col-md-7">
-                                <label class="form-label">Tên khách hàng / Cơ quan</label>
-                                <input type="text" class="form-control form-control-sm" name="ten_khach_hang"
-                                       value="<%= attr(kh.ten_khach_hang) %>" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="form-label">Ngày thành lập</label>
-                                <input type="date" class="form-control form-control-sm" name="ngay_thanh_lap"
-                                       value="<%= isoDate(kh.ngay_thanh_lap) %>">
-                            </div>
-                            <div class="col-md-2 d-flex gap-2">
-                                <button type="submit" class="btn btn-sm btn-success flex-fill">Lưu</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-cancel-customer"
-                                        data-id="<%= kh.id %>">Hủy</button>
-                            </div>
-                        </form>
-                    </td>
-                </tr>
+                <script type="application/json" id="customer-edit-data-<%= kh.id %>"><%- safeJson(editCustomerData) %></script>
 
                 <tr id="customer-history-<%= kh.id %>" class="customer-detail-row" style="display:none;">
-                    <td colspan="8">
+                    <td colspan="7">
                         <div id="customer-history-content-<%= kh.id %>" class="customer-history-content"></div>
                     </td>
                 </tr>

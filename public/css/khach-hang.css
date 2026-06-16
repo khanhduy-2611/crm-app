@@ -981,6 +981,12 @@ body.dark-mode tr.dn-item-row:hover td:first-child::after {
     margin-left: 6px;
     white-space: nowrap;
 }
+.birthday-badge:empty {
+    display: none !important;
+}
+.birthday-badge i {
+    font-size: 0.62rem;
+}
 .birthday-badge.today {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: #fff;
@@ -1335,6 +1341,11 @@ body.dark-mode .cmd-item.selected {
     align-items: center;
     gap: 10px;
 }
+.modal-subtitle-custom {
+    margin-top: 4px;
+    color: var(--text-light);
+    font-size: 0.78rem;
+}
 .modal-close-btn {
     background: none;
     border: none;
@@ -1370,6 +1381,75 @@ body.dark-mode .cmd-item.selected {
 }
 .modal-footer-custom .btn {
     flex: 1;
+}
+
+.customer-edit-full-modal {
+    max-width: 1120px;
+}
+.customer-edit-full-modal .modal-body-custom {
+    padding: 1.5rem;
+}
+.customer-edit-full-modal .modal-footer-custom {
+    margin: 0 -1.5rem -1.5rem;
+    justify-content: flex-end;
+}
+.customer-edit-full-modal .modal-footer-custom .btn {
+    flex: 0 0 auto;
+    min-width: 132px;
+}
+.edit-full-section {
+    padding: 1.25rem;
+    border-radius: 8px;
+}
+.edit-full-section .section-box-title {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dark);
+    font-size: 0.82rem;
+}
+.edit-full-vip-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.edit-full-vip-section {
+    border-color: #1f2937;
+}
+.edit-full-index {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    margin-right: 6px;
+    border: 1px solid rgba(37, 99, 235, 0.35);
+    border-radius: 5px;
+    background: rgba(37, 99, 235, 0.08);
+    color: #2563eb;
+    font-size: 0.72rem;
+    font-weight: 900;
+}
+.edit-full-remove-vip {
+    display: inline-flex;
+    width: 28px;
+    height: 28px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(220, 53, 69, 0.22);
+    border-radius: 5px;
+    background: rgba(220, 53, 69, 0.06);
+    color: #dc3545;
+}
+.edit-full-remove-vip:hover {
+    background: rgba(220, 53, 69, 0.12);
+}
+.edit-full-add-vip-btn {
+    border-style: dashed;
+}
+.edit-full-footer {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
 /* Dark mode support */
@@ -1696,7 +1776,7 @@ body.dark-mode .vip-profile-card {
     overflow-x: auto;
 }
 .vip-company-table {
-    min-width: 1320px;
+    min-width: 1240px;
     table-layout: fixed;
 }
 .vip-company-table thead th {
@@ -1711,13 +1791,13 @@ body.dark-mode .vip-profile-card {
     text-transform: uppercase;
     white-space: nowrap;
 }
-.vip-company-table th:nth-child(1) { width: 7%; }
-.vip-company-table th:nth-child(2) { width: 19%; }
-.vip-company-table th:nth-child(3) { width: 9%; }
+.vip-company-table th:nth-child(1) { width: 8%; }
+.vip-company-table th:nth-child(2) { width: 20%; }
+.vip-company-table th:nth-child(3) { width: 10%; }
 .vip-company-table th:nth-child(4),
-.vip-company-table th:nth-child(5),
-.vip-company-table th:nth-child(6) { width: 17%; }
-.vip-company-table th:nth-child(7) { width: 14%; }
+.vip-company-table th:nth-child(5) { width: 18%; }
+.vip-company-table th:nth-child(6) { width: 18%; }
+.vip-company-table th:nth-child(7) { width: 8%; }
 .vip-company-row > td {
     padding: 18px 14px;
     border-bottom: 1px solid #cfd5dd;
@@ -1906,7 +1986,6 @@ body.dark-mode .vip-profile-card {
     font-size: 0.64rem;
     font-weight: 800;
 }
-.customer-edit-row td,
 .customer-detail-row td {
     padding: 14px 18px;
     border-bottom: 1px solid #cfd5dd;
@@ -1973,6 +2052,18 @@ body.dark-mode .vip-profile-card {
     margin: 4px 0 0;
     font-size: 0.58rem;
 }
+.customer-date {
+    line-height: 1.35;
+}
+.customer-date .company-event-badge {
+    display: flex !important;
+    width: fit-content;
+    margin-top: 7px;
+    margin-left: 0;
+}
+.customer-date .company-event-badge:empty {
+    display: none !important;
+}
 body.dark-mode .vip-company-table thead th {
     background: var(--surface-2) !important;
 }
@@ -2007,22 +2098,22 @@ body.dark-mode .vip-card-role {
    CUSTOMER LIST - ONE CUSTOMER PER ROW
 ============================================================ */
 .vip-company-table {
-    min-width: 1440px;
+    min-width: 1360px;
     table-layout: fixed;
 }
-.vip-company-table th:nth-child(1) { width: 7%; }
-.vip-company-table th:nth-child(2) { width: 17%; }
-.vip-company-table th:nth-child(3) { width: 8%; }
-.vip-company-table th:nth-child(4) { width: 15%; }
-.vip-company-table th:nth-child(5) { width: 13%; }
-.vip-company-table th:nth-child(6) { width: 15%; }
-.vip-company-table th:nth-child(7) { width: 15%; }
-.vip-company-table th:nth-child(8) { width: 10%; }
+.vip-company-table th:nth-child(1) { width: 8%; }
+.vip-company-table th:nth-child(2) { width: 20%; }
+.vip-company-table th:nth-child(3) { width: 10%; }
+.vip-company-table th:nth-child(4),
+.vip-company-table th:nth-child(5) { width: 18%; }
+.vip-company-table th:nth-child(6) { width: 18%; }
+.vip-company-table th:nth-child(7) { width: 8%; }
 
 .vip-company-row > td {
-    padding: 14px 12px;
+    padding: 16px;
     vertical-align: top;
     transition: none;
+    font-size: 0.86rem;
 }
 .vip-company-row:hover > td {
     background: rgba(140,29,64,0.02);
@@ -2030,14 +2121,18 @@ body.dark-mode .vip-card-role {
 .customer-code,
 .customer-date,
 .customer-actions {
-    padding-top: 17px !important;
+    padding-top: 18px !important;
+}
+.customer-code,
+.customer-date {
+    font-size: 0.86rem;
 }
 .customer-main-cell {
-    padding-top: 15px !important;
+    padding-top: 18px !important;
 }
 .customer-name {
     color: var(--primary);
-    font-size: 0.84rem;
+    font-size: 0.92rem;
     line-height: 1.45;
 }
 .vip-group-cell,
@@ -2047,25 +2142,29 @@ body.dark-mode .vip-card-role {
 .vip-compact-card {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px;
-    padding: 8px 0;
+    gap: 10px;
+    padding: 10px 0;
     border-bottom: 1px solid var(--border);
 }
 .vip-compact-card:last-child {
     border-bottom: 0;
 }
 .vip-compact-card .vip-card-main {
-    gap: 2px;
+    gap: 4px;
 }
 .vip-compact-card .vip-card-name {
-    font-size: 0.76rem;
+    font-size: 0.86rem;
 }
 .vip-compact-card .vip-card-role {
-    font-size: 0.63rem;
+    font-size: 0.68rem;
     font-weight: 800;
 }
 .vip-compact-card .vip-card-detail {
-    font-size: 0.62rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+.vip-compact-card .vip-birth-date {
+    color: var(--text-mid);
 }
 .vip-compact-card .vip-card-actions {
     align-self: start;
@@ -2091,12 +2190,12 @@ body.dark-mode .vip-card-role {
 }
 .officer-item strong {
     color: var(--text-dark);
-    font-size: 0.75rem;
+    font-size: 0.84rem;
     line-height: 1.4;
 }
 .officer-item span {
     color: var(--text-light);
-    font-size: 0.64rem;
+    font-size: 0.7rem;
 }
 .customer-actions {
     white-space: nowrap;

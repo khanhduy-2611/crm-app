@@ -12,6 +12,7 @@ module.exports = function createKhachHangRouter({ pool }) {
             const chucVu = 'all';
 
             const chucVuResult = await pool.query('SELECT * FROM chuc_vu ORDER BY id ASC');
+            const canBoResult = await pool.query('SELECT id, ho_ten, phong_ban FROM can_bo_quan_ly ORDER BY ho_ten ASC');
             const capCao = ['giám đốc', 'phó giám đốc', 'tổng giám đốc', 'chủ tịch', 'phó chủ tịch', 'hiệu trưởng', 'phó hiệu trưởng', 'hiệu phó', 'lãnh đạo', 'bí thư', 'phó bí thư', 'viện trưởng'];
             const capGiua = ['trưởng phòng', 'phó trưởng phòng', 'trưởng ban', 'trưởng bộ phận', 'trưởng nhóm', 'quản lý', 'tổ trưởng', 'trưởng khoa', 'trưởng chi nhánh'];
             const getCap = (ten) => {
@@ -70,8 +71,25 @@ module.exports = function createKhachHangRouter({ pool }) {
             const totalPages = Math.max(1, Math.ceil(totalFilteredKhachHang / limit));
             const page = Math.min(Math.max(requestedPage, 1), totalPages);
             const offset = (page - 1) * limit;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const getUpcomingDate = (dateValue) => {
+                if (!dateValue) return null;
+                const original = new Date(dateValue);
+                if (Number.isNaN(original.getTime())) return null;
 
-            const customerParams = [...filterParams, limit, offset];
+                let upcoming = new Date(today.getFullYear(), original.getMonth(), original.getDate());
+                if (upcoming < today) {
+                    upcoming = new Date(today.getFullYear() + 1, original.getMonth(), original.getDate());
+                }
+                return upcoming;
+            };
+            const getDaysUntilDate = (dateValue) => {
+                const upcoming = getUpcomingDate(dateValue);
+                return upcoming ? Math.round((upcoming - today) / 86400000) : null;
+            };
+
+            const customerParams = [...filterParams];
             const customerResult = await pool.query(`
                 SELECT
                     kh.*,
@@ -82,7 +100,6 @@ module.exports = function createKhachHangRouter({ pool }) {
                 LEFT JOIN can_bo_quan_ly cb ON kh.can_bo_id = cb.id
                 ${customerWhereClause}
                 ORDER BY kh.id DESC
-                LIMIT $${customerParams.length - 1} OFFSET $${customerParams.length}
             `, customerParams);
             const customerIds = customerResult.rows.map(customer => customer.id);
 
@@ -190,10 +207,19 @@ module.exports = function createKhachHangRouter({ pool }) {
                 if (!vipByCustomer.has(vip.khach_hang_id)) vipByCustomer.set(vip.khach_hang_id, []);
                 vipByCustomer.get(vip.khach_hang_id).push(vip);
             });
-            const listKhachHangGrouped = customerResult.rows.map(customer => {
+            const listKhachHangGroupedAll = customerResult.rows.map(customer => {
                 const dsVip = (vipByCustomer.get(customer.id) || [])
                     .filter(vip => normalizeRole(vip.chuc_vu).trim() !== 'quan ly')
                     .sort((a, b) => rolePriority(a.chuc_vu) - rolePriority(b.chuc_vu) || b.id - a.id);
+                const companyEventDays = getDaysUntilDate(customer.ngay_thanh_lap);
+                const vipEventDays = dsVip
+                    .map(vip => getDaysUntilDate(vip.ngay_sinh))
+                    .filter(days => days !== null);
+                const eventDays = [
+                    ...(companyEventDays === null ? [] : [companyEventDays]),
+                    ...vipEventDays
+                ];
+                const ngaySuKienSapToi = eventDays.length ? Math.min(...eventDays) : null;
                 return {
                     ...customer,
                     ds_vip: dsVip.map(vip => ({
@@ -201,10 +227,16 @@ module.exports = function createKhachHangRouter({ pool }) {
                         nhom_hien_thi: getVipGroup(vip.chuc_vu),
                         nhom_mau_chuc_vu: getRoleColorGroup(vip.chuc_vu)
                     })),
+                    ngay_su_kien_sap_toi: ngaySuKienSapToi,
                     lich_su_count: dsVip.reduce((sum, vip) => sum + Number(vip.lich_su_count || 0), 0),
                     ghi_chu_count: dsVip.filter(vip => String(vip.ghi_chu || '').trim()).length
                 };
+            }).sort((a, b) => {
+                const eventA = a.ngay_su_kien_sap_toi ?? Number.MAX_SAFE_INTEGER;
+                const eventB = b.ngay_su_kien_sap_toi ?? Number.MAX_SAFE_INTEGER;
+                return eventA - eventB || b.id - a.id;
             });
+            const listKhachHangGrouped = listKhachHangGroupedAll.slice(offset, offset + limit);
 
             const scopedOptionsSql = `
                 SELECT
@@ -254,18 +286,9 @@ module.exports = function createKhachHangRouter({ pool }) {
                 `)
             ]);
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const getUpcomingDate = (dateValue) => {
-                const original = new Date(dateValue);
-                let upcoming = new Date(today.getFullYear(), original.getMonth(), original.getDate());
-                if (upcoming < today) {
-                    upcoming = new Date(today.getFullYear() + 1, original.getMonth(), original.getDate());
-                }
-                return upcoming;
-            };
             const buildEvent = (type, id, title, subtitle, dateValue) => {
                 const eventDate = getUpcomingDate(dateValue);
+                if (!eventDate) return null;
                 const daysLeft = Math.round((eventDate - today) / 86400000);
                 return {
                     type,
@@ -293,6 +316,7 @@ module.exports = function createKhachHangRouter({ pool }) {
                     vip.ngay_sinh
                 ))
             ]
+                .filter(Boolean)
                 .filter(event => event.daysLeft >= 0 && event.daysLeft <= 7)
                 .sort((a, b) => a.daysLeft - b.daysLeft || a.title.localeCompare(b.title, 'vi'));
 
@@ -306,6 +330,7 @@ module.exports = function createKhachHangRouter({ pool }) {
                 listKhachHang: khachHangOptionsResult.rows,
                 listKhachHangGrouped,
                 listChucVu: chucVuResult.rows,
+                listCanBo: canBoResult.rows,
                 thongKe: { tongKH, tongVip },
                 page,
                 limit,
@@ -378,6 +403,83 @@ module.exports = function createKhachHangRouter({ pool }) {
         } catch (err) {
             console.error('Lỗi cập nhật KH:', err);
             res.status(500).send('Lỗi cập nhật: ' + err.message);
+        }
+    });
+
+    router.post('/khach-hang/update-full', async (req, res) => {
+        const client = await pool.connect();
+        try {
+            await client.query('BEGIN');
+
+            const {
+                id,
+                ma_kh,
+                ten_khach_hang,
+                ngay_thanh_lap,
+                can_bo_id
+            } = req.body;
+
+            await client.query(
+                `UPDATE khach_hang
+                 SET ma_kh = $1,
+                     ten_khach_hang = $2,
+                     ngay_thanh_lap = $3,
+                     can_bo_id = $4
+                 WHERE id = $5`,
+                [ma_kh || null, ten_khach_hang, ngay_thanh_lap || null, can_bo_id || null, id]
+            );
+
+            const vipIds = [].concat(req.body.vip_id || []);
+            const hoTenArr = [].concat(req.body.ho_ten || []);
+            const chucVuArr = [].concat(req.body.chuc_vu_id || []);
+            const ngaySinhArr = [].concat(req.body.ngay_sinh || []);
+            const sdtArr = [].concat(req.body.so_dien_thoai || []);
+
+            for (let i = 0; i < vipIds.length; i++) {
+                const vipId = vipIds[i];
+                const hoTen = String(hoTenArr[i] || '').trim();
+                if (!hoTen) continue;
+
+                if (vipId) {
+                    await client.query(
+                        `UPDATE vip
+                         SET ho_ten = $1,
+                             chuc_vu_id = $2,
+                             ngay_sinh = $3,
+                             so_dien_thoai = $4
+                         WHERE id = $5 AND khach_hang_id = $6`,
+                        [
+                            hoTen,
+                            chucVuArr[i] || null,
+                            ngaySinhArr[i] || null,
+                            sdtArr[i] || null,
+                            vipId,
+                            id
+                        ]
+                    );
+                } else {
+                    await client.query(
+                        `INSERT INTO vip (khach_hang_id, chuc_vu_id, ho_ten, ngay_sinh, so_dien_thoai)
+                         VALUES ($1, $2, $3, $4, $5)`,
+                        [
+                            id,
+                            chucVuArr[i] || null,
+                            hoTen,
+                            ngaySinhArr[i] || null,
+                            sdtArr[i] || null
+                        ]
+                    );
+                }
+            }
+
+            await client.query('COMMIT');
+            res.redirect('/khach-hang?toast=Đã%20cập%20nhật%20thông%20tin%20khách%20hàng%20thành%20công!&type=success');
+        } catch (err) {
+            await client.query('ROLLBACK');
+            console.error('Lỗi cập nhật đầy đủ KH:', err);
+            res.status(500).send('Lỗi cập nhật: ' + err.message);
+        } finally {
+            client.release();
         }
     });
 

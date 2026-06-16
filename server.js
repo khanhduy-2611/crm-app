@@ -654,6 +654,6 @@ app.post('/import-excel', upload.single('file'), async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 CRM đang chạy tại: http://localhost:${PORT}`);
 });
