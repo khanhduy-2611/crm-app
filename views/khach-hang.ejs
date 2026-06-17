@@ -115,9 +115,15 @@
                         </h5>
                         <small class="text-muted" style="font-size:0.75rem;">Mỗi khách hàng hoặc cơ quan được hiển thị trên một dòng</small>
                     </div>
-                    <input type="text" id="searchVip" class="form-control form-control-sm search-input"
-                           style="max-width:520px; width:min(100%, 520px);" placeholder="Tìm theo tên hoặc SĐT... Nhấn Enter để tìm"
-                           value="<%= keyword %>">
+                    <div class="customer-search-actions">
+                        <input type="text" id="searchVip" class="form-control form-control-sm search-input"
+                               placeholder="Tìm theo tên hoặc SĐT... Nhấn Enter để tìm"
+                               value="<%= keyword %>">
+                        <a class="search-home-btn" href="/khach-hang?page=1&limit=<%= limit %>"
+                           title="Về trang đầu" aria-label="Về trang đầu">
+                            <i class="fa-solid fa-house"></i>
+                        </a>
+                    </div>
                 </div>
                 <%- include('partials/vip-table', {
                     listKhachHangGrouped,

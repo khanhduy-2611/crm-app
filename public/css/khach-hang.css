@@ -1094,6 +1094,45 @@ tr.dn-item-row:hover .dn-name {
     font-size: 0.82rem !important;
 }
 /* ---- BỘ LỌC CHỨC VỤ ---- */
+.customer-search-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: min(100%, 560px);
+}
+.customer-search-actions .search-input {
+    flex: 1 1 auto;
+    min-width: 220px;
+}
+.search-home-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-light);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 30px;
+    font-size: 0.72rem;
+    text-decoration: none;
+    transition: var(--transition);
+}
+.search-home-btn:hover {
+    border-color: var(--primary);
+    background: rgba(140,29,64,0.06);
+    color: var(--primary);
+}
+body.dark-mode .search-home-btn {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text-mid);
+}
+body.dark-mode .search-home-btn:hover {
+    border-color: #4ADE80;
+    color: #4ADE80;
+}
 .filter-bar {
     display: flex;
     flex-wrap: wrap;
