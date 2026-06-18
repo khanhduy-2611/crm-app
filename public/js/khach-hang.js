@@ -346,9 +346,6 @@ async function openVipDetail(vipId) {
         document.getElementById('vipDetailSdt').textContent = vip.so_dien_thoai || '---';
         document.getElementById('vipEditSdt').value = vip.so_dien_thoai || '';
         
-        document.getElementById('vipDetailEmail').textContent = vip.email || '---';
-        document.getElementById('vipEditEmail').value = vip.email || '';
-        
         document.getElementById('vipDetailTenKh').textContent = vip.ten_khach_hang || '---';
         document.getElementById('vipEditTenKh').value = vip.ten_khach_hang || '';
         
@@ -431,7 +428,6 @@ function cancelVipEdit() {
     document.getElementById('vipEditChucVu').value = currentVipEditData.chuc_vu_id || '';
     document.getElementById('vipEditNgaySinh').value = toLocalDateInputValue(currentVipEditData.ngay_sinh);
     document.getElementById('vipEditSdt').value = currentVipEditData.so_dien_thoai || '';
-    document.getElementById('vipEditEmail').value = currentVipEditData.email || '';
     document.getElementById('vipEditTenKh').value = currentVipEditData.ten_khach_hang || '';
     document.getElementById('vipEditNgayThanhLap').value = toLocalDateInputValue(currentVipEditData.ngay_thanh_lap);
     
@@ -447,7 +443,6 @@ async function saveVipEdit() {
             chuc_vu_id: document.getElementById('vipEditChucVu').value,
             ngay_sinh: document.getElementById('vipEditNgaySinh').value,
             so_dien_thoai: document.getElementById('vipEditSdt').value,
-            email: document.getElementById('vipEditEmail').value,
             khach_hang_id: document.getElementById('vipDetailKhachHangId').value
         };
 
